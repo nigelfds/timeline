@@ -1,0 +1,52 @@
+
+{
+    "timeline":
+    {
+        "headline":"The Main Timeline Headline",
+        "type":"default",
+        "text":"<p class='intro'>html text is ok here</p>",
+        "asset": {
+            "media":"http://www.monashhealth.org/images/interface/buttons/support-us-cta-2.png",
+            "credit":"Media credit text",
+            "caption":"Example of an asset caption text"
+        },
+        "date": [
+            {
+                "startDate":"2011,12,10",
+                "endDate":"2011,12,11",
+                "headline":"This is an event",
+                "text":"<p>HTML is OK here</p>",
+                "tag":"Tag allows vertical positioning in the timeline",
+                "asset": {
+                    "media":"http://www.monashhealth.org/images/interface/buttons/support-us-cta-2.png",
+                    "thumbnail":"http://www.monashhealth.org/images/interface/buttons/support-us-cta-2.png",
+                    "credit":"Medie credit text",
+                    "caption":"Media caption text"
+                }
+            },
+            {
+                "startDate": "2011,12,10",
+                "headline": "second event"
+            }
+        ],
+        "era": [
+            {
+                "startDate":"2011,12,1",
+                "endDate":"2011,12,21",
+                "headline":"Era headline",
+                "tag":"Not sure what this does"
+            }
+            
+        ],
+        "chart": [
+            {
+                "startDate":"2011,12,10",
+                "endDate":"2011,12,11",
+                "headline":"Headline Goes Here",
+                "value":"28"
+            }
+            
+        ]
+        
+    }
+}
