@@ -25,18 +25,17 @@
                 }
             },
             {
-                "startDate": "2011,12,10",
+                "startDate": "2011,12,14",
                 "headline": "second event"
             }
         ],
         "era": [
             {
                 "startDate":"2011,12,1",
-                "endDate":"2011,12,21",
+                "endDate":"2011,12,30",
                 "headline":"Era headline",
-                "tag":"Not sure what this does"
-            }
-            
+                "tag":"Not sure what the tag does but the era creates a styled area in the timeline between the dates of the era"
+            }            
         ],
         "chart": [
             {
