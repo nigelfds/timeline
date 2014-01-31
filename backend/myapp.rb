@@ -16,6 +16,9 @@ end
 
 post '/patient' do
 	body = JSON.parse(request.body.read)
+	if not body["name"]
+		error 400
+	end
 	$db["patients"].insert("name" => body["name"])
 end
 
