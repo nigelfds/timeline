@@ -16,10 +16,13 @@ end
 
 post '/patient' do
 	body = JSON.parse(request.body.read)
-	if not body["name"]
-		error 400
+	if isValidPatient(body)
+		$db["patients"].insert :name => body["name"]
+		status 200
 	end
-	$db["patients"].insert("name" => body["name"])
+	error 400
 end
 
-
+def isValidPatient(patient)
+	patient["name"]
+end
