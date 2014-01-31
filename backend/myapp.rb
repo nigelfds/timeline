@@ -14,3 +14,9 @@ get '/patient' do
 	{:patients => $db["patients"].find.to_a}.to_json
 end
 
+post '/patient' do
+	body = JSON.parse(request.body.read)
+	$db["patients"].insert("name" => body["name"])
+end
+
+

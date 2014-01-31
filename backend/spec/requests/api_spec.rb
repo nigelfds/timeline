@@ -19,7 +19,7 @@ describe "Patients" do
 		{:patients => []}.to_json.should eq(last_response.body)
 	end
 
-	describe "Real patients" do
+	describe "Patient related stuff" do
 		after(:each) do
 			$db["patients"].remove
 		end
@@ -28,8 +28,11 @@ describe "Patients" do
 			get '/patient'
 			JSON.parse(last_response.body)["patients"][0].should include("name" => "Bob")
 		end
+		it "should add a patient" do
+			post '/patient', {"name" => "Jack"}.to_json
+			$db["patients"].find_one("name"=>"Jack").should include("name" => "Jack")
+		end
 	end
 
-	
 
 end
