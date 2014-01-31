@@ -26,3 +26,8 @@ end
 def isValidPatient(patient)
 	patient["name"]
 end
+
+get '/patient/:id/event' do
+	content_type :json
+	{:events => $db["events"].find(:patient_id => params[:id]).to_a}.to_json
+end
