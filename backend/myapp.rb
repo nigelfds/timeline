@@ -14,3 +14,20 @@ get '/patient' do
 	{:patients => $db["patients"].find.to_a}.to_json
 end
 
+post '/patient' do
+	body = JSON.parse(request.body.read)
+	if isValidPatient(body)
+		$db["patients"].insert :name => body["name"]
+		status 200
+	end
+	error 400
+end
+
+def isValidPatient(patient)
+	patient["name"]
+end
+
+get '/patient/:id/event' do
+	content_type :json
+	{:events => $db["events"].find(:patient_id => params[:id]).to_a}.to_json
+end
