@@ -8,3 +8,4 @@ UsersController = ($scope, users_service) ->
 
 class UsersService
 	items : ->
+		
