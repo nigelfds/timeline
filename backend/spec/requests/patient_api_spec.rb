@@ -31,7 +31,6 @@ describe "POST Patient" do
 		post '/patient', {}.to_json
 		last_response.status.should eq(400)
 		$db["patients"].find.to_a.should eq([])
-
 	end
 end
 
@@ -44,7 +43,15 @@ describe "PUT Patient" do
 		id = $db["patients"].insert(:name => "Fred").to_s
 		put '/patient/'+id, {"name" => "Frank"}.to_json
 
+		last_response.status.should eq(200)
+
 		$db["patients"].find_one("name"=>"Frank").should include("name" => "Frank")
 		$db["patients"].find_one("name"=>"Fred").should be_nil
+	end
+
+	it "should return error if update fails" do
+		put '/patient/52eeec750004deaf4d00000b', {"name" => "Frank"}.to_json
+
+		last_response.status.should eq(400)
 	end
 end

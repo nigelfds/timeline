@@ -26,7 +26,11 @@ end
 put '/patient/:id' do
 	body = JSON.parse(request.body.read)
 	new_values = body.select {|k,v| ["name"].include? k}
-	$db["patients"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+	result = $db["patients"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+
+	unless result["updatedExisting"]
+		error 400, result.to_json
+	end
 end
 
 
