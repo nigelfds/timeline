@@ -1,4 +1,8 @@
+UserController = ($scope, UserService) ->
+
+  	UserService.getUsers (users) ->
+  		$scope.users = users
+
+
 angular.module('timeline')
-  .controller 'UserController', ($scope, UserService) ->
-  	UserService.getUsers()
-  	$scope.users = []
+  .controller 'UserController', UserController
