@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe "GET Patients" do
+	after(:each) do
+		$db["patients"].remove
+	end
 	it "should be json" do
 		get '/patient'
 		last_response.headers['Content-Type'].should eq('application/json;charset=utf-8')
@@ -14,6 +17,22 @@ describe "GET Patients" do
 		$db["patients"].insert :name => "Bob"
 		get '/patient'
 		JSON.parse(last_response.body)["patients"][0].should include("name" => "Bob")
+	end
+end
+
+describe "GET Patient" do
+	after(:each) do
+		$db["patients"].remove
+	end
+
+	it "should return not found if no customer found" do
+		get '/patient/'+'52eeec750004deaf4d00000b'
+		last_response.status.should eq(404)
+	end
+	it "should get a customer" do
+		id = $db["patients"].insert(:name => "Bob").to_s
+		get '/patient/'+id
+		JSON.parse(last_response.body)["patient"].should include("name" => "Bob")
 	end
 end
 
