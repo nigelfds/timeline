@@ -71,6 +71,16 @@ post '/patient/:patient_id/event' do
 	status 200
 end
 
+put '/patient/:patient_id/event/:id' do
+	body = JSON.parse(request.body.read)
+	new_values = body.select {|k,v| ["description","start"].include? k}
+	result = $db["events"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+
+	unless result["updatedExisting"]
+		error 400, result.to_json
+	end
+end
+
 delete '/patient/:patient_id/event/:id' do
 	result = $db["events"].remove("_id" => BSON.ObjectId(params[:id]))
 	if result["n"] > 0

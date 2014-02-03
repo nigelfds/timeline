@@ -80,6 +80,31 @@ describe "Event API Spec" do
 		end
 	end
 
+	describe "PUT event" do
+		after(:each) do
+			$db["events"].remove
+		end
+
+		#TODO: check patient exists?
+		it "should update a event" do
+			patient_id = '52eeec750004deaf4d00000b'
+			time = Time.now.utc
+			id = $db["events"].insert({:description => "Some Event", :start => time, :patient_id => "2"}).to_s
+			put '/patient/'+patient_id+'/event/'+id, {:description => "Super Special Event", :start => (time + 1000).to_s}.to_json
+
+			result = $db["events"].find_one(BSON.ObjectId(id))
+			result.should_not be_nil
+			result.should include("description" => "Super Special Event")
+			result.should include("start" => (time + 1000).to_s)
+		end
+
+		it "should return error if update fails" do
+			put '/patient/52eeec750004deaf4d00000b/event/52eeec750004deaf4d00000b', {:description => "Super Special Event", :start => 1}.to_json
+
+			last_response.status.should eq(400)
+		end
+	end
+
 	describe "DELETE event" do
 		after(:each) do
 			$db["events"].remove
