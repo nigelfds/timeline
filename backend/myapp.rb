@@ -23,6 +23,13 @@ post '/patient' do
 	error 400
 end
 
+put '/patient/:id' do
+	body = JSON.parse(request.body.read)
+	new_values = body.select {|k,v| ["name"].include? k}
+	$db["patients"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+end
+
+
 def isValidPatient(patient)
 	patient["name"]
 end
