@@ -14,6 +14,17 @@ get '/patient' do
 	{:patients => $db["patients"].find.to_a}.to_json
 end
 
+get '/patient/:id' do
+	content_type :json
+	patient = $db["patients"].find_one({"_id" => BSON.ObjectId(params[:id])})
+	if patient
+		{:patient => patient}.to_json
+	else
+		error 404
+	end
+end
+
+
 post '/patient' do
 	body = JSON.parse(request.body.read)
 	if isValidPatient(body)
