@@ -52,7 +52,7 @@ end
 
 get '/patient/:id/event' do
 	content_type :json
-	events = $db["events"].find(:patient_id => params[:id]).sort(:start).to_a
+	events = $db["events"].find(:patient_id => BSON.ObjectId(params[:id])).sort(:start).to_a
 	{:events => events}.to_json
 end
 
@@ -69,7 +69,7 @@ end
 post '/patient/:patient_id/event' do
 	body = JSON.parse(request.body.read)
 	if isValidEvent(body)
-		id = $db["events"].insert({:description => body["description"], :patient_id => params[:patient_id], :start => body["start"]}).to_s
+		id = $db["events"].insert({:description => body["description"], :patient_id => BSON.ObjectId(params[:patient_id]), :start => body["start"]}).to_s
 		body(id)
 		status 200
 	else
@@ -80,7 +80,7 @@ end
 put '/patient/:patient_id/event/:id' do
 	body = JSON.parse(request.body.read)
 	new_values = body.select {|k,v| ["description","start"].include? k}
-	result = $db["events"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+	result = $db["events"].update({"_id" => BSON.ObjectId(params[:id])}, '$set' => new_values)
 
 	unless result["updatedExisting"]
 		error 400, result.to_json
