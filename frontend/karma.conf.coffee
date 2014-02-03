@@ -12,7 +12,7 @@ module.exports = (config) ->
     # list of files / patterns to load in the browser
     files: [
 #        "source/lib/underscore/underscore.js"
-#        "source/lib/angular/angular.js"
+       "source/lib/angular/angular.js"
 #        "source/lib/angular/angular-mocks.js"
         "source/lib/sinon/*.js"
         "source/lib/chai/*"
