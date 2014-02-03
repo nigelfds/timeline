@@ -40,4 +40,33 @@ describe "Event API Spec" do
 			JSON.parse(last_response.body)["events"][2].should include("description" => "Last Event")
 		end
 	end
+
+	describe "GET event" do
+		after(:each) do
+			$db["events"].remove
+		end
+
+		it "should return event" do
+			patient_id = '52eeec750004deaf4d00000b'
+			id = $db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => BSON.ObjectId(patient_id)}).to_s
+			get '/patient/'+patient_id+'/event/'+id
+			JSON.parse(last_response.body)["event"].should include("description" => "Some Event")
+		end
+
+		it "should not return event for wrong patient" do
+			patient_id = '52eeec750004deaf4d00000b'
+			id = $db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => "2"}).to_s
+			get '/patient/'+patient_id+'/event/'+id
+
+			last_response.status.should eq(404)
+		end
+	end
+
+	describe "POST event" do
+		after(:each) do
+			$db["events"].remove
+		end
+		#check patient exists?
+	end
+
 end

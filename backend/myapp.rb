@@ -43,3 +43,14 @@ get '/patient/:id/event' do
 	events = $db["events"].find(:patient_id => params[:id]).sort(:start).to_a
 	{:events => events}.to_json
 end
+
+get '/patient/:patient_id/event/:id' do
+	content_type :json
+	event = $db["events"].find_one({"_id" => BSON.ObjectId(params[:id]), "patient_id" => BSON.ObjectId(params[:patient_id])})
+	if event
+		{:event => event}.to_json
+	else
+		error 404
+	end
+end
+
