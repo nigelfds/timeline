@@ -1,25 +1,23 @@
-describe "UsersController", ->
-
-	scope = service = undefined
-
-	beforeEach ->
-		scope = {}
-		service = sinon.createStubInstance UsersService
-
+describe "UserController", ->
 
 	it "should display an empty list", ->
-		service.items.returns [ ]
+		usersService = sinon.createStubInstance UsersService
+		usersService.getUsers.yields []
+		_scope = {}
 
-		UsersController scope, service
+		usersController = UserController _scope, usersService
 
-		scope.users.should.have.length 0
+		_scope.users.length.should.eql 0
 
-	it "should display the current users", ->
-		barry = name : "Barry"
-		michael = name : "Michael"
-		service.items.returns [ barry, michael ]
 
-		UsersController scope, service
+	it "should display users", ->
+		barry = name: "Barry"
+		michael = name: "Michael"
+		usersService = sinon.createStubInstance UsersService
+		usersService.getUsers.yields [barry, michael]
+		_scope = {}
 
-		scope.users.should.contain barry
-		scope.users.should.contain michael
+		usersController = UserController _scope, usersService
+
+		_scope.users.should.contain barry
+		_scope.users.should.contain michael

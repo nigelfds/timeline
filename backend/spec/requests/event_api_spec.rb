@@ -72,11 +72,23 @@ describe "Event API Spec" do
 			time = Time.now.utc.to_s
 			post '/patient/'+patient_id+'/event', {:description => "Special Event", :start => time}.to_json
 
+			last_response.status.should eq(200)
+			last_response.body.should_not be_empty  #Return id
+
 			result = $db["events"].find_one("description" => "Special Event")
 			result.should_not be_nil
 			result.should include("description" => "Special Event")
 			result.should include("start" => time)
 			result.should include("patient_id" => patient_id)
+		end
+
+		it "should fail if invalid data" do
+			patient_id = '52eeec750004deaf4d00000b'
+			time = Time.now.utc.to_s
+			post '/patient/'+patient_id+'/event', {}.to_json
+
+			last_response.status.should eq(400)
+			$db["events"].find.to_a.should eq([])
 		end
 	end
 

@@ -43,6 +43,9 @@ describe "POST Patient" do
 	
 	it "should add a patient" do
 		post '/patient', {"name" => "Jack"}.to_json
+
+		last_response.status.should eq(200)
+		last_response.body.should_not be_empty  #Return id
 		$db["patients"].find_one("name"=>"Jack").should include("name" => "Jack")
 	end
 
