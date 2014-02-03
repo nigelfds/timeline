@@ -1,11 +1,11 @@
-describe "UserController", ->
+describe "UsersController", ->
 
 	it "should display an empty list", ->
 		usersService = sinon.createStubInstance UsersService
 		usersService.getUsers.yields []
 		_scope = {}
 
-		usersController = UserController _scope, usersService
+		usersController = UsersController _scope, usersService
 
 		_scope.users.length.should.eql 0
 
@@ -17,7 +17,7 @@ describe "UserController", ->
 		usersService.getUsers.yields [barry, michael]
 		_scope = {}
 
-		usersController = UserController _scope, usersService
+		usersController = UsersController _scope, usersService
 
 		_scope.users.should.contain barry
 		_scope.users.should.contain michael

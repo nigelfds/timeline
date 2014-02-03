@@ -1,4 +1,4 @@
-describe 'UserService', () ->
+describe 'UsersService', () ->
 
 	UserService = undefined
 	$httpBackend = undefined
@@ -27,4 +27,14 @@ describe 'UserService', () ->
 
 
 
+# describe 'UserService alternative', () ->
 
+#     server = undefined
+
+#     beforeEach -> server = sinon.fakeServer.create()
+
+#     afterEach -> server = server.restore()
+
+#     it "should return the list of users", ->
+
+#         service = new UsersService
