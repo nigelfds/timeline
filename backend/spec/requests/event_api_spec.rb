@@ -8,33 +8,37 @@ describe "Event API Spec" do
 		end
 
 		it "return an empty array" do
-			get '/patient/1/event'
+			patient_id = '52eeec750004deaf4d00000b'
+			get '/patient/'+patient_id+'/event'
 			(last_response.body).should eq({:events => []}.to_json)
 		end
 
 		it "return an array of events" do
-			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => "1"})
-			get '/patient/1/event'
+			patient_id = '52eeec750004deaf4d00000b'
+			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => BSON.ObjectId(patient_id)})
+			get '/patient/'+patient_id+'/event'
 			JSON.parse(last_response.body)["events"][0].should include("description" => "Some Event")
 		end
 
 		it "return events related to the specified patient" do
+			patient_id = '52eeec750004deaf4d00000b'
 			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => "1"})
-			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => "2"})
+			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => BSON.ObjectId(patient_id)})
 			$db["events"].insert({:description => "First Event", :start => (Time.now - 1000).utc, :patient_id => "3"})
 
-			get '/patient/2/event'
+			get '/patient/'+patient_id+'/event'
 			events = JSON.parse(last_response.body)["events"]
 			events.size.should eq(1)
 			events[0].should include("description" => "Last Event")
 		end
 
 		it "return an array of multiple events ordered by start time" do
-			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => "1"})
-			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => "1"})
-			$db["events"].insert({:description => "First Event", :start => (Time.now - 1000).utc, :patient_id => "1"})
+			patient_id = '52eeec750004deaf4d00000b'
+			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => BSON.ObjectId(patient_id)})
+			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => BSON.ObjectId(patient_id)})
+			$db["events"].insert({:description => "First Event", :start => (Time.now - 1000).utc, :patient_id => BSON.ObjectId(patient_id)})
 			
-			get '/patient/1/event'
+			get '/patient/'+patient_id+'/event'
 			JSON.parse(last_response.body)["events"][0].should include("description" => "First Event")
 			JSON.parse(last_response.body)["events"][1].should include("description" => "Some Event")
 			JSON.parse(last_response.body)["events"][2].should include("description" => "Last Event")
@@ -79,7 +83,7 @@ describe "Event API Spec" do
 			result.should_not be_nil
 			result.should include("description" => "Special Event")
 			result.should include("start" => time)
-			result.should include("patient_id" => patient_id)
+			result.should include("patient_id" => BSON.ObjectId(patient_id))
 		end
 
 		it "should fail if invalid data" do
@@ -101,13 +105,14 @@ describe "Event API Spec" do
 		it "should update a event" do
 			patient_id = '52eeec750004deaf4d00000b'
 			time = Time.now.utc
-			id = $db["events"].insert({:description => "Some Event", :start => time, :patient_id => "2"}).to_s
+			id = $db["events"].insert({:description => "Some Event", :start => time, :patient_id => BSON.ObjectId(patient_id)}).to_s
 			put '/patient/'+patient_id+'/event/'+id, {:description => "Super Special Event", :start => (time + 1000).to_s}.to_json
 
 			result = $db["events"].find_one(BSON.ObjectId(id))
 			result.should_not be_nil
 			result.should include("description" => "Super Special Event")
 			result.should include("start" => (time + 1000).to_s)
+			result.should include("patient_id" => BSON.ObjectId(patient_id))
 		end
 
 		it "should return error if update fails" do
