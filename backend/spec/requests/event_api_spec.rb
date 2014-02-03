@@ -19,6 +19,14 @@ describe "Event API Spec" do
 		end
 
 		it "return events related to the specified patient" do
+			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => "1"})
+			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => "2"})
+			$db["events"].insert({:description => "First Event", :start => (Time.now - 1000).utc, :patient_id => "3"})
+
+			get '/patient/2/event'
+			events = JSON.parse(last_response.body)["events"]
+			events.size.should eq(1)
+			events[0].should include("description" => "Last Event")
 		end
 
 		it "return an array of multiple events ordered by start time" do
