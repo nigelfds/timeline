@@ -7,19 +7,19 @@
 		brew install mongo
 		mkdir -p data/db
 		mongod --dbpath data/db
-		
+
 2. Install required gems for the server (if you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that)
 
 		bundle install
-		
+
 3. Run the server
-		
-		ruby myapp.rb	
-	
-	
-		
+
+		rackup
+
+
+
 ##### Running the tests
-1. Just run rspec	
+1. Just run rspec
 
 		rspec
 

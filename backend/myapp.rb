@@ -11,6 +11,7 @@ end
 
 get '/patient' do
 	content_type :json
+	response['Access-Control-Allow-Origin'] = '*'
 	{:patients => $db["patients"].find.to_a}.to_json
 end
 
