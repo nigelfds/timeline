@@ -65,3 +65,10 @@ get '/patient/:patient_id/event/:id' do
 	end
 end
 
+post '/patient/:patient_id/event' do
+	body = JSON.parse(request.body.read)
+	$db["events"].insert({:description => body["description"], :patient_id => params[:patient_id], :start => body["start"]})
+	status 200
+end
+
+
