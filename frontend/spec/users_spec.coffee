@@ -1,25 +1,25 @@
-describe "UsersController", ->
+describe "UserController", ->
 
-	scope = service = undefined
+	scope = userController = userService = undefined
 
-	beforeEach ->
-		scope = {}
-		service = sinon.createStubInstance UsersService
+	beforeEach module 'timeline'
 
+	beforeEach inject ($controller, $rootScope, _UserService_) ->
+    	scope = $rootScope.$new()
+    	userService = {
+    		getUsers: sinon.spy()
+    	}
+
+    	userController = $controller 'UserController', {
+      		$scope: scope
+      		UserService: userService
+    	}
 
 	it "should display an empty list", ->
-		service.items.returns [ ]
-
-		UsersController scope, service
-
 		scope.users.should.have.length 0
 
-	it "should display the current users", ->
-		barry = name : "Barry"
-		michael = name : "Michael"
-		service.items.returns [ barry, michael ]
+	it "should call the getUsers method", ->
+		expect(userService.getUsers.called).to.be.true
 
-		UsersController scope, service
-
-		scope.users.should.contain barry
-		scope.users.should.contain michael
+	it "should display a user", ->
+		scope.users.should.have.length 0
