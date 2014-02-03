@@ -1,40 +1,46 @@
 describe 'UsersService', () ->
 
-	UserService = undefined
+	UsersService = undefined
 	$httpBackend = undefined
 
 	beforeEach module 'timeline'
 
-	beforeEach inject (_UserService_, _$httpBackend_) ->
-		UserService = _UserService_
+	beforeEach inject (_UsersService_, _$httpBackend_) ->
+		UsersService = _UsersService_
 		$httpBackend = _$httpBackend_
 
 
 	it 'should make a get request to user_list_api', () ->
     	$httpBackend.whenGET('http://0.0.0.0:9292/patient').respond {"patients":[]}
     	$httpBackend.expectGET('http://0.0.0.0:9292/patient')
-    	UserService.getUsers(() ->)
+    	UsersService.getUsers(() ->)
     	$httpBackend.flush()
 
     it 'should execute the callback function', () ->
     	$httpBackend.whenGET('http://0.0.0.0:9292/patient').respond {"patients":[]}
     	callback = sinon.spy()
 
-    	UserService.getUsers(callback)
+    	UsersService.getUsers(callback)
     	$httpBackend.flush()
 
     	expect(callback.called).to.be.true
 
 
 
-# describe 'UserService alternative', () ->
+# describe 'UsersService alternative', () ->
 
-#     server = undefined
+#     service = httpBackend = undefined
 
-#     beforeEach -> server = sinon.fakeServer.create()
+#     beforeEach -> module "timeline"
 
-#     afterEach -> server = server.restore()
+#     beforeEach -> inject (_UsersService_, _$httpBackend_) ->
+#         service = _UsersService_
+#         httpBackend = _$httpBackend_
 
-#     it "should return the list of users", ->
+#     it "should return the list of users", (done) ->
+#         httpBackend.when("GET", "/user_list_api").respond "users"
 
-#         service = new UsersService
+#         service.getUsers (users) ->
+#             users.should.eql "users"
+#             done()
+

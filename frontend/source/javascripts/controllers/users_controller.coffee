@@ -1,6 +1,6 @@
-UsersController = ($scope, UserService) ->
+UsersController = ($scope, UsersService) ->
 
-  	UserService.getUsers (users) ->
+  	UsersService.getUsers (users) ->
   		$scope.users = users
 
 
