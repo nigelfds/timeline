@@ -24,14 +24,15 @@ get '/patient/:id' do
 	end
 end
 
-
 post '/patient' do
 	body = JSON.parse(request.body.read)
 	if isValidPatient(body)
-		$db["patients"].insert :name => body["name"]
+		id = $db["patients"].insert(:name => body["name"]).to_s
+		body(id)
 		status 200
+	else
+		error 400
 	end
-	error 400
 end
 
 put '/patient/:id' do
@@ -67,8 +68,13 @@ end
 
 post '/patient/:patient_id/event' do
 	body = JSON.parse(request.body.read)
-	$db["events"].insert({:description => body["description"], :patient_id => params[:patient_id], :start => body["start"]})
-	status 200
+	if isValidEvent(body)
+		id = $db["events"].insert({:description => body["description"], :patient_id => params[:patient_id], :start => body["start"]}).to_s
+		body(id)
+		status 200
+	else
+		error 400
+	end
 end
 
 put '/patient/:patient_id/event/:id' do
@@ -90,5 +96,6 @@ delete '/patient/:patient_id/event/:id' do
 	end
 end
 
-
-
+def isValidEvent(event)
+	event["description"] && event["start"] #Note patient_id is already coming through as part of the url...
+end
