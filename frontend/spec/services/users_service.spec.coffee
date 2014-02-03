@@ -11,13 +11,13 @@ describe 'UsersService', () ->
 
 
 	it 'should make a get request to user_list_api', () ->
-    	$httpBackend.whenGET('/user_list_api').respond []
-    	$httpBackend.expectGET('/user_list_api')
+    	$httpBackend.whenGET('http://0.0.0.0:9292/patient').respond {"patients":[]}
+    	$httpBackend.expectGET('http://0.0.0.0:9292/patient')
     	UserService.getUsers(() ->)
     	$httpBackend.flush()
 
     it 'should execute the callback function', () ->
-    	$httpBackend.whenGET('/user_list_api').respond []
+    	$httpBackend.whenGET('http://0.0.0.0:9292/patient').respond {"patients":[]}
     	callback = sinon.spy()
 
     	UserService.getUsers(callback)
