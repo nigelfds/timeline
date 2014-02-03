@@ -1,6 +1,6 @@
 # To get up and running
 
-1. Install required gems
+1. Install required gems (if you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that)
 
 		bundle install
 		
@@ -13,5 +13,24 @@
 		open http://localhost:4567
 
 
+#### Running the tests
 
-If you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that.
+1. Install Node.js
+
+		brew install node
+		
+2. Install Phantomjs
+
+		brew install phantomjs
+		
+3. Install required packages
+
+		npm install
+		
+4. Start Karma test server (tests will run whenever files are updated)
+
+		./node_modules/.bin/karma start karma.conf.coffee
+
+
+
+
