@@ -71,4 +71,14 @@ post '/patient/:patient_id/event' do
 	status 200
 end
 
+delete '/patient/:patient_id/event/:id' do
+	result = $db["events"].remove("_id" => BSON.ObjectId(params[:id]))
+	if result["n"] > 0
+		status 200
+	else
+		error 404
+	end
+end
+
+
 
