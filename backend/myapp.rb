@@ -53,6 +53,7 @@ end
 
 get '/patient/:id/event' do
 	content_type :json
+	response['Access-Control-Allow-Origin'] = '*'
 	events = $db["events"].find(:patient_id => BSON.ObjectId(params[:id])).sort(:start).to_a
 	{:events => events}.to_json
 end
