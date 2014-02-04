@@ -8,13 +8,14 @@ describe "UsersController", ->
 
 	it "should display an empty list", (done) ->
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields {}
+		usersService.getUsers.yieldsAsync {}
 
 		scope.$watch "users", (newValue, oldValue) -> 
 			newValue.should.eql {}
 			done()
 
-		usersController = UsersController scope, usersService
+		scope.users = {}
+		# usersController = UsersController scope, usersService
 
 		scope.$apply()
 
