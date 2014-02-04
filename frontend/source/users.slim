@@ -1,3 +1,4 @@
 ul
-  li ng-repeat="user in users.patients | orderBy:'name'" {{user.name}}
+  li ng-repeat="user in users.patients | orderBy:'name'"
+    a(href="#/events/{{user._id.$oid}}") {{user.name}}
 

@@ -40,7 +40,7 @@ describe "POST Patient" do
 	after(:each) do
 		$db["patients"].remove
 	end
-	
+
 	it "should add a patient" do
 		post '/patient', {"name" => "Jack"}.to_json
 

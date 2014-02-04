@@ -13,6 +13,7 @@ module.exports = (config) ->
     files: [
 #        "source/lib/underscore/underscore.js"
        "source/lib/angularjs/angular.min.js"
+       "source/lib/angularjs/angular-route.min.js"
        "source/lib/angularjs/angular-mocks.js"
         "source/lib/sinon/*.js"
         "source/lib/chai/*"
