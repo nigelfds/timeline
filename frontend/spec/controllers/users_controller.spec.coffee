@@ -1,23 +1,33 @@
 describe "UsersController", ->
 
-	it "should display an empty list", ->
+	scope = undefined
+
+	beforeEach module("timeline")
+
+	beforeEach inject (_$rootScope_) -> scope = _$rootScope_.$new()
+
+	it "should display an empty list", (done) ->
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields []
-		_scope = {}
+		usersService.getUsers.yields {}
 
-		usersController = UsersController _scope, usersService
+		scope.$watch "users", (newValue, oldValue) -> 
+			newValue.should.eql {}
+			done()
 
-		_scope.users.length.should.eql 0
+		usersController = UsersController scope, usersService
+
+		scope.$apply()
 
 
-	it "should display users", ->
+
+	xit "should display users", ->
 		barry = name: "Barry"
 		michael = name: "Michael"
 		usersService = sinon.createStubInstance UsersService
 		usersService.getUsers.yields {"patients":[barry, michael]}
-		_scope = {}
+		scope = {}
 
-		usersController = UsersController _scope, usersService
+		usersController = UsersController scope, usersService
 
-		_scope.users.patients.should.contain barry
-		_scope.users.patients.should.contain michael
+		scope.users.patients.should.contain barry
+		scope.users.patients.should.contain michael
