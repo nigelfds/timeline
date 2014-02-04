@@ -1,27 +1,23 @@
 describe "UsersController", ->
 
-	scope = undefined
+	scope = deferred = undefined
 
 	beforeEach module("timeline")
 
-	beforeEach inject (_$rootScope_) -> scope = _$rootScope_.$new()
+	beforeEach inject (_$rootScope_, _$q_) ->
+		scope = _$rootScope_.$new()
+		deferred = _$q_.defer()
 
-	it "should display an empty list", (done) ->
+	it "should display an empty list", () ->
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yieldsAsync {}
+		usersService.getUsers.yields "empty"
 
-		scope.$watch "users", (newValue, oldValue) -> 
-			newValue.should.eql {}
-			done()
+		usersController = UsersController scope, usersService
 
-		scope.users = {}
-		# usersController = UsersController scope, usersService
-
-		scope.$apply()
+		scope.users.should.eql "empty"
 
 
-
-	xit "should display users", ->
+	it "should display users", ->
 		barry = name: "Barry"
 		michael = name: "Michael"
 		usersService = sinon.createStubInstance UsersService
