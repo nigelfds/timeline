@@ -29,7 +29,7 @@ module.exports = (config) ->
 
     # test results reporter to use
     # possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ["progress"]
+    reporters: ["progress", "growl"]
 
     # web server port
     port: 9876
