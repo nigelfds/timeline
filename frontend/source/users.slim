@@ -11,6 +11,6 @@ html lang="en"
   	script src="../javascripts/controllers/UserController.js" type="text/javascript"
 
   	div class="container" ng-controller="UserController"
-  		ul
-  			li ng-repeat="k in users.patients | orderBy:'name'" {{k.name}}
+      ul
+        li ng-repeat="user in users.patients | orderBy:'name'" {{user.name}}
 
