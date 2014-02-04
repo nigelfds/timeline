@@ -1,29 +1,43 @@
 describe "EventController", ->
 
     userId = '52f0329df6f4070ce200000'
+    _scope = routeParams = undefined
 
-    xit "should display an empty list", ->
-        eventService = sinon.createStubInstance EventsService
-        eventService.getEvents.yields ([userId] [])
+    beforeEach ->
         _scope = {}
-
         routeParams = {
-            userId: userId
-        }
-
-        eventController = EventController _scope, eventService, routeParams
-
-        _scope.events.length.should.eql 0
+                userId: userId
+            }
 
 
-    xit "should display users", ->
-        barry = name: "Barry"
-        michael = name: "Michael"
-        eventService = sinon.createStubInstance EventsService
-        eventService.getEvents.yields {"patients":[barry, michael]}
-        _scope = {}
+    describe 'when there are no events', ->
+        _scope = undefined
 
-        eventController = EventController _scope, eventService
+        beforeEach ->
+            eventService = sinon.createStubInstance EventsService
+            eventService.getEvents.yields {"events":[]}
 
-        _scope.events.should.contain barry
-        _scope.events.should.contain michael
+            eventController = EventController _scope, routeParams, eventService
+
+        it "should display an empty list", ->
+            _scope.events.length.should.eql 0
+
+
+    describe 'when there are 2 events', ->
+        _scope = undefined
+        date = new Date(Date.now())
+
+        beforeEach ->
+            event1 = {description: "Some Event", userId: userId, start: date.toUTCString()}
+            event2 = {description: "Another Event", userId: userId, start: date.toUTCString()}
+            eventService = sinon.createStubInstance EventsService
+            eventService.getEvents.yields {"events":[event1, event2]}
+
+            eventController = EventController _scope, routeParams, eventService
+
+        it "should display events", ->
+            _scope.events[0].content.should.eql "Some Event"
+            _scope.events[0].start.should.equalDate date
+
+            _scope.events[1].content.should.eql "Another Event"
+            _scope.events[1].start.should.equalDate date
