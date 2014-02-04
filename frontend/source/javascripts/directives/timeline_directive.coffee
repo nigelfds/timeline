@@ -4,7 +4,7 @@ angular.module('timeline')
 			restrict: 'E',
 			template: '<div id="user-timeline">'
 			link: (scope, element, attrs) ->
-				timeline = new links.Timeline(element.children()[0])
+				timeline = new links.Timeline(element.find('#user-timeline').get(0))
 
 				drawTimeline= (events) ->
 					data = events
