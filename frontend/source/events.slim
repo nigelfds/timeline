@@ -13,7 +13,3 @@ form(name="eventForm" novalidate ng-submit="createEvent()")
 		timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
 
     button(type="submit" class="btn btn-primary" ng-disabled="eventForm.$invalid") Create Event
-
-
-ul
-	li ng-repeat="event in events" {{event}}
