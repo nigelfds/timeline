@@ -1,5 +1,6 @@
 angular.module('timeline', [
-		'ngRoute'
+		'ngRoute',
+		'ui.bootstrap'
 	]
 )
 
