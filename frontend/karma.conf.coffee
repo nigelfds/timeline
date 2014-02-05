@@ -16,6 +16,8 @@ module.exports = (config) ->
        "source/lib/angularjs/angular.min.js"
        "source/lib/angularjs/angular-route.min.js"
        "source/lib/angularjs/angular-mocks.js"
+       "source/lib/angular-ui/ui-bootstrap-custom-0.10.0.min.js"
+       "source/lib/angular-ui/ui-bootstrap-custom-tpls-0.10.0.min.js"
        "source/frameworks/timeline-chap-links/timeline.js"
         "source/lib/sinon/*.js"
         "source/lib/chai/*"
