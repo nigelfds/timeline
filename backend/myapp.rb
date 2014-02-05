@@ -69,6 +69,7 @@ get '/patient/:patient_id/event/:id' do
 end
 
 post '/patient/:patient_id/event' do
+	response['Access-Control-Allow-Origin'] = '*'
 	body = JSON.parse(request.body.read)
 	if isValidEvent(body)
 		id = $db["events"].insert({:description => body["description"], :patient_id => BSON.ObjectId(params[:patient_id]), :start => body["start"]}).to_s
@@ -96,6 +97,14 @@ delete '/patient/:patient_id/event/:id' do
 	else
 		error 404
 	end
+end
+
+options "*" do
+	response['Access-Control-Allow-Origin'] = '*'
+  	response.headers["Allow"] = "POST"
+  	response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+
+  halt 200
 end
 
 def isValidEvent(event)
