@@ -19,8 +19,9 @@ module.exports = (config) ->
        "source/lib/angular-ui/ui-bootstrap-custom-tpls-0.10.0.min.js"
        "source/frameworks/timeline-chap-links/timeline.js"
         "source/lib/sinon/*.js"
-        "source/lib/chai/*"
+        "source/lib/chai/*.js"
         "source/javascripts/**"
+        "spec/chai-test.js"
         "frontend_specs/**"
     ]
 

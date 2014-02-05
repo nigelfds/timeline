@@ -2,3 +2,9 @@ ul
   li ng-repeat="user in users.patients | orderBy:'name'"
     a(href="#/events/{{user._id.$oid}}") {{user.name}}
 
+form(name="userForm" novalidate ng-submit="createUser()")
+	div
+		label Name
+		input (type="text" class="form-control" ng-model="userName" required)
+    button(type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid") Create New User
+

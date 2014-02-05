@@ -49,6 +49,12 @@ describe "POST Patient" do
 		$db["patients"].find_one("name"=>"Jack").should include("name" => "Jack")
 	end
 
+	it 'should return the new patient' do
+		post '/patient', {"name" => "Jack"}.to_json
+
+		last_response.body.should include('"name":"Jack"')
+	end
+
 	it "should give error on invalid patient creation request" do
 		post '/patient', {}.to_json
 		last_response.status.should eq(400)
