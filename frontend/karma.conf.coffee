@@ -11,7 +11,6 @@ module.exports = (config) ->
 
     # list of files / patterns to load in the browser
     files: [
-#        "source/lib/underscore/underscore.js"
        "source/lib/jquery/jquery-1.11.0.min.js"
        "source/lib/angularjs/angular.min.js"
        "source/lib/angularjs/angular-route.min.js"
@@ -19,13 +18,14 @@ module.exports = (config) ->
        "source/frameworks/timeline-chap-links/timeline.js"
         "source/lib/sinon/*.js"
         "source/lib/chai/*"
-        "source/javascripts/timeline.coffee"
         "source/javascripts/**"
         "spec/**"
     ]
 
     # list of files to exclude
-    exclude: []
+    exclude: [
+        "source/javascripts/site.coffee"
+    ]
 
     # test results reporter to use
     # possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
