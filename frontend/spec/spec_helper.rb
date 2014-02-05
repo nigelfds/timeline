@@ -1,10 +1,9 @@
 require 'rubygems'
 require 'spork'
-
 ENV['RACK_ENV'] = 'test'                    # force the environment to 'test'
 
 Spork.prefork do
-  require File.join(File.dirname(__FILE__), '..', 'myapp.rb')
+  require File.join(File.dirname(__FILE__), '..', 'backend.rb')
 
   require 'rubygems'
   require 'sinatra'
@@ -13,7 +12,7 @@ Spork.prefork do
   require 'capybara'
   require 'capybara/dsl'
 
-  Capybara.app = Sinatra::Application       # in order to make Capybara work
+  Capybara.app = Backend        # in order to make Capybara work
 
   # set test environments
   set :environment, :test
@@ -27,7 +26,7 @@ Spork.prefork do
   end
 
   def app
-    @app ||= Sinatra::Application
+    @app ||= Backend
   end
 end
 

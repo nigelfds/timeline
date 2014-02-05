@@ -1,3 +1,6 @@
+require './backend'
+use Backend
+
 ###
 # Compass
 ###

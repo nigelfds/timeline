@@ -21,7 +21,7 @@ module.exports = (config) ->
         "source/lib/sinon/*.js"
         "source/lib/chai/*"
         "source/javascripts/**"
-        "spec/**"
+        "frontend_specs/**"
     ]
 
     # list of files to exclude
