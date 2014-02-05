@@ -18,7 +18,7 @@ angular.module('timeline')
 
 					timeline.setVisibleChartRangeAuto()
 
-				scope.$watch('events',
+				scope.$watchCollection('events',
 					() ->
 						drawTimeline(scope.events) if(scope.events)
 				)

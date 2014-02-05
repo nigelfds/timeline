@@ -26,5 +26,7 @@ describe "UsersController", ->
 
 		usersController = UsersController scope, usersService
 
-		scope.users.patients.should.contain barry
-		scope.users.patients.should.contain michael
+
+		scope.users.patients.should.have.length 2
+		scope.users.patients[0].should.equal barry
+		scope.users.patients[1].should.equal michael

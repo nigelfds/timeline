@@ -18,5 +18,11 @@ describe "my first test" do
 	end
   end
 
+  describe "Options" do
+    before { options "/"}
+    it { last_response.header["Allow"].should include("POST") }
+    it { last_response.header["Access-Control-Allow-Headers"].should include("Content-Type") }
+  end
+
 
 end
