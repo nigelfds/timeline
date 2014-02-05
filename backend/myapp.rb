@@ -26,10 +26,11 @@ get '/patient/:id' do
 end
 
 post '/patient' do
+	response['Access-Control-Allow-Origin'] = '*'
 	body = JSON.parse(request.body.read)
 	if isValidPatient(body)
 		id = $db["patients"].insert(:name => body["name"]).to_s
-		body(id)
+		body($db["patients"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
 		status 200
 	else
 		error 400
