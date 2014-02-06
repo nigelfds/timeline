@@ -69,7 +69,7 @@ class Backend < Sinatra::Base
 		body = JSON.parse(request.body.read)
 		if isValidEvent(body)
 			id = $db["events"].insert({:description => body["description"], :patient_id => BSON.ObjectId(params[:patient_id]), :start => body["start"]}).to_s
-			body(id)
+			body($db["events"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
 			status 200
 		else
 			error 400

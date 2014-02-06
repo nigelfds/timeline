@@ -51,7 +51,6 @@ describe "POST Patient" do
 
 	it 'should return the new patient' do
 		post '/patient', {"name" => "Jack"}.to_json
-
 		last_response.body.should include('"name":"Jack"')
 	end
 
