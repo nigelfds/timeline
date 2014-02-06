@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Event API Spec" do
-	
+
 	describe "GET events" do
 		after(:each) do
 			$db["events"].remove
@@ -37,7 +37,7 @@ describe "Event API Spec" do
 			$db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => BSON.ObjectId(patient_id)})
 			$db["events"].insert({:description => "Last Event", :start => (Time.now + 1000).utc, :patient_id => BSON.ObjectId(patient_id)})
 			$db["events"].insert({:description => "First Event", :start => (Time.now - 1000).utc, :patient_id => BSON.ObjectId(patient_id)})
-			
+
 			get '/patient/'+patient_id+'/event'
 			JSON.parse(last_response.body)["events"][0].should include("description" => "First Event")
 			JSON.parse(last_response.body)["events"][1].should include("description" => "Some Event")
@@ -94,6 +94,15 @@ describe "Event API Spec" do
 			last_response.status.should eq(400)
 			$db["events"].find.to_a.should eq([])
 		end
+
+		it 'should return the event' do
+			patient_id = '52eeec750004deaf4d00000b'
+			time = Time.now.utc.to_s
+			post '/patient/'+patient_id+'/event', {:description => "Special Event", :start => time}.to_json
+
+			last_response.body.should include('"description":"Special Event"')
+			last_response.body.should include(time)
+		end
 	end
 
 	describe "PUT event" do
@@ -138,7 +147,7 @@ describe "Event API Spec" do
 
 		it "return 404 if cannot find object to delete" do
 			patient_id = id = '52eeec750004deaf4d00000b'
-			
+
 			delete '/patient/'+patient_id+'/event/'+id
 			last_response.status.should eq(404)
 		end
