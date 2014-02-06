@@ -28,7 +28,7 @@
       return this.http.get("/patient/" + userId + "/event").success(callback);
     };
 
-    EventsService.prototype.createEvent = function(event, userId) {
+    EventsService.prototype.createEvent = function(event, userId, callback) {
       return this.http({
         url: '/patient/' + userId + '/event',
         method: 'POST',
@@ -36,7 +36,7 @@
           'Content-Type': 'application/json'
         },
         data: event
-      });
+      }).success(callback);
     };
 
     return EventsService;
@@ -106,7 +106,7 @@
       EventService.createEvent({
         description: $scope.description,
         start: dateTime.toString()
-      }, $routeParams.userId);
+      }, $routeParams.userId, function(new_event) {}, $scope.events.push(new_event));
       return $scope.events.push({
         content: $scope.description,
         start: dateTime
