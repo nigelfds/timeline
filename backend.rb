@@ -95,12 +95,6 @@ class Backend < Sinatra::Base
 		end
 	end
 
-	options "*" do
-	  	response.headers["Allow"] = "POST"
-	  	response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-	  	halt 200
-	end
-
 	def isValidEvent(event)
 		event["description"] && event["start"] #Note patient_id is already coming through as part of the url...
 	end
