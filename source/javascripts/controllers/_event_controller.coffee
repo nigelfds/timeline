@@ -5,14 +5,17 @@ EventController = ($scope, $routeParams, EventService) ->
     $scope.time.setHours(12)
     $scope.time.setMinutes(0)
 
+    $scope.events = []
+
+    mapEvent= (event) ->
+        return {
+                content: event.description
+                start: new Date(event.start)
+            }
+
     EventService.getEvents($routeParams.userId, (events) ->
 
-    	$scope.events = events.events.map((the_event) ->
-    		return {
-    			content: the_event.description
-    			start: new Date(the_event.start)
-    		}
-    	)
+    	$scope.events = events.events.map(mapEvent)
     )
 
     $scope.createEvent = () ->
@@ -24,12 +27,12 @@ EventController = ($scope, $routeParams, EventService) ->
             $scope.time.getHours(),
             $scope.time.getMinutes()
         )
-        EventService.createEvent
-            description: $scope.description
-            start: dateTime.toString(), $routeParams.userId, (new_event) ->
-            $scope.events.push(new_event)
-
-        $scope.events.push({content: $scope.description, start: dateTime})
+        EventService.createEvent(
+            {description: $scope.description
+            start: dateTime.toString()},
+            $routeParams.userId,
+            (new_event) ->
+                $scope.events.push(mapEvent(new_event)))
 
 angular.module('timeline')
     .controller 'EventController', EventController

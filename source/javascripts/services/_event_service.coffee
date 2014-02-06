@@ -1,8 +1,6 @@
 class EventsService
 	constructor: (@http) ->
 
-
-
 	getEvents: (userId,callback) ->
 		@http.get("/patient/#{userId}/event").success(callback)
 
