@@ -10,7 +10,7 @@ use Backend
 
 # try the static site
 use Rack::TryStatic, 
-    root: "public",  # static files root dir
+    root: "build",  # static files root dir
     urls: %w[/],     # match all requests 
     try: ['.html', 'index.html', '/index.html'] # try these postfixes sequentially
 

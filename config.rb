@@ -1,5 +1,7 @@
-require './backend'
-use Backend
+configure :development do
+  require './backend'
+  use Backend
+end
 
 ###
 # Compass

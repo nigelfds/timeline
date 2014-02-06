@@ -4,6 +4,10 @@ require 'mongo'
 
 include Mongo
 
+ENV["MONGO_HOST"] = "localhost" unless ENV["MONGO_HOST"]
+ENV["MONGO_PORT"] = "27017" unless ENV["MONGO_PORT"]
+ENV["MONGO_DB_NAME"] = "dandb" unless ENV["MONGO_DB_NAME"]
+
 class Backend < Sinatra::Base
 
 	$db = MongoClient.new(ENV["MONGO_HOST"], ENV["MONGO_PORT"]).db(ENV["MONGO_DB_NAME"])
