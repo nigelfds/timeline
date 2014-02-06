@@ -33,4 +33,12 @@
 
 #### Running the tests (backend)
 
-	foreman run rspec
+1. Create .env file containing
+
+		MONGO_HOST=localhost
+		MONGO_PORT=27017
+		MONGO_DB_NAME=dandb
+
+2. Run the tests
+
+		foreman run rspec
