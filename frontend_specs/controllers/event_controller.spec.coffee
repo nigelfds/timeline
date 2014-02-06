@@ -50,6 +50,7 @@ describe "EventController", ->
             event1 = {description: "Some Event", start: date.toUTCString()}
             eventService = sinon.createStubInstance EventsService
             eventService.getEvents.yields {"events":[]}
+            eventService.createEvent.yields {description: "Some Event"}
 
         it 'should create a new event with valid data', ->
             eventController = EventController _scope, routeParams, eventService

@@ -1,18 +1,20 @@
 nav(class="navbar navbar-default" role="navigation")
     .container-fluid
         .navbar-header
-            .navbar-brand
-                ol(class="breadcrumb")
-                    li
-                        a(href="#") Users
-                    li Events
+            .navbar-brand Events
 
 eventtimeline
 
-form(name="eventForm" novalidate ng-submit="createEvent()")
-	div
-		input (type="text" placeholder="Description" class="form-control" ng-model="description" required)
-		input(class="form-control" type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
-		timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
+form(name="eventForm" novalidate)
 
-    button(type="submit" class="btn btn-primary" ng-disabled="eventForm.$invalid") Create Event
+.container-fluid
+    .row-fluid
+        .col-xs-5
+            input (type="text" placeholder="Description" class="form-control" ng-model="description" required)
+        .col-xs-2
+            input(class="form-control" type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
+        .col-xs-2
+            timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
+        .col-xs-3
+            button(class="btn btn-primary" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
+                span class="glyphicon glyphicon-plus"

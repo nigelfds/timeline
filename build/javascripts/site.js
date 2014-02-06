@@ -88,28 +88,29 @@
   var EventController;
 
   EventController = function($scope, $routeParams, EventService) {
+    var mapEvent;
     $scope.date = new Date();
     $scope.time = new Date();
     $scope.time.setHours(12);
     $scope.time.setMinutes(0);
+    $scope.events = [];
+    mapEvent = function(event) {
+      return {
+        content: event.description,
+        start: new Date(event.start)
+      };
+    };
     EventService.getEvents($routeParams.userId, function(events) {
-      return $scope.events = events.events.map(function(the_event) {
-        return {
-          content: the_event.description,
-          start: new Date(the_event.start)
-        };
-      });
+      return $scope.events = events.events.map(mapEvent);
     });
     return $scope.createEvent = function() {
       var dateTime;
       dateTime = new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes());
-      EventService.createEvent({
+      return EventService.createEvent({
         description: $scope.description,
         start: dateTime.toString()
-      }, $routeParams.userId, function(new_event) {}, $scope.events.push(new_event));
-      return $scope.events.push({
-        content: $scope.description,
-        start: dateTime
+      }, $routeParams.userId, function(new_event) {
+        return $scope.events.push(mapEvent(new_event));
       });
     };
   };
