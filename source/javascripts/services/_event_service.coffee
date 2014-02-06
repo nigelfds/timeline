@@ -6,13 +6,13 @@ class EventsService
 	getEvents: (userId,callback) ->
 		@http.get("/patient/#{userId}/event").success(callback)
 
-	createEvent: (event, userId) ->
+	createEvent: (event, userId, callback) ->
 		@http({
     		url: '/patient/'+userId+'/event',
     		method: 'POST',
     		headers: { 'Content-Type': 'application/json' },
     		data: event
-		})
+		}).success(callback)
 
 
 angular.module('timeline')

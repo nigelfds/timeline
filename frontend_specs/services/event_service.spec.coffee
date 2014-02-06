@@ -28,10 +28,13 @@ describe 'EventService', () ->
 
     describe 'when creating a new event' , ()->
         it 'should make a post to the event api', ()->
+
             postedEvent = angular.toJson {description: "Some content", start: new Date(Date.now())}
-            $httpBackend.whenPOST('/patient/'+userId+'/event', postedEvent).respond {}
+            $httpBackend.whenPOST('/patient/'+userId+'/event', postedEvent).respond {description: "Some content"}
             $httpBackend.expectPOST('/patient/'+userId+'/event', postedEvent)
 
-            EventService.createEvent(postedEvent, userId)
+            EventService.createEvent(postedEvent, userId, (new_event) ->
+                new_event.should.eql {description: "Some content"}
+            )
 
             $httpBackend.flush()

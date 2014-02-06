@@ -26,7 +26,8 @@ EventController = ($scope, $routeParams, EventService) ->
         )
         EventService.createEvent
             description: $scope.description
-            start: dateTime.toString(), $routeParams.userId
+            start: dateTime.toString(), $routeParams.userId, (new_event) ->
+            $scope.events.push(new_event)
 
         $scope.events.push({content: $scope.description, start: dateTime})
 
