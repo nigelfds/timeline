@@ -13,7 +13,7 @@ class Backend < Sinatra::Base
 	$db = MongoClient.new(ENV["MONGO_HOST"], ENV["MONGO_PORT"]).db(ENV["MONGO_DB_NAME"])
 
 	if (ENV["MONGO_USER"] and ENV["MONGO_PASSWORD"])
-		$db.authenticate(ENV["MONGO_USER"], ENV["MONGO_PASSWORD"]) 
+		$db.authenticate(ENV["MONGO_USER"], ENV["MONGO_PASSWORD"])
 	end
 
 	get '/patient' do
