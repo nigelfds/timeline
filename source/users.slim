@@ -1,7 +1,9 @@
 nav(class="navbar navbar-default" role="navigation")
     .container-fluid
         .navbar-header
-            .navbar-brand Users
+            .navbar-brand
+                 ol(class="breadcrumb")
+                    li Users
 
 .container-fluid
     .row-fluid
@@ -20,6 +22,6 @@ nav(class="navbar navbar-default" role="navigation")
             .col-xs-5
                 input (type="text" placeholder="Name" class="form-control" ng-model="userName" required)
             .col-xs-3
-                button(ng-click="createUser()" class="btn btn-primary" ng-disabled="userForm.$invalid")   
+                button(ng-click="createUser()" class="btn btn-primary" ng-disabled="userForm.$invalid")
                     span class="glyphicon glyphicon-plus"
             .col-xs-2
