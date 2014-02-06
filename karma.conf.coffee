@@ -21,7 +21,6 @@ module.exports = (config) ->
         "source/lib/sinon/*.js"
         "source/lib/chai/*.js"
         "source/javascripts/**"
-        "spec/chai-test.js"
         "frontend_specs/**"
     ]
 
