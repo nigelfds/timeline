@@ -6,7 +6,11 @@ include Mongo
 
 class Backend < Sinatra::Base
 
-	$db = MongoClient.new("localhost", 27017).db("dandb")
+	$db = MongoClient.new(ENV["MONGO_HOST"], ENV["MONGO_PORT"]).db(ENV["MONGO_DB_NAME"])
+
+	if (ENV["MONGO_USER"] and ENV["MONGO_PASSWORD"])
+		$db.authenticate(ENV["MONGO_USER"], ENV["MONGO_PASSWORD"]) 
+	end
 
 	get '/patient' do
 		content_type :json

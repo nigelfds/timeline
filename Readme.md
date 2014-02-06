@@ -13,7 +13,7 @@
 		open http://localhost:4567
 
 
-#### Running the tests
+#### Running the tests (frontend)
 
 1. Install Node.js
 
@@ -31,6 +31,6 @@
 
 		./node_modules/.bin/karma start karma.conf.coffee
 
+#### Running the tests (backend)
 
-
-
+	foreman run rspec
