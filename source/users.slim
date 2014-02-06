@@ -5,7 +5,7 @@ nav(class="navbar navbar-default" role="navigation")
 
 .container-fluid
     .row-fluid
-        .container-fluid ng-repeat="user in users.patients | orderBy:'name'"
+        div (class="container-fluid user" ng-repeat="user in users.patients | orderBy:'name'")
             .col-xs-2
             .col-xs-5
                 p = "{{user.name}}"
