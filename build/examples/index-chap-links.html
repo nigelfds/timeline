@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><title>Timeline JS Example</title><script src="frameworks/timeline-chap-links/timeline.js" type="text/javascript"></script><link href="frameworks/timeline-chap-links/timeline.css" rel="stylesheet" /><link href="stylesheets/site.css" rel="stylesheet" /></head><body><div id="timeline-embed"></div><script type="text/javascript">(function() {
+  var data, options, timeline;
+
+  timeline = new links.Timeline(document.getElementById('timeline-embed'));
+
+  data = [
+    {
+      'start': new Date(2012, 2, 1),
+      'content': 'Bare minimum'
+    }, {
+      'start': new Date(2012, 2, 2),
+      'end': new Date(2012, 2, 3),
+      'content': 'Event that spans time'
+    }, {
+      'start': new Date(2012, 2, 2),
+      'end': new Date(2012, 2, 3),
+      'content': 'Arbitrary <b>HTML</b> is allowed in <a href="#">here</a>'
+    }, {
+      'start': new Date(2012, 2, 3),
+      'content': '<div class="handoff">Handoff</div>Internal activity with handoff.',
+      'className': 'internal-activity'
+    }, {
+      'start': new Date(2012, 2, 4),
+      'content': 'Internal activity',
+      'className': 'internal-activity'
+    }, {
+      'start': new Date(2012, 2, 5),
+      'content': 'Value demand',
+      'className': 'value-demand'
+    }, {
+      'start': new Date(2012, 2, 6),
+      'content': 'Failure demand',
+      'className': 'failure-demand'
+    }
+  ];
+
+  options = {
+    "width": "100%",
+    "height": "100%",
+    "style": "box",
+    "groupsOnRight": "true"
+  };
+
+  timeline.draw(data, options);
+
+  timeline.setVisibleChartRangeAuto();
+
+}).call(this);
+</script></body></html>

@@ -1,0 +1,24 @@
+html,
+body {
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+#timeline-embed {
+  height: 100%;
+}
+.timeline-event.internal-activity {
+  background-color: #add8e6;
+}
+.timeline-event.value-demand {
+  background-color: #008000;
+}
+.timeline-event.failure-demand {
+  background-color: #f00;
+}
+.timeline-event .handoff {
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  color: #f00;
+}
