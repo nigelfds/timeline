@@ -5,7 +5,7 @@ nav(class="navbar navbar-default" role="navigation")
 
 eventtimeline
 
-form(name="eventForm" novalidate ng-submit="createEvent()")
+form(name="eventForm" novalidate)
 
 .container-fluid
     .row-fluid
@@ -16,5 +16,5 @@ form(name="eventForm" novalidate ng-submit="createEvent()")
         .col-xs-2
             timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
         .col-xs-3
-            a(class="btn btn-primary" ng-disabled="eventForm.$invalid")
+            button(class="btn btn-primary" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
                 span class="glyphicon glyphicon-plus"
