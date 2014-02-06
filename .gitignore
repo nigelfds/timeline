@@ -17,7 +17,7 @@
 .DS_Store
 
 # Ignore the data files
-/backend/data
+/frontend/data
 
 
 /frontend/node_modules
