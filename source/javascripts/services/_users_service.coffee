@@ -2,11 +2,11 @@ class UsersService
 	constructor: (@http) ->
 
 	getUsers: (callback) ->
-		@http.get("http://0.0.0.0:9292/patient").success (data) -> callback(data)
+		@http.get("/patient").success (data) -> callback(data)
 
 	createUser: (user, callback) ->
 		@http({
-    		url: 'http://0.0.0.0:9292/patient',
+    		url: '/patient',
     		method: 'POST',
     		headers: { 'Content-Type': 'application/json' },
     		data: user

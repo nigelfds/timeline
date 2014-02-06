@@ -10,7 +10,7 @@ describe 'UsersService', () ->
 
     it "should callback with the list of users", (done) ->
         users = {"patients":[]}
-        $httpBackend.when("GET", "http://0.0.0.0:9292/patient").respond users
+        $httpBackend.when("GET", "/patient").respond users
 
         service.getUsers (_users) ->
             _users.should.eql users
@@ -21,8 +21,8 @@ describe 'UsersService', () ->
     describe 'when creating a new user' , ()->
         it 'should make a post to the user api', ()->
             postedEvent = angular.toJson {name: "Barry"}
-            $httpBackend.whenPOST('http://0.0.0.0:9292/patient', postedEvent).respond {}
-            $httpBackend.expectPOST('http://0.0.0.0:9292/patient', postedEvent).respond {name: "Barry", id: "12345"}
+            $httpBackend.whenPOST('/patient', postedEvent).respond {}
+            $httpBackend.expectPOST('/patient', postedEvent).respond {name: "Barry", id: "12345"}
 
             service.createUser postedEvent, (new_user) ->
                 new_user.should.eql {name: "Barry", id: "12345"}
