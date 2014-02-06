@@ -1,15 +1,12 @@
-eventtimeline
+header
+  h1 Events
 
+eventtimeline
 
 form(name="eventForm" novalidate ng-submit="createEvent()")
 	div
-		label Description
-		input (type="text" class="form-control" ng-model="description" required)
-	div
-		label Date
+		input (type="text" placeholder="Description" class="form-control" ng-model="description" required)
 		input(class="form-control" type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
-
-		label Time
 		timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
 
     button(type="submit" class="btn btn-primary" ng-disabled="eventForm.$invalid") Create Event

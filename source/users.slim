@@ -1,10 +1,15 @@
-ul
-  li ng-repeat="user in users.patients | orderBy:'name'"
-    a(href="#/events/{{user._id.$oid}}") {{user.name}}
+header
+  h1 Users
 
-form(name="userForm" novalidate ng-submit="createUser()")
-	div
-		label Name
-		input (type="text" class="form-control" ng-model="userName" required)
-    button(type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid") Create New User
+.container-fluid
+    .row-fluid
+        ul
+            li ng-repeat="user in users.patients | orderBy:'name'"
+                a(href="#/events/{{user._id.$oid}}") {{user.name}}
 
+    .row-fluid
+        form(name="userForm" novalidate ng-submit="createUser()")
+            .col-xs-10
+                input (type="text" placeholder="Name" class="form-control" ng-model="userName" required)
+            .col-xs-2
+                button(type="submit" class="btn btn-primary btn-default" ng-disabled="userForm.$invalid") Create New User
