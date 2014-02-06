@@ -5,18 +5,21 @@ nav(class="navbar navbar-default" role="navigation")
 
 .container-fluid
     .row-fluid
-        .container-fluid
-            div ng-repeat="user in users.patients | orderBy:'name'"
-                .col-xs-10
-                    p = "{{user.name}}"
-                .col-xs-2
-                    a(class="btn btn-default" href="#/events/{{user._id.$oid}}")
-                        span class="glyphicon glyphicon-calendar"
+        .container-fluid ng-repeat="user in users.patients | orderBy:'name'"
+            .col-xs-2
+            .col-xs-5
+                p = "{{user.name}}"
+            .col-xs-3
+                a(class="btn btn-default" href="#/events/{{user._id.$oid}}")
+                    span class="glyphicon glyphicon-calendar"
+            .col-xs-2
 
     .row-fluid
         form(name="userForm" novalidate)
-            .col-xs-10
-                input (type="text" placeholder="Name" class="form-control" ng-model="userName" required)
             .col-xs-2
-                a(ng-click="createUser()" class="btn btn-primary btn-default" ng-disabled="userForm.$invalid")   
+            .col-xs-5
+                input (type="text" placeholder="Name" class="form-control" ng-model="userName" required)
+            .col-xs-3
+                button(ng-click="createUser()" class="btn btn-primary" ng-disabled="userForm.$invalid")   
                     span class="glyphicon glyphicon-plus"
+            .col-xs-2
