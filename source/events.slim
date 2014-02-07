@@ -1,20 +1,18 @@
 nav(class="navbar navbar-default" role="navigation")
-    .container-fluid
-        .navbar-header
-            .navbar-brand Events
+    .navbar-header
+        .navbar-brand Events
 
 eventtimeline
 
-form(name="eventForm" novalidate)
-
-.container-fluid
-    .row-fluid
-        .col-xs-5
-            input (type="text" placeholder="Description" class="form-control" ng-model="description" required)
-        .col-xs-2
-            input(class="form-control" type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
-        .col-xs-2
-            timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
-        .col-xs-3
-            button(class="btn btn-primary" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
-                span class="glyphicon glyphicon-plus"
+form(id="eventForm" name="eventForm" novalidate)
+    .container
+        .row
+            .col-xs-5
+                input (type="text" placeholder="Description" class="form-control top-margin-hack" ng-model="description" required)
+            .col-xs-3
+                input(class="form-control" type="text" class="top-margin-hack" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
+            .col-xs-3
+                timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
+            .col-xs-1
+                button(class="btn btn-primary top-margin-hack" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
+                    span class="glyphicon glyphicon-plus"

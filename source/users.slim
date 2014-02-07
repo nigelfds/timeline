@@ -1,11 +1,10 @@
 nav(class="navbar navbar-default" role="navigation")
-    .container-fluid
-        .navbar-header
-            .navbar-brand Users
+    .navbar-header
+        .navbar-brand Users
 
-.container-fluid
-    .row-fluid
-        div (class="container-fluid user" ng-repeat="user in users.patients | orderBy:'name'")
+.container
+    .row
+        div (class="container user" ng-repeat="user in users.patients | orderBy:'name'")
             .col-xs-2
             .col-xs-5
                 p = "{{user.name}}"
@@ -14,7 +13,7 @@ nav(class="navbar navbar-default" role="navigation")
                     span class="glyphicon glyphicon-calendar"
             .col-xs-2
 
-    .row-fluid
+    .row
         form(name="userForm" novalidate)
             .col-xs-2
             .col-xs-5
