@@ -2,7 +2,7 @@ nav(class="navbar navbar-default" role="navigation")
     .navbar-header
         .navbar-brand Events
 
-eventtimeline
+div(eventtimeline)
 
 form(id="eventForm" name="eventForm" novalidate)
     .container
@@ -12,7 +12,7 @@ form(id="eventForm" name="eventForm" novalidate)
             .col-xs-3
                 input(class="form-control" type="text" class="top-margin-hack" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
             .col-xs-3
-                timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
+                input(timepicker hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
             .col-xs-1
                 button(class="btn btn-primary top-margin-hack" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
                     span class="glyphicon glyphicon-plus"

@@ -1,7 +1,7 @@
 angular.module('timeline')
 	.directive('eventtimeline', [
 		() ->
-			restrict: 'E',
+			restrict: 'A',
 			template: '<div id="user-timeline">'
 			link: (scope, element, attrs) ->
 				timeline = new links.Timeline(element.children()[0])

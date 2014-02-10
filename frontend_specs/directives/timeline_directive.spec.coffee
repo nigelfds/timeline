@@ -7,7 +7,7 @@ describe("Timeline Directive", ->
     beforeEach module 'timeline'
 
     beforeEach inject ($rootScope, $compile) ->
-        element = angular.element '<eventtimeline>'
+        element = angular.element '<div eventtimeline>'
         scope = $rootScope.$new()
 
         sinon.spy(scope, "$watch");
