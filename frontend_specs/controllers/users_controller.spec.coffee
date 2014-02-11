@@ -10,18 +10,18 @@ describe "UsersController", ->
 
 	it "should display an empty list", () ->
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields { "patients" : "empty" }
+		usersService.getUsers.yields []
 
 		usersController = UsersController scope, usersService
 
-		scope.users.should.eql "empty"
+		scope.users.should.eql []
 
 
 	it "should display users", ->
 		barry = name: "Barry"
 		michael = name: "Michael"
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields {"patients":[barry, michael]}
+		usersService.getUsers.yields [ barry, michael ]
 		scope = {}
 
 		usersController = UsersController scope, usersService
@@ -41,7 +41,7 @@ describe "UsersController", ->
 		it 'should create a new user with the provided name', ->
 			barry = name: "Barry"
 			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields {"patients":[]}
+			usersService.getUsers.yields []
 
 			usersController = UsersController scope, usersService
 
@@ -53,7 +53,7 @@ describe "UsersController", ->
 		it 'should add the new user to the scope', ->
 			barry = {name: "Barry"}
 			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields {"patients":[]}
+			usersService.getUsers.yields []
 			usersService.createUser.yields barry
 
 			usersController = UsersController scope, usersService

@@ -16,36 +16,39 @@ class Backend < Sinatra::Base
 		$db.authenticate(ENV["MONGO_USER"], ENV["MONGO_PASSWORD"])
 	end
 
-	get '/patient' do
+	get '/users' do
 		content_type :json
-		{:patients => $db["patients"].find.to_a}.to_json
+
+		users = $db["users"].find.to_a
+
+		users.to_json
 	end
 
-	get '/patient/:id' do
+	get '/users/:id' do
 		content_type :json
-		patient = $db["patients"].find_one({"_id" => BSON.ObjectId(params[:id])})
+		patient = $db["users"].find_one({"_id" => BSON.ObjectId(params[:id])})
 		if patient
-			{:patient => patient}.to_json
+			patient.to_json
 		else
 			error 404
 		end
 	end
 
-	post '/patient' do
+	post '/users' do
 		body = JSON.parse(request.body.read)
 		if isValidPatient(body)
-			id = $db["patients"].insert(:name => body["name"]).to_s
-			body($db["patients"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
+			id = $db["users"].insert(:name => body["name"]).to_s
+			body($db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
 			status 200
 		else
 			error 400
 		end
 	end
 
-	put '/patient/:id' do
+	put '/users/:id' do
 		body = JSON.parse(request.body.read)
 		new_values = body.select {|k,v| ["name"].include? k}
-		result = $db["patients"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+		result = $db["users"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
 
 		unless result["updatedExisting"]
 			error 400, result.to_json

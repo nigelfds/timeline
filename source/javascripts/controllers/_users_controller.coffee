@@ -1,7 +1,7 @@
 UsersController = ($scope, UsersService) ->
 
 	UsersService.getUsers (users) ->
-		$scope.users = users.patients
+		$scope.users = users
 
 	$scope.createUser = ($event) ->
 		$event.preventDefault()

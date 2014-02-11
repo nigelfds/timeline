@@ -1,83 +1,135 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe "GET Patients" do
+db_users = $db["users"]
+url_path = "/users"
+
+describe "GET #{url_path}" do
 	after(:each) do
-		$db["patients"].remove
+		db_users.remove
 	end
 	it "should be json" do
-		get '/patient'
-		last_response.headers['Content-Type'].should eq('application/json;charset=utf-8')
+		get "#{url_path}"
+
+		last_response.headers["Content-Type"].should eq("application/json;charset=utf-8")
 	end
 
 	it "should get a empty list of customers" do
-		get '/patient'
-		{:patients => []}.to_json.should eq(last_response.body)
+		get "#{url_path}"
+		response = JSON.parse(last_response.body)
+
+		response.should eql([])
 	end
+
 	it "should get a list of customers" do
-		$db["patients"].insert :name => "Bob"
-		get '/patient'
-		JSON.parse(last_response.body)["patients"][0].should include("name" => "Bob")
+		db_users.insert :name => "Bob"
+		db_users.insert :name => "John"
+
+		get "#{url_path}"
+		response = JSON.parse(last_response.body)
+
+		response.should have(2).items
+		
+		# JSON.parse(last_response.body)["users"][0].should include("name" => "Bob")
 	end
 end
 
-describe "GET Patient" do
+describe "GET #{url_path}/:id" do
 	after(:each) do
-		$db["patients"].remove
+		db_users.remove
 	end
 
 	it "should return not found if no customer found" do
-		get '/patient/'+'52eeec750004deaf4d00000b'
+		get "#{url_path}/52eeec750004deaf4d00000b"
 		last_response.status.should eq(404)
 	end
-	it "should get a customer" do
-		id = $db["patients"].insert(:name => "Bob").to_s
-		get '/patient/'+id
-		JSON.parse(last_response.body)["patient"].should include("name" => "Bob")
+
+	it "should get a user" do
+		id = db_users.insert(:name => "Bob").to_s
+		get "#{url_path}/#{id}"
+
+		response = JSON.parse(last_response.body)
+
+		response["name"].should eq("Bob")
 	end
 end
 
-describe "POST Patient" do
+describe "POST #{url_path}" do
 	after(:each) do
-		$db["patients"].remove
+		db_users.remove
 	end
 
-	it "should add a patient" do
-		post '/patient', {"name" => "Jack"}.to_json
+	it "should insert a new user" do
+		new_user = {"name" => "Jack"}
+
+		post "#{url_path}", new_user.to_json
+
+		db_users.find_one("name"=>"Jack").should_not be_nil
+	end
+
+	it "should return a response of OK" do
+		post "#{url_path}", {"name" => "Jack"}.to_json
 
 		last_response.status.should eq(200)
-		last_response.body.should_not be_empty  #Return id
-		$db["patients"].find_one("name"=>"Jack").should include("name" => "Jack")
 	end
 
-	it 'should return the new patient' do
-		post '/patient', {"name" => "Jack"}.to_json
-		last_response.body.should include('"name":"Jack"')
+	it "should return the new user" do
+		post "#{url_path}", {"name" => "Jack"}.to_json
+
+		response = JSON.parse(last_response.body)
+		response["name"].should eq("Jack")
 	end
 
-	it "should give error on invalid patient creation request" do
-		post '/patient', {}.to_json
-		last_response.status.should eq(400)
-		$db["patients"].find.to_a.should eq([])
+	describe "with an invalid request" do
+
+		it "should return an error response" do
+			post "#{url_path}", {}.to_json
+
+			last_response.status.should eq(400)
+		end
+
+		it "should not insert a new user" do
+			post "#{url_path}", {}.to_json
+
+			db_users.find.to_a.should eq([])
+		end
+
 	end
+
 end
 
-describe "PUT Patient" do
+describe "PUT #{url_path}" do
 	after(:each) do
-		$db["patients"].remove
+		db_users.remove
 	end
 
-	it "should update the patients name" do
-		id = $db["patients"].insert(:name => "Fred").to_s
-		put '/patient/'+id, {"name" => "Frank"}.to_json
+	describe "with a valid update" do
+		before(:each) do
+			@id = db_users.insert(:name => "Fred")
 
-		last_response.status.should eq(200)
+		end
 
-		$db["patients"].find_one("name"=>"Frank").should include("name" => "Frank")
-		$db["patients"].find_one("name"=>"Fred").should be_nil
-	end
+		it "should return an OK response" do
+			update = {"name" => "Frank"}
+
+			put "#{url_path}/#{@id}", update.to_json
+
+			last_response.status.should eq(200)
+		end
+
+		it "should update the users name" do
+			update = {"name" => "Frank"}
+
+			put "#{url_path}/#{@id}", update.to_json
+
+			user = db_users.find_one("_id" => @id)
+			user["name"].should eq("Frank")
+		end
+
+	end 
+
 
 	it "should return error if update fails" do
-		put '/patient/52eeec750004deaf4d00000b', {"name" => "Frank"}.to_json
+		put "#{url_path}/52eeec750004deaf4d00000b", {"name" => "Frank"}.to_json
 
 		last_response.status.should eq(400)
 	end
