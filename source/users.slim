@@ -2,23 +2,17 @@ nav(class="navbar navbar-default" role="navigation")
     .navbar-header
         .navbar-brand Users
 
-.container
+.container-fluid
     .row
-        div (class="container user" ng-repeat="user in users.patients | orderBy:'name'")
-            .col-xs-2
-            .col-xs-5
-                p = "{{user.name}}"
-            .col-xs-3
-                a(class="btn btn-default" href="#/events/{{user._id.$oid}}")
-                    span class="glyphicon glyphicon-calendar"
-            .col-xs-2
+        .col-xs-10.col-xs-offset-1
+            a.user.btn.btn-success(ng-repeat="user in users | orderBy:'name'" href="#/events/{{user._id.$oid}}")
+                = "{{user.name}}"
 
-    .row
-        form(name="userForm" novalidate)
-            .col-xs-2
-            .col-xs-5
-                input (type="text" placeholder="Name" class="form-control" ng-model="userName" required)
-            .col-xs-3
-                button(ng-click="createUser()" class="btn btn-primary" ng-disabled="userForm.$invalid")
-                    span class="glyphicon glyphicon-plus"
-            .col-xs-2
+        .col-xs-10.col-xs-offset-1(ng-repeat-end)
+            form.form-inline.user(name="userForm" novalidate)
+                .input-group.input-group-lg
+                    input.form-control(type="text" placeholder="Type a new users name" ng-model="userName" required)
+                    span.input-group-btn
+                        button.btn.btn-default.glyphicon.glyphicon-plus(ng-click="createUser($event)" ng-disabled="userForm.$invalid")
+
+                        / button.btn.btn-default(ng-click="$event.preventDefault()") Hello

@@ -1,16 +1,37 @@
 # To get up and running
 
-1. Install required gems (if you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that)
+#### Install and run an instance of [MongoDB](http://www.mongodb.org)
+
+1. Update [Homebrew](http://brew.sh)
+
+		brew update
+	
+2. Install MongoDB
+
+		brew install mongo
+		
+3. Make a folder for the MongoDB data (recommended to use a path outside of the codebase)
+
+		mkdir -p [path to data]
+		
+4. Run Mongo
+
+		mongod --dbpath [path to data]
+
+#### Run the server
+
+2. Install required gems (if you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that)
 
 		bundle install
 		
-2. Run the server
+3. Run the server
 
-		bundle exec middleman
+		middleman
 		
-3. You can now view the website in your browser
+4. You can now view the website in your browser
 
 		open http://localhost:4567
+	
 
 
 #### Running the tests (frontend)
@@ -33,12 +54,12 @@
 
 #### Running the tests (backend)
 
-1. Create .env file containing
+1. Create .env file containing (Optional if Mongo isn't running under this configuration)
 
 		MONGO_HOST=localhost
 		MONGO_PORT=27017
 		MONGO_DB_NAME=dandb
 
-2. Run the tests
+2. Run the tests)
 
 		foreman run rspec

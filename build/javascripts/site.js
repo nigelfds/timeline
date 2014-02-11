@@ -131,7 +131,7 @@
         name: $scope.userName
       };
       return UsersService.createUser(newUser, function(new_user) {
-        return $scope.users.patients.push(new_user);
+        return $scope.users.push(new_user);
       });
     };
   };

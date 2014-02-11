@@ -5,14 +5,21 @@ nav(class="navbar navbar-default" role="navigation")
 eventtimeline
 
 form(id="eventForm" name="eventForm" novalidate)
-    .container
-        .row
-            .col-xs-5
-                input (type="text" placeholder="Description" class="form-control top-margin-hack" ng-model="description" required)
-            .col-xs-3
-                input(class="form-control" type="text" class="top-margin-hack" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)
-            .col-xs-3
-                timepicker(hour-step="1" minute-step="5" show-meridian="true" ng-model="time")
-            .col-xs-1
-                button(class="btn btn-primary top-margin-hack" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
-                    span class="glyphicon glyphicon-plus"
+    h4 Add a new event
+    .input-group
+        span.input-group-addon Description
+        input.form-control(type="text" placeholder="Please type the description of the event" ng-model="description" required)
+
+    .input-group
+        span.input-group-addon
+            span.glyphicon.glyphicon-calendar
+        input.form-control(type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)                
+
+    .input-group
+        span.input-group-addon
+            span.glyphicon.glyphicon-time
+        timepicker(hour-step="1" minute-step="30" show-meridian="true" ng-model="time")
+
+    .input-group
+        button(class="btn btn-primary top-margin-hack" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
+            | Add

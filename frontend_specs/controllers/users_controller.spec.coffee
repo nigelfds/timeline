@@ -10,7 +10,7 @@ describe "UsersController", ->
 
 	it "should display an empty list", () ->
 		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields "empty"
+		usersService.getUsers.yields { "patients" : "empty" }
 
 		usersController = UsersController scope, usersService
 
@@ -27,11 +27,17 @@ describe "UsersController", ->
 		usersController = UsersController scope, usersService
 
 
-		scope.users.patients.should.have.length 2
-		scope.users.patients[0].should.equal barry
-		scope.users.patients[1].should.equal michael
+		scope.users.should.have.length 2
+		scope.users[0].should.equal barry
+		scope.users[1].should.equal michael
 
 	describe 'when addining a new user', ->
+		event = undefined
+
+		beforeEach ->
+			event =
+				preventDefault: sinon.stub()
+
 		it 'should create a new user with the provided name', ->
 			barry = name: "Barry"
 			usersService = sinon.createStubInstance UsersService
@@ -40,7 +46,7 @@ describe "UsersController", ->
 			usersController = UsersController scope, usersService
 
 			scope.userName = barry["name"]
-			scope.createUser()
+			scope.createUser(event)
 
 			usersService.createUser.should.have.been.calledWith barry
 
@@ -53,9 +59,10 @@ describe "UsersController", ->
 			usersController = UsersController scope, usersService
 
 			scope.userName = barry["name"]
-			scope.createUser()
+			scope.createUser(event)
 
-			scope.users.patients[0].should.eql barry
+			scope.users[0].should.eql barry
 			#I need the "Chai things" plugin to do something like
+			# scope.users.should.deep.contain barry
 			#scope.users.patients.should.include.something.that.deep.equals barry
 
