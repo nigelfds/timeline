@@ -143,7 +143,7 @@
   angular.module('timeline').directive('eventtimeline', [
     function() {
       return {
-        restrict: 'E',
+        restrict: 'A',
         template: '<div id="user-timeline">',
         link: function(scope, element, attrs) {
           var drawTimeline, options, timeline;
