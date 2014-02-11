@@ -61,8 +61,5 @@ describe "UsersController", ->
 			scope.userName = barry["name"]
 			scope.createUser(event)
 
-			scope.users[0].should.eql barry
-			#I need the "Chai things" plugin to do something like
-			# scope.users.should.deep.contain barry
-			#scope.users.patients.should.include.something.that.deep.equals barry
+			scope.users.should.contain.members [barry]
 
