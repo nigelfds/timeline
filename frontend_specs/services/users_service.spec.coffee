@@ -18,6 +18,20 @@ describe 'UsersService', () ->
 
         $httpBackend.flush()
 
+    it "should return a user", (done) ->
+        test_user = id: "some_user_id"
+
+        user = name: "Seaton"
+        $httpBackend.when("GET", "/patient/#{test_user.id}").respond patient: user
+
+        service.getUser test_user.id, (_user) ->
+            _user.should.eql user
+            done()
+
+        $httpBackend.flush()
+
+
+
     describe 'when creating a new user' , ()->
         it 'should make a post to the user api', ()->
             postedEvent = angular.toJson {name: "Barry"}

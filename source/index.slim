@@ -1,14 +1,14 @@
 doctype html
 html lang="en"
   head
-	title Users of the clinic
+  	title Users of the clinic
     /[if lte IE 8]
-      | <script src="lib/json3/json3.min.js"></script>
-  script(type="text/javascript" src="frameworks/timeline-chap-links/timeline.js")
-  link(rel="stylesheet" href="frameworks/timeline-chap-links/timeline.css")
-  link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css")
-	link(rel="stylesheet" href="stylesheets/site.css")
-  body id="ng-app" ng-app="timeline"
+      script(src="lib/json3/json3.min.js")
+    script(type="text/javascript" src="frameworks/timeline-chap-links/timeline.js")
+    link(rel="stylesheet" href="frameworks/timeline-chap-links/timeline.css")
+    link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css")
+  	link(rel="stylesheet" href="stylesheets/site.css")
+  body(ng-app="timeline")
     div ng-view=""
 
     script src="lib/jquery/jquery-1.11.0.min.js" type="text/javascript"
@@ -16,6 +16,5 @@ html lang="en"
     script src="lib/angularjs/angular-route.min.js" type="text/javascript"
     script src="lib/angular-ui/ui-bootstrap-custom-0.10.0.min.js" type="text/javascript"
     script src="lib/angular-ui/ui-bootstrap-custom-tpls-0.10.0.min.js" type="text/javascript"
-
     script src="javascripts/site.js"
 

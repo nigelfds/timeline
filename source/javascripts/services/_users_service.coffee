@@ -4,6 +4,9 @@ class UsersService
 	getUsers: (callback) ->
 		@http.get("/patient").success (data) -> callback(data)
 
+	getUser: (id, callback) ->
+		@http.get("/patient/#{id}").success (data) -> callback(data.patient)
+
 	createUser: (user, callback) ->
 		@http({
     		url: '/patient',
