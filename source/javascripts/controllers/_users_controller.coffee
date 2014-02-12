@@ -8,4 +8,5 @@ UsersController = ($scope, UsersService) ->
 		newUser = { name: $scope.userName }
 		UsersService.createUser newUser, (new_user) -> $scope.users.push(new_user)
 
+
 angular.module('timeline').controller 'UsersController', UsersController
