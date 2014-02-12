@@ -11,11 +11,13 @@ ENV["MONGO_DB_NAME"] = "dandb" unless ENV["MONGO_DB_NAME"]
 ENV["USER_NAME"] = "admin" unless ENV["USER_NAME"]
 ENV["USER_PASSWORD"] = "admin" unless ENV["USER_PASSWORD"]
 
+ENV["DISABLE_AUTH"] = "true" unless ENV["DISABLE_AUTH"]
+
 class Backend < Sinatra::Base
 
 	helpers do
 	  	def protected!
-	    	return if authorized?
+	    	return if (ENV["DISABLE_AUTH"]=="true"  or authorized?)
 	    	headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
 	    	halt 401, "Not authorized\n"
 	  	end

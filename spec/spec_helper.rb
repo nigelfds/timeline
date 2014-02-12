@@ -6,6 +6,8 @@ ENV["MONGO_DB_NAME"] = "TestDb"
 ENV["USER_NAME"] = "admin"
 ENV["USER_PASSWORD"] = "admin"
 
+ENV["DISABLE_AUTH"] = "false"
+
 
 Spork.prefork do
   require File.join(File.dirname(__FILE__), '..', 'backend.rb')
