@@ -13,6 +13,7 @@ module.exports = (config) ->
     files: [
        "source/lib/jquery/jquery-1.11.0.min.js"
        "source/lib/angularjs/angular.min.js"
+       "source/lib/angularjs/angular-animate.min.js"
        "source/lib/angularjs/angular-route.min.js"
        "source/lib/angularjs/angular-mocks.js"
        "source/lib/angular-ui/ui-bootstrap-custom-0.10.0.min.js"

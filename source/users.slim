@@ -1,11 +1,12 @@
 .container-fluid
     .row
         .col-xs-10.col-xs-offset-1
-            a.user.btn.btn-success(ng-repeat="user in users | orderBy:'name'" href="#/users/{{user._id.$oid}}")
-                | {{user.name}}
+            .list-group
+                a.username.list-group-item.list-group-item-info(ng-repeat="user in users | orderBy:'name'" href="#/users/{{user._id.$oid}}")
+                    | {{user.name}}
 
         .col-xs-10.col-xs-offset-1(ng-repeat-end)
-            form.form-inline.user(name="userForm" novalidate)
+            form.newuser.form-inline(name="userForm" novalidate)
                 .input-group.input-group-lg
                     input.form-control(type="text" placeholder="Type a new users name" ng-model="userName" required)
                     span.input-group-btn

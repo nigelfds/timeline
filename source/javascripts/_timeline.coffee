@@ -1,6 +1,7 @@
 angular.module('timeline', [
 		'ngRoute',
-		'ui.bootstrap'
+		'ui.bootstrap',
+		'ngAnimate'
 	]
 )
 
