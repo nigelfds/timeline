@@ -6,7 +6,8 @@ UserController = ($scope, $routeParams, UsersService) ->
 	$scope.save = ($event) ->		
 		# filter all the user data except the id
 		data = {}
-		data[property] = value for property, value of $scope.user when property != "_id"
+		for property, value of $scope.user when property != "_id"
+			data[property] = value
 
 		UsersService.updateUser userId, data
 

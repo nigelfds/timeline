@@ -9,5 +9,9 @@
                 	span.input-group-addon Handovers
                     input.form-control(type="number" min="0" ng-model="user.numberOfHandovers" required)
 
+                .input-group
+                    span.input-group-addon Number of contacts
+                    input.form-control(type="number" min="0" ng-model="user.numberOfContacts" required)
+
                 .form-group
                     button.btn.btn-default(ng-click="save($event)" ng-disabled="userForm.$invalid") Save
