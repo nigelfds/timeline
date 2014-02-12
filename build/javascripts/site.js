@@ -5,6 +5,10 @@
         templateUrl: 'users.html',
         controller: 'UsersController'
       });
+      $routeProvider.when('/users/:userId', {
+        templateUrl: 'user.html',
+        controller: 'UserController'
+      });
       $routeProvider.when('/events/:userId', {
         templateUrl: 'events.html',
         controller: 'EventController'
@@ -57,14 +61,20 @@
     }
 
     UsersService.prototype.getUsers = function(callback) {
-      return this.http.get("/patient").success(function(data) {
+      return this.http.get("/users").success(function(data) {
+        return callback(data);
+      });
+    };
+
+    UsersService.prototype.getUser = function(id, callback) {
+      return this.http.get("/users/" + id).success(function(data) {
         return callback(data);
       });
     };
 
     UsersService.prototype.createUser = function(user, callback) {
       return this.http({
-        url: '/patient',
+        url: '/users',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -119,14 +129,27 @@
 
 }).call(this);
 (function() {
+  var UserController;
+
+  UserController = function($scope, $routeParams, UsersService) {
+    return UsersService.getUser($routeParams.userId, function(user) {
+      return $scope.name = user.name;
+    });
+  };
+
+  angular.module('timeline').controller('UserController', UserController);
+
+}).call(this);
+(function() {
   var UsersController;
 
   UsersController = function($scope, UsersService) {
     UsersService.getUsers(function(users) {
       return $scope.users = users;
     });
-    return $scope.createUser = function() {
+    return $scope.createUser = function($event) {
       var newUser;
+      $event.preventDefault();
       newUser = {
         name: $scope.userName
       };
