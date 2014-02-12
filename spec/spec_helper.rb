@@ -1,6 +1,13 @@
 require 'rubygems'
 require 'spork'
 ENV['RACK_ENV'] = 'test'                    # force the environment to 'test'
+ENV["MONGO_DB_NAME"] = "TestDb"
+
+ENV["USER_NAME"] = "admin"
+ENV["USER_PASSWORD"] = "admin"
+
+ENV["DISABLE_AUTH"] = "false"
+
 
 Spork.prefork do
   require File.join(File.dirname(__FILE__), '..', 'backend.rb')
