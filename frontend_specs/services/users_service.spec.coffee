@@ -30,14 +30,27 @@ describe 'UsersService', () ->
         $httpBackend.flush()
 
     describe 'when creating a new user' , ()->
-        it 'should make a post to the user api', ()->
-            postedEvent = angular.toJson {name: "Barry"}
-            $httpBackend.whenPOST('/users', postedEvent).respond {}
-            $httpBackend.expectPOST('/users', postedEvent).respond {name: "Barry", id: "12345"}
 
-            service.createUser postedEvent, (new_user) ->
-                new_user.should.eql {name: "Barry", id: "12345"}
+        it 'should make a post to the user api', ()->
+            potential_user = {name: "Barry"}
+            created_user = {name: "Barry", id: "12345"}
+            $httpBackend.expectPOST('/users', potential_user).respond created_user
+
+            service.createUser potential_user, (new_user) -> new_user.should.eql created_user
 
             $httpBackend.flush()
+
+    describe "updating a user", ->
+
+        it "sends the updated information to the server", ->
+            test_user = id: "some_id"
+            updatedUserData = "numberOfHandovers": 34
+            $httpBackend.expectPUT("/users/some_id", updatedUserData).respond {}
+
+            service.updateUser test_user.id, updatedUserData
+
+            $httpBackend.flush()
+
+
 
 

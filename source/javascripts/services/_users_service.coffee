@@ -15,5 +15,8 @@ class UsersService
     		data: user
 		}).success (data) -> callback(data)
 
+	updateUser: (id, data) ->
+		@http.put("/users/#{id}", data)
+
 
 angular.module('timeline').factory 'UsersService', ($http) -> new UsersService($http)

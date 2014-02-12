@@ -46,9 +46,10 @@ class Backend < Sinatra::Base
 	end
 
 	put '/users/:id' do
-		body = JSON.parse(request.body.read)
-		new_values = body.select {|k,v| ["name"].include? k}
-		result = $db["users"].update({"_id" => BSON.ObjectId(params[:id])}, new_values)
+		id = BSON.ObjectId(params[:id])
+		new_values = JSON.parse(request.body.read)
+
+		result = $db["users"].update({"_id" => id}, {"$set" => new_values})
 
 		unless result["updatedExisting"]
 			error 400, result.to_json

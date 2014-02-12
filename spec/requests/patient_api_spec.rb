@@ -125,6 +125,18 @@ describe "PUT #{url_path}" do
 			user["name"].should eq("Frank")
 		end
 
+		it "should update only the supplied fields" do
+			update = { "handovers" => 45, "contacts" => 68 }
+
+			put "#{url_path}/#{@id}", update.to_json
+
+			user = db_users.find_one("_id" => @id)
+
+			user["name"].should eq("Fred")
+			user["handovers"].should eq(45)
+			user["contacts"].should eq(68)
+		end
+
 	end 
 
 
