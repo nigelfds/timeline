@@ -28,6 +28,10 @@ class Backend < Sinatra::Base
 	  	end
 	end
 
+	before do
+		protected!
+	end
+
 	$db = MongoClient.new(ENV["MONGO_HOST"], ENV["MONGO_PORT"]).db(ENV["MONGO_DB_NAME"])
 
 	if (ENV["MONGO_USER"] and ENV["MONGO_PASSWORD"])
@@ -35,7 +39,6 @@ class Backend < Sinatra::Base
 	end
 
 	get '/users' do
-		protected!
 		content_type :json
 
 		users = $db["users"].find.to_a
@@ -44,7 +47,6 @@ class Backend < Sinatra::Base
 	end
 
 	get '/users/:id' do
-		protected!
 		content_type :json
 		patient = $db["users"].find_one({"_id" => BSON.ObjectId(params[:id])})
 		if patient
@@ -55,7 +57,6 @@ class Backend < Sinatra::Base
 	end
 
 	post '/users' do
-		protected!
 		body = JSON.parse(request.body.read)
 		if isValidPatient(body)
 			id = $db["users"].insert(:name => body["name"]).to_s
@@ -67,8 +68,6 @@ class Backend < Sinatra::Base
 	end
 
 	put '/users/:id' do
-		protected!
-
 		id = BSON.ObjectId(params[:id])
 		new_values = JSON.parse(request.body.read)
 
@@ -85,14 +84,12 @@ class Backend < Sinatra::Base
 	end
 
 	get '/patient/:id/event' do
-		protected!
 		content_type :json
 		events = $db["events"].find(:patient_id => BSON.ObjectId(params[:id])).sort(:start).to_a
 		{:events => events}.to_json
 	end
 
 	get '/patient/:patient_id/event/:id' do
-		protected!
 		content_type :json
 		event = $db["events"].find_one({"_id" => BSON.ObjectId(params[:id]), "patient_id" => BSON.ObjectId(params[:patient_id])})
 		if event
@@ -103,7 +100,6 @@ class Backend < Sinatra::Base
 	end
 
 	post '/patient/:patient_id/event' do
-		protected!
 		body = JSON.parse(request.body.read)
 		if isValidEvent(body)
 			id = $db["events"].insert({:description => body["description"], :patient_id => BSON.ObjectId(params[:patient_id]), :start => body["start"]}).to_s
@@ -115,7 +111,6 @@ class Backend < Sinatra::Base
 	end
 
 	put '/patient/:patient_id/event/:id' do
-		protected!
 		body = JSON.parse(request.body.read)
 		new_values = body.select {|k,v| ["description","start"].include? k}
 		result = $db["events"].update({"_id" => BSON.ObjectId(params[:id])}, '$set' => new_values)
@@ -126,7 +121,6 @@ class Backend < Sinatra::Base
 	end
 
 	delete '/patient/:patient_id/event/:id' do
-		protected!
 		result = $db["events"].remove("_id" => BSON.ObjectId(params[:id]))
 		if result["n"] > 0
 			status 200
