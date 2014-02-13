@@ -6,7 +6,7 @@ ENV["MONGO_DB_NAME"] = "TestDb"
 ENV["USER_NAME"] = "admin"
 ENV["USER_PASSWORD"] = "admin"
 
-ENV["DISABLE_AUTH"] = "false"
+ENV["PASSWORD_PROTECTED"] = "true"
 
 
 Spork.prefork do
