@@ -15,17 +15,31 @@
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'numberOfHandovers')")
                             	span.input-group-addon Handovers
-                                input.form-control(name="numberOfHandovers" type="number" min="0" ng-model="user.numberOfHandovers" ng-change="save()" required)
+                                input.form-control(name="numberOfHandovers" type="number" min="0" ng-model="user.numberOfHandovers" ng-change="save('numberOfHandovers')" required)
 
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'numberOfContacts')")
-                                span.input-group-addon Number of contacts
-                                input.form-control(name="numberOfContacts" type="number" min="0" ng-model="user.numberOfContacts" ng-change="save()" required)
+                                span.input-group-addon Patient contacts
+                                input.form-control(name="numberOfContacts" type="number" min="0" ng-model="user.numberOfContacts" ng-change="save('numberOfContacts')" required)
 
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'numberOfSystems')")
                                 span.input-group-addon Systems updated
-                                input.form-control(name="numberOfSystems" type="number" min="0" ng-model="user.numberOfSystems" ng-change="save()" required)
+                                input.form-control(name="numberOfSystems" type="number" min="0" ng-model="user.numberOfSystems" ng-change="save('numberOfSystems')" required)
 
-                        / .form-group
-                        /     button.btn.btn-default.pull-right(ng-click="save($event)" ng-disabled="userForm.$invalid") Save
+                        .form-group
+                            .input-group(ng-class="validationClass(userForm, 'touchPoints')")
+                                span.input-group-addon System touch points
+                                input.form-control(name="touchPoints" type="number" min="0" ng-model="user.touchPoints" ng-change="save('touchPoints')" required)
+                                
+                        .form-group
+                            .input-group(ng-class="validationClass(userForm, 'numberOfPeopleInvolved')")
+                                span.input-group-addon People involved
+                                input.form-control(name="numberOfPeopleInvolved" type="number" min="0" ng-model="user.numberOfPeopleInvolved" ng-change="save('numberOfPeopleInvolved')" required)
+
+
+                        / alert(ng-show="alerts.length != 0")
+                        /     div.fade(ng-repeat="alert in alerts" type="alert.type")
+                        /         | {{alert.msg}} {{$index}}
+
+                        / button.btn.btn-default(ng-click="addAlert()") Add Alert

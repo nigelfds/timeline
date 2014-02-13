@@ -6,6 +6,8 @@ describe "User controller", ->
 		"_id": "some_user_id"
 		"name": "Seaton"
 		"numberOfHandovers": 45
+		"numberOfPeopleInvolved": 10
+		"numberOfContacts": 34
 
 	beforeEach ->
 		scope = {}
@@ -15,28 +17,32 @@ describe "User controller", ->
 
 		UserController scope, routeParams, service
 
-	it "should display the user", ->
+	it "displays the user", ->
 		scope.user.should.be.eql test_user
 
 	describe "save", ->
 		beforeEach ->
 			scope.user = test_user
-			scope.userForm = $invalid: false
+			scope.userForm = 
+				numberOfHandovers: $valid : true
+				numberOfPeopleInvolved: $valid : true
+				numberOfContacts: $valid : true
 
-		it "should save the updated information", ->
-			scope.save()
+		it "saves only the specified property", ->
+			scope.save "numberOfPeopleInvolved"
 
-			data = 
-				"name" : test_user.name
-				"numberOfHandovers" : test_user.numberOfHandovers
+			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
 
 			service.updateUser.should.have.been.calledWith test_user.id, data
 
-		describe "when the form is not valid", ->
-			beforeEach -> scope.userForm = $invalid: true
+
+		describe "when data is invalid", ->
+			beforeEach -> scope.userForm.numberOfHandovers.$valid = false
 			
-			it "should not send anything to the service", ->
-				scope.save()
+			it "doesn't save the property", ->
+				scope.save "numberOfHandovers"
 
 				service.updateUser.should.not.have.been.called
+
+
 
