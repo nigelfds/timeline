@@ -1,6 +1,6 @@
 describe "User controller", ->
 
-	scope = routeParams = service = undefined
+	scope = routeParams = service = timeout = undefined
 
 	test_user =
 		"_id": "some_user_id"
@@ -18,7 +18,9 @@ describe "User controller", ->
 		service = sinon.createStubInstance UsersService
 		service.getUser.withArgs(test_user.id).yields test_user
 
-		UserController scope, routeParams, service
+		timeout = sinon.stub()
+
+		UserController scope, routeParams, service, timeout
 
 	it "displays the user", ->
 		scope.user.should.be.eql test_user
@@ -38,6 +40,13 @@ describe "User controller", ->
 
 			service.updateUser.should.have.been.calledWith test_user.id, data
 
+		it "alerts on success", ->
+			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
+			service.updateUser.withArgs(test_user.id, data).yields true
+
+			scope.save scope.userForm, "numberOfPeopleInvolved"
+
+			scope.alerts[0].message.should.eql "Updated user successfully"
 
 		describe "when data is invalid", ->
 			beforeEach -> scope.userForm.numberOfHandovers.$valid = false
