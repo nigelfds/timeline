@@ -12,6 +12,7 @@
 
                 .panel-body
             		form.form-inline(name="userForm" novalidate)
+
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'numberOfHandovers')")
                             	span.input-group-addon Handovers
@@ -38,8 +39,8 @@
                                 input.form-control(name="numberOfPeopleInvolved" type="number" min="0" ng-model="user.numberOfPeopleInvolved" ng-change="save('numberOfPeopleInvolved')" required)
 
 
-                        / alert(ng-show="alerts.length != 0")
-                        /     div.fade(ng-repeat="alert in alerts" type="alert.type")
-                        /         | {{alert.msg}} {{$index}}
+                        alert(ng-show="alerts.length != 0")
+                            div.fade(ng-repeat="alert in alerts")
+                                | {{alert.message}}
 
                         / button.btn.btn-default(ng-click="addAlert()") Add Alert

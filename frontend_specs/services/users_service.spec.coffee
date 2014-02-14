@@ -47,7 +47,9 @@ describe 'UsersService', () ->
             updatedUserData = "numberOfHandovers": 34
             $httpBackend.expectPUT("/users/some_id", updatedUserData).respond {}
 
-            service.updateUser test_user.id, updatedUserData
+            service.updateUser test_user.id, updatedUserData, (success) ->
+                success.should.eql true
+
 
             $httpBackend.flush()
 
