@@ -4,6 +4,7 @@
             h3
                 | {{user.name}}
 
+
             .panel.panel-default
                 .panel-heading
                     h4.name.panel-title
@@ -63,10 +64,8 @@
                             .input-group(ng-class="validationClass(userForm, 'numberOfPeopleInvolved')")
                                 span.input-group-addon People involved
                                 input.form-control(name="numberOfPeopleInvolved" type="number" min="0" ng-model="user.numberOfPeopleInvolved" ng-change="save(userForm, 'numberOfPeopleInvolved')" required)
+    alert.messages(ng-show="alerts.length != 0")
+        div.fade(ng-repeat="alert in alerts")
+            | {{alert.message}}
 
 
-                        alert(ng-show="alerts.length != 0")
-                            div.fade(ng-repeat="alert in alerts")
-                                | {{alert.message}}
-
-                        / button.btn.btn-default(ng-click="addAlert()") Add Alert
