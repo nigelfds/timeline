@@ -24,7 +24,7 @@
                                 span.input-group-addon Age
                                 input.form-control(name="age" type='number' min='0' ng-model="user.age" ng-change="save(userDetailsForm, 'age')" required)
                         .form-group
-                            .input-group
+                            .input-group(ng-class="validationClass(userDetailsForm, 'gender')")
                                 select.form-control(name="gender" ng-model="user.gender" required ng-change="save(userDetailsForm, 'gender')")
                                     option (value="") Select A Gender
                                     option (value="male") Male
