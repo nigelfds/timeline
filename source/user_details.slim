@@ -5,18 +5,9 @@
 
     .panel-body
         form.form-inline(name="userDetailsForm" novalidate)
-            .form-group
-                .input-group(ng-class="validationClass(userDetailsForm, 'name')")
-                    span.input-group-addon Name
-                    input.form-control(name="name" ng-model="user.name" ng-change="save(userDetailsForm, 'name')" required)
-            .form-group
-                .input-group(ng-class="validationClass(userDetailsForm, 'urNumber')")
-                    span.input-group-addon UR Number
-                    input.form-control(name="urNumber" type='number' min='0' ng-model="user.urNumber" ng-change="save(userDetailsForm, 'urNumber')" required)
-            .form-group
-                .input-group(ng-class="validationClass(userDetailsForm, 'age')")
-                    span.input-group-addon Age
-                    input.form-control(name="age" type='number' min='0' ng-model="user.age" ng-change="save(userDetailsForm, 'age')" required)
+            = partial "form_field", :locals => { :form_name => "userDetailsForm", :field_name => "name", :field_text => "Name" }
+            = partial "form_field", :locals => { :form_name => "userDetailsForm", :field_name => "urNumber", :field_text => "Unique Reference" }
+            = partial "form_field", :locals => { :form_name => "userDetailsForm", :field_name => "age", :field_text => "Age" }
             .form-group
                 .input-group(ng-class="validationClass(userDetailsForm, 'gender')")
                     select.form-control(name="gender" ng-model="user.gender" required ng-change="save(userDetailsForm, 'gender')")
