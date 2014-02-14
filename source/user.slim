@@ -4,66 +4,10 @@
             h3
                 | {{user.name}}
 
+            = partial "user_details"
+            = partial "system_variables"
+            = partial "basis_32"
 
-            .panel.panel-default
-                .panel-heading
-                    h4.name.panel-title
-                    | User Details
-
-                .panel-body
-                    form.form-inline(name="userDetailsForm" novalidate)
-                        .form-group
-                            .input-group(ng-class="validationClass(userDetailsForm, 'name')")
-                                span.input-group-addon Name
-                                input.form-control(name="name" ng-model="user.name" ng-change="save(userDetailsForm, 'name')" required)
-                        .form-group
-                            .input-group(ng-class="validationClass(userDetailsForm, 'urNumber')")
-                                span.input-group-addon UR Number
-                                input.form-control(name="urNumber" type='number' min='0' ng-model="user.urNumber" ng-change="save(userDetailsForm, 'urNumber')" required)
-                        .form-group
-                            .input-group(ng-class="validationClass(userDetailsForm, 'age')")
-                                span.input-group-addon Age
-                                input.form-control(name="age" type='number' min='0' ng-model="user.age" ng-change="save(userDetailsForm, 'age')" required)
-                        .form-group
-                            .input-group(ng-class="validationClass(userDetailsForm, 'gender')")
-                                select.form-control(name="gender" ng-model="user.gender" required ng-change="save(userDetailsForm, 'gender')")
-                                    option (value="") Select A Gender
-                                    option (value="male") Male
-                                    option (value="female") Female
-
-
-            .panel.panel-default
-    		    .panel-heading
-                    h4.name.panel-title
-                    | System variables
-
-                .panel-body
-            		form.form-inline(name="userForm" novalidate)
-
-                        .form-group
-                            .input-group(ng-class="validationClass(userForm, 'numberOfHandovers')")
-                            	span.input-group-addon Handovers
-                                input.form-control(name="numberOfHandovers" type="number" min="0" ng-model="user.numberOfHandovers" ng-change="save(userForm, 'numberOfHandovers')" required)
-
-                        .form-group
-                            .input-group(ng-class="validationClass(userForm, 'numberOfContacts')")
-                                span.input-group-addon Patient contacts
-                                input.form-control(name="numberOfContacts" type="number" min="0" ng-model="user.numberOfContacts" ng-change="save(userForm, 'numberOfContacts')" required)
-
-                        .form-group
-                            .input-group(ng-class="validationClass(userForm, 'numberOfSystems')")
-                                span.input-group-addon Systems updated
-                                input.form-control(name="numberOfSystems" type="number" min="0" ng-model="user.numberOfSystems" ng-change="save(userForm, 'numberOfSystems')" required)
-
-                        .form-group
-                            .input-group(ng-class="validationClass(userForm, 'touchPoints')")
-                                span.input-group-addon System touch points
-                                input.form-control(name="touchPoints" type="number" min="0" ng-model="user.touchPoints" ng-change="save(userForm, 'touchPoints')" required)
-
-                        .form-group
-                            .input-group(ng-class="validationClass(userForm, 'numberOfPeopleInvolved')")
-                                span.input-group-addon People involved
-                                input.form-control(name="numberOfPeopleInvolved" type="number" min="0" ng-model="user.numberOfPeopleInvolved" ng-change="save(userForm, 'numberOfPeopleInvolved')" required)
     alert.messages(ng-show="alerts.length != 0")
         div.fade(ng-repeat="alert in alerts")
             | {{alert.message}}

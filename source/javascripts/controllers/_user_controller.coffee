@@ -4,6 +4,7 @@ UserController = ($scope, $routeParams, UsersService, $timeout) ->
 	UsersService.getUser userId, (user) -> $scope.user = user
 
 	$scope.validationClass = (form, fieldName) ->
+		console.log fieldName
 		'has-success': form[fieldName].$valid
 		'has-error': form[fieldName].$invalid
 
