@@ -63,3 +63,16 @@ describe "UsersController", ->
 
 			scope.users.should.contain.members [barry]
 
+		it 'should remove the name variable from the scope', ->
+			barry = {name: "Barry"}
+			usersService = sinon.createStubInstance UsersService
+			usersService.getUsers.yields []
+			usersService.createUser.yields barry
+
+			usersController = UsersController scope, usersService
+
+			scope.userName = barry["name"]
+			scope.createUser(event)
+
+			expect(scope.userName).to.be.undefined
+
