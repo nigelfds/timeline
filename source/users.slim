@@ -8,9 +8,38 @@
                     / .list-group-item-text UR : 6546564
 
         .col-xs-10.col-xs-offset-1(ng-repeat-end)
-            form.newuser.form-inline(name="userForm" novalidate)
-                .input-group.input-group-lg
-                    input.form-control(type="text" placeholder="Type a new users name" ng-model="userName" required)
-                    span.input-group-btn
-                        button.btn.btn-default(ng-click="createUser($event)" ng-disabled="userForm.$invalid")
-                            i.glyphicon.glyphicon-plus
+            .panel.panel-default
+                .panel-heading
+                    h4.name.panel-title
+                    | New user
+                .panel-body
+                    form.newuser.form-inline(name="userForm" novalidate)
+                        .form-group
+                            .input-group(ng-class="{'has-error': userForm.userName.$invalid && userName != nil}"      )
+                                span.input-group-addon Name
+                                input.form-control(name="userName" ng-model="userName" required)
+
+                        .form-group
+                            .input-group(ng-class="{'has-error': userForm.urNumber.$invalid && urNumber != nil")
+                                span.input-group-addon UR Number
+                                input.form-control(name="urNumber" type="number" min="0" ng-model="urNumber" required)
+
+                        .form-group
+                            .input-group(ng-class="{'has-error': userForm.age.$invalid && age != nil")
+                                span.input-group-addon Age
+                                input.form-control(name="age" type="number" min="0" ng-model="age" required)
+                        .form-group
+                            select.form-control(ng-model="gender" required)
+                                option (value="") Select A Gender
+                                option (value="male")Male
+                                option (value="female")Female
+                        .form-group
+                            button.btn.btn-default(ng-click="createUser($event)" ng-disabled="userForm.$invalid") Create User
+
+        / .col-xs-10.col-xs-offset-1(ng-repeat-end)
+        /     form.newuser.form-inline(name="userForm" novalidate)
+        /         .input-group.input-group-lg
+        /             input.form-control(type="text" placeholder="Type a new users name" ng-model="userName" required)
+        /             span.input-group-btn
+        /                 button.btn.btn-default(ng-click="createUser($event)" ng-disabled="userForm.$invalid")
+        /                     i.glyphicon.glyphicon-plus

@@ -3,12 +3,13 @@ UserController = ($scope, $routeParams, UsersService, $timeout) ->
 
 	UsersService.getUser userId, (user) -> $scope.user = user
 
-	$scope.validationClass = (form, fieldName) -> 
+	$scope.validationClass = (form, fieldName) ->
 		'has-success': form[fieldName].$valid
 		'has-error': form[fieldName].$invalid
 
-	$scope.save = (property) ->
-		formValue = $scope.userForm["#{property}"]
+	$scope.save = (form, property) ->
+		# formValue = $scope.userForm["#{property}"]
+		formValue = form[property]
 		if formValue?.$valid
 			data = {}
 			data[property] = $scope.user[property]

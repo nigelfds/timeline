@@ -32,26 +32,34 @@ describe "UsersController", ->
 		scope.users[1].should.equal michael
 
 	describe 'when addining a new user', ->
-		event = undefined
+		event = barry = undefined
 
 		beforeEach ->
 			event =
 				preventDefault: sinon.stub()
+			barry = {
+						name: "Barry",
+						urNumber: "1234567890",
+						age:"35",
+						gender:"male"
+					}
 
 		it 'should create a new user with the provided name', ->
-			barry = name: "Barry"
 			usersService = sinon.createStubInstance UsersService
 			usersService.getUsers.yields []
 
 			usersController = UsersController scope, usersService
 
 			scope.userName = barry["name"]
+			scope.age = barry["age"]
+			scope.urNumber = barry["urNumber"]
+			scope.gender = barry["gender"]
 			scope.createUser(event)
 
 			usersService.createUser.should.have.been.calledWith barry
 
 		it 'should add the new user to the scope', ->
-			barry = {name: "Barry"}
+
 			usersService = sinon.createStubInstance UsersService
 			usersService.getUsers.yields []
 			usersService.createUser.yields barry
@@ -59,12 +67,14 @@ describe "UsersController", ->
 			usersController = UsersController scope, usersService
 
 			scope.userName = barry["name"]
+			scope.age = barry["age"]
+			scope.urNumber = barry["urNumber"]
+			scope.gender = barry["gender"]
 			scope.createUser(event)
 
 			scope.users.should.contain.members [barry]
 
-		it 'should remove the name variable from the scope', ->
-			barry = {name: "Barry"}
+		it 'should remove all the variables from the scope', ->
 			usersService = sinon.createStubInstance UsersService
 			usersService.getUsers.yields []
 			usersService.createUser.yields barry
@@ -72,7 +82,12 @@ describe "UsersController", ->
 			usersController = UsersController scope, usersService
 
 			scope.userName = barry["name"]
+			scope.age = barry["age"]
+			scope.urNumber = barry["urNumber"]
+			scope.gender = barry["gender"]
 			scope.createUser(event)
 
 			expect(scope.userName).to.be.undefined
-
+			expect(scope.urNumber).to.be.undefined
+			expect(scope.age).to.be.undefined
+			expect(scope.gender).to.be.undefined

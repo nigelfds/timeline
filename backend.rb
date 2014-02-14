@@ -59,7 +59,7 @@ class Backend < Sinatra::Base
 	post '/users' do
 		body = JSON.parse(request.body.read)
 		if isValidPatient(body)
-			id = $db["users"].insert(:name => body["name"]).to_s
+			id = $db["users"].insert(body).to_s
 			body($db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
 			status 200
 		else

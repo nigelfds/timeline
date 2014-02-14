@@ -2,9 +2,12 @@ describe "User controller", ->
 
 	scope = routeParams = service = timeout = undefined
 
-	test_user = 
+	test_user =
 		"_id": "some_user_id"
 		"name": "Seaton"
+		"urNumber": 123456789
+		"age": 30
+		"gender": "male"
 		"numberOfHandovers": 45
 		"numberOfPeopleInvolved": 10
 		"numberOfContacts": 34
@@ -25,13 +28,13 @@ describe "User controller", ->
 	describe "save", ->
 		beforeEach ->
 			scope.user = test_user
-			scope.userForm = 
+			scope.userForm =
 				numberOfHandovers: $valid : true
 				numberOfPeopleInvolved: $valid : true
 				numberOfContacts: $valid : true
 
 		it "saves only the specified property", ->
-			scope.save "numberOfPeopleInvolved"
+			scope.save scope.userForm, "numberOfPeopleInvolved"
 
 			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
 
@@ -47,9 +50,9 @@ describe "User controller", ->
 
 		describe "when data is invalid", ->
 			beforeEach -> scope.userForm.numberOfHandovers.$valid = false
-			
+
 			it "doesn't save the property", ->
-				scope.save "numberOfHandovers"
+				scope.save scope.userForm, "numberOfHandovers"
 
 				service.updateUser.should.not.have.been.called
 
