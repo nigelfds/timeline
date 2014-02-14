@@ -44,9 +44,9 @@ describe "User controller", ->
 			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
 			service.updateUser.withArgs(test_user.id, data).yields true
 
-			scope.save "numberOfPeopleInvolved"
+			scope.save scope.userForm, "numberOfPeopleInvolved"
 
-			scope.alerts[0].should.eql(message: "Updated user successfully")
+			scope.alerts[0].message.should.eql "Updated user successfully"
 
 		describe "when data is invalid", ->
 			beforeEach -> scope.userForm.numberOfHandovers.$valid = false

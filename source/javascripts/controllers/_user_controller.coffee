@@ -8,7 +8,6 @@ UserController = ($scope, $routeParams, UsersService, $timeout) ->
 		'has-error': form[fieldName].$invalid
 
 	$scope.save = (form, property) ->
-		# formValue = $scope.userForm["#{property}"]
 		formValue = form[property]
 		if formValue?.$valid
 			data = {}

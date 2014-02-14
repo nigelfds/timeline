@@ -1,5 +1,5 @@
 (function() {
-  angular.module('timeline', ['ngRoute', 'ui.bootstrap']).config([
+  angular.module('timeline', ['ngRoute', 'ui.bootstrap', 'ngAnimate']).config([
     '$routeProvider', function($routeProvider) {
       $routeProvider.when('/users', {
         templateUrl: 'users.html',
@@ -85,6 +85,11 @@
       });
     };
 
+    UsersService.prototype.updateUser = function(id, data, callback) {
+      this.http.put("/users/" + id, data);
+      return callback(true);
+    };
+
     return UsersService;
 
   })();
@@ -131,10 +136,42 @@
 (function() {
   var UserController;
 
-  UserController = function($scope, $routeParams, UsersService) {
-    return UsersService.getUser($routeParams.userId, function(user) {
-      return $scope.name = user.name;
+  UserController = function($scope, $routeParams, UsersService, $timeout) {
+    var addAlert, userId;
+    userId = $routeParams.userId;
+    UsersService.getUser(userId, function(user) {
+      return $scope.user = user;
     });
+    $scope.validationClass = function(form, fieldName) {
+      return {
+        'has-success': form[fieldName].$valid,
+        'has-error': form[fieldName].$invalid
+      };
+    };
+    $scope.save = function(form, property) {
+      var data, formValue;
+      formValue = form[property];
+      if (formValue != null ? formValue.$valid : void 0) {
+        data = {};
+        data[property] = $scope.user[property];
+        return UsersService.updateUser(userId, data, function(success) {
+          return addAlert("Updated user successfully");
+        });
+      } else {
+        return addAlert("Invalid value.  User wasn't updated.");
+      }
+    };
+    $scope.alerts = [];
+    return addAlert = function(_message) {
+      var removeAlert;
+      $scope.alerts.push({
+        message: _message
+      });
+      removeAlert = function() {
+        return $scope.alerts.shift();
+      };
+      return $timeout(removeAlert, 5000);
+    };
   };
 
   angular.module('timeline').controller('UserController', UserController);
@@ -151,8 +188,15 @@
       var newUser;
       $event.preventDefault();
       newUser = {
-        name: $scope.userName
+        name: $scope.userName,
+        urNumber: $scope.urNumber,
+        age: $scope.age,
+        gender: $scope.gender
       };
+      $scope.userName = void 0;
+      $scope.urNumber = void 0;
+      $scope.age = void 0;
+      $scope.gender = void 0;
       return UsersService.createUser(newUser, function(new_user) {
         return $scope.users.push(new_user);
       });

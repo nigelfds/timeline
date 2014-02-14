@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.9
+ * @license AngularJS v1.2.12
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -386,7 +386,7 @@ angular.mock.$LogProvider = function() {
        *
        * @example
        * <pre>
-       * $log.log('Some Error');
+       * $log.error('Some Error');
        * var first = $log.error.logs.unshift();
        * </pre>
        */
@@ -511,6 +511,7 @@ angular.mock.$IntervalProvider = function() {
     };
 
     $interval.cancel = function(promise) {
+      if(!promise) return false;
       var fnIndex;
 
       angular.forEach(repeatFns, function(fn, index) {
@@ -763,70 +764,39 @@ angular.mock.TzDate = function (offset, timestamp) {
 angular.mock.TzDate.prototype = Date.prototype;
 /* jshint +W101 */
 
-// TODO(matias): remove this IMMEDIATELY once we can properly detect the
-// presence of a registered module
-var animateLoaded;
-try {
-  angular.module('ngAnimate');
-  animateLoaded = true;
-} catch(e) {}
+angular.mock.animate = angular.module('ngAnimateMock', ['ng'])
 
-if(animateLoaded) {
-  angular.module('ngAnimate').config(['$provide', function($provide) {
+  .config(['$provide', function($provide) {
     var reflowQueue = [];
+
     $provide.value('$$animateReflow', function(fn) {
       reflowQueue.push(fn);
       return angular.noop;
     });
-    $provide.decorator('$animate', function($delegate) {
-      $delegate.triggerReflow = function() {
-        if(reflowQueue.length === 0) {
-          throw new Error('No animation reflows present');
-        }
-        angular.forEach(reflowQueue, function(fn) {
-          fn();
-        });
-        reflowQueue = [];
-      };
-      return $delegate;
-    });
-  }]);
-}
-
-angular.mock.animate = angular.module('mock.animate', ['ng'])
-
-  .config(['$provide', function($provide) {
 
     $provide.decorator('$animate', function($delegate) {
       var animate = {
         queue : [],
         enabled : $delegate.enabled,
-        flushNext : function(name) {
-          var tick = animate.queue.shift();
-
-          if (!tick) throw new Error('No animation to be flushed');
-          if(tick.method !== name) {
-            throw new Error('The next animation is not "' + name +
-              '", but is "' + tick.method + '"');
+        triggerReflow : function() {
+          if(reflowQueue.length === 0) {
+            throw new Error('No animation reflows present');
           }
-          tick.fn();
-          return tick;
+          angular.forEach(reflowQueue, function(fn) {
+            fn();
+          });
+          reflowQueue = [];
         }
       };
 
       angular.forEach(['enter','leave','move','addClass','removeClass'], function(method) {
         animate[method] = function() {
-          var params = arguments;
           animate.queue.push({
-            method : method,
-            params : params,
-            element : angular.isElement(params[0]) && params[0],
-            parent  : angular.isElement(params[1]) && params[1],
-            after   : angular.isElement(params[2]) && params[2],
-            fn : function() {
-              $delegate[method].apply($delegate, params);
-            }
+            event : method,
+            element : arguments[0],
+            args : arguments
           });
+          $delegate[method].apply($delegate, arguments);
         };
       });
 
@@ -917,7 +887,7 @@ angular.mock.dump = function(object) {
  * development please see {@link ngMockE2E.$httpBackend e2e $httpBackend mock}.
  *
  * During unit testing, we want our unit tests to run quickly and have no external dependencies so
- * we donâ€™t want to send {@link https://developer.mozilla.org/en/xmlhttprequest XHR} or
+ * we don’t want to send {@link https://developer.mozilla.org/en/xmlhttprequest XHR} or
  * {@link http://en.wikipedia.org/wiki/JSONP JSONP} requests to a real server. All we really need is
  * to verify whether a certain request has been sent or not, or alternatively just let the
  * application make requests, respond with pre-trained responses and assert that the end result is
@@ -996,18 +966,18 @@ angular.mock.dump = function(object) {
  *
  * # Flushing HTTP requests
  *
- * The $httpBackend used in production, always responds to requests with responses asynchronously.
- * If we preserved this behavior in unit testing, we'd have to create async unit tests, which are
- * hard to write, follow and maintain. At the same time the testing mock, can't respond
+ * The $httpBackend used in production always responds to requests with responses asynchronously.
+ * If we preserved this behavior in unit testing we'd have to create async unit tests, which are
+ * hard to write, understand, and maintain. However, the testing mock can't respond
  * synchronously because that would change the execution of the code under test. For this reason the
  * mock $httpBackend has a `flush()` method, which allows the test to explicitly flush pending
- * requests and thus preserving the async api of the backend, while allowing the test to execute
+ * requests and thus preserve the async api of the backend while allowing the test to execute
  * synchronously.
  *
  *
  * # Unit testing with mock $httpBackend
- * The following code shows how to setup and use the mock backend in unit testing a controller.
- * First we create the controller under test
+ * The following code shows how to setup and use the mock backend when unit testing a controller.
+ * First we create the controller under test:
  *
   <pre>
   // The controller code
@@ -1032,7 +1002,7 @@ angular.mock.dump = function(object) {
   }
   </pre>
  *
- * Now we setup the mock backend and create the test specs.
+ * Now we setup the mock backend and create the test specs:
  *
   <pre>
     // testing controller
@@ -1073,7 +1043,7 @@ angular.mock.dump = function(object) {
          var controller = createController();
          $httpBackend.flush();
 
-         // now you donâ€™t care about the authentication, but
+         // now you don’t care about the authentication, but
          // the controller will still send the request and
          // $httpBackend will respond without you having to
          // specify the expectation and response for this request
@@ -1224,9 +1194,9 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
    *   request is handled.
    *
-   *  - respond â€“
+   *  - respond –
    *      `{function([status,] data[, headers])|function(function(method, url, data, headers)}`
-   *    â€“ The respond method takes a set of static data to be returned or a function that can return
+   *    – The respond method takes a set of static data to be returned or a function that can return
    *    an array containing response status (number), response data (string) and response headers
    *    (Object).
    */
@@ -1348,9 +1318,9 @@ function createHttpBackendMock($rootScope, $delegate, $browser) {
    * @returns {requestHandler} Returns an object with `respond` method that control how a matched
    *  request is handled.
    *
-   *  - respond â€“
+   *  - respond –
    *    `{function([status,] data[, headers])|function(function(method, url, data, headers)}`
-   *    â€“ The respond method takes a set of static data to be returned or a function that can return
+   *    – The respond method takes a set of static data to be returned or a function that can return
    *    an array containing response status (number), response data (string) and response headers
    *    (Object).
    */
@@ -1736,7 +1706,7 @@ angular.mock.$RootElementProvider = function() {
  * In addition, ngMock also extends various core ng services such that they can be
  * inspected and controlled in a synchronous manner within test code.
  *
- * {@installModule mocks}
+ * {@installModule mock}
  *
  * <div doc-module-components="ngMock"></div>
  *
@@ -1828,12 +1798,12 @@ angular.module('ngMockE2E', ['ng']).config(['$provide', function($provide) {
  * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
  *   control how a matched request is handled.
  *
- *  - respond â€“
+ *  - respond –
  *    `{function([status,] data[, headers])|function(function(method, url, data, headers)}`
- *    â€“ The respond method takes a set of static data to be returned or a function that can return
+ *    – The respond method takes a set of static data to be returned or a function that can return
  *    an array containing response status (number), response data (string) and response headers
  *    (Object).
- *  - passThrough â€“ `{function()}` â€“ Any request matching a backend definition with `passThrough`
+ *  - passThrough – `{function()}` – Any request matching a backend definition with `passThrough`
  *    handler, will be pass through to the real backend (an XHR request will be made to the
  *    server.
  */
@@ -1954,7 +1924,7 @@ if(window.jasmine || window.mocha) {
 
   var currentSpec = null,
       isSpecRunning = function() {
-        return currentSpec && (window.mocha || currentSpec.queue.running);
+        return !!currentSpec;
       };
 
 
@@ -2132,7 +2102,7 @@ if(window.jasmine || window.mocha) {
   window.inject = angular.mock.inject = function() {
     var blockFns = Array.prototype.slice.call(arguments, 0);
     var errorForStack = new Error('Declaration Location');
-    return isSpecRunning() ? workFn() : workFn;
+    return isSpecRunning() ? workFn.call(currentSpec) : workFn;
     /////////////////////
     function workFn() {
       var modules = currentSpec.$modules || [];

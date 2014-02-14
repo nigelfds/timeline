@@ -4,39 +4,43 @@ body {
   padding: 0px;
   margin: 0px;
 }
-.user {
-  margin: 0.3em;
+.content {
+  position: relative;
 }
-#timeline-embed {
+.view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 100%;
 }
-.timeline-event.internal-activity {
-  background-color: #add8e6;
+.fade {
+  opacity: 1;
 }
-.timeline-event.value-demand {
-  background-color: #008000;
+.fade.ng-enter,
+.fade.ng-leave {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
 }
-.timeline-event.failure-demand {
-  background-color: #f00;
+.fade.ng-enter {
+  opacity: 0;
 }
-.timeline-event .handoff {
-  position: absolute;
-  right: -20px;
-  top: -20px;
-  color: #f00;
+.fade.ng-enter-active {
+  opacity: 1;
 }
-.top-margin-hack {
-  margin-top: 34px;
+.fade.ng-leave {
+  opacity: 1;
 }
-#eventForm {
-  padding-top: 20px;
+.fade.ng-leave-active {
+  opacity: 0;
 }
-.breadcrumb {
-  background-color: transparent;
-}
-a.btn.btn-success {
+.username {
+  margin: 0.3em;
   width: 100%;
 }
-form.user {
-  margin-top: 3em;
+form.newuser {
+  margin: 0.3em;
+  margin-top: 1em;
 }
