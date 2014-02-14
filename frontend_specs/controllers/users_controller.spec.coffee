@@ -91,4 +91,3 @@ describe "UsersController", ->
 			expect(scope.urNumber).to.be.undefined
 			expect(scope.age).to.be.undefined
 			expect(scope.gender).to.be.undefined
-

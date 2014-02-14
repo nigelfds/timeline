@@ -15,6 +15,7 @@ UsersController = ($scope, UsersService) ->
 		$scope.urNumber = undefined
 		$scope.age = undefined
 		$scope.gender = undefined
+
 		UsersService.createUser newUser, (new_user) -> $scope.users.push(new_user)
 
 

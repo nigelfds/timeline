@@ -15,24 +15,24 @@
                 .panel-body
                     form.newuser.form-inline(name="userForm" novalidate)
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.userName.$invalid && ! userForm.userName.$pristine}"      )
+                            .input-group(ng-class="{'has-error': userForm.userName.$invalid && userName != nil}"      )
                                 span.input-group-addon Name
                                 input.form-control(name="userName" ng-model="userName" required)
 
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.urNumber.$invalid && ! userForm.urNumber.$pristine}")
+                            .input-group(ng-class="{'has-error': userForm.urNumber.$invalid && urNumber != nil")
                                 span.input-group-addon UR Number
                                 input.form-control(name="urNumber" type="number" min="0" ng-model="urNumber" required)
 
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.age.$invalid && ! userForm.age.$pristine}")
+                            .input-group(ng-class="{'has-error': userForm.age.$invalid && age != nil")
                                 span.input-group-addon Age
                                 input.form-control(name="age" type="number" min="0" ng-model="age" required)
                         .form-group
                             select.form-control(ng-model="gender" required)
                                 option (value="") Select A Gender
-                                option Male
-                                option Female
+                                option (value="male")Male
+                                option (value="female")Female
                         .form-group
                             button.btn.btn-default(ng-click="createUser($event)" ng-disabled="userForm.$invalid") Create User
 
