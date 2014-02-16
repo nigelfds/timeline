@@ -185,6 +185,11 @@
     UsersService.getUsers(function(users) {
       return $scope.users = users;
     });
+    $scope.validationClass = function(form, fieldName) {
+      return {
+        'has-error': form[fieldName].$invalid && (!form[fieldName].$pristine)
+      };
+    };
     return $scope.createUser = function($event) {
       var newUser;
       $event.preventDefault();
@@ -198,6 +203,7 @@
       $scope.urNumber = void 0;
       $scope.age = void 0;
       $scope.gender = void 0;
+      $scope.userForm.$setPristine();
       return UsersService.createUser(newUser, function(new_user) {
         return $scope.users.push(new_user);
       });

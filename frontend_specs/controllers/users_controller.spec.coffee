@@ -35,6 +35,7 @@ describe "UsersController", ->
 		event = barry = undefined
 
 		beforeEach ->
+			scope.userForm = {$setPristine: sinon.spy()}
 			event =
 				preventDefault: sinon.stub()
 			barry = {
@@ -42,7 +43,7 @@ describe "UsersController", ->
 						urNumber: "1234567890",
 						age:"35",
 						gender:"male"
-					}
+			}
 
 		it 'should create a new user with the provided name', ->
 			usersService = sinon.createStubInstance UsersService
@@ -91,3 +92,18 @@ describe "UsersController", ->
 			expect(scope.urNumber).to.be.undefined
 			expect(scope.age).to.be.undefined
 			expect(scope.gender).to.be.undefined
+
+		it 'should mark all fields as pristine', ->
+			usersService = sinon.createStubInstance UsersService
+			usersService.getUsers.yields []
+			usersService.createUser.yields barry
+
+			usersController = UsersController scope, usersService
+
+			scope.userName = barry["name"]
+			scope.age = barry["age"]
+			scope.urNumber = barry["urNumber"]
+			scope.gender = barry["gender"]
+			scope.createUser(event)
+
+			scope.userForm.$setPristine.should.be.called

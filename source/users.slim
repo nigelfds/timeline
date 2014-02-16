@@ -16,17 +16,17 @@
                 .panel-body
                     form.newuser.form-inline(name="userForm" novalidate)
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.userName.$invalid && userName != nil }")
+                            .input-group(ng-class="validationClass(userForm, 'userName')")
                                 span.input-group-addon Name
                                 input.form-control(name="userName" ng-model="userName" required)
 
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.urNumber.$invalid && urNumber != nil }")
+                            .input-group(ng-class="validationClass(userForm, 'urNumber')")
                                 span.input-group-addon UR Number
                                 input.form-control(name="urNumber" type="number" min="0" ng-model="urNumber" required)
 
                         .form-group
-                            .input-group(ng-class="{'has-error': userForm.age.$invalid && age != nil }")
+                            .input-group(ng-class="validationClass(userForm, 'age')")
                                 span.input-group-addon Age
                                 input.form-control(name="age" type="number" min="0" ng-model="age" required)
                         .form-group
