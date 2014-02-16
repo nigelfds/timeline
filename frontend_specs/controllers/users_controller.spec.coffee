@@ -51,10 +51,8 @@ describe "UsersController", ->
 
 			usersController = UsersController scope, usersService
 
-			scope.userName = barry["name"]
-			scope.age = barry["age"]
-			scope.urNumber = barry["urNumber"]
-			scope.gender = barry["gender"]
+			scope.newUser = barry
+
 			scope.createUser(event)
 
 			usersService.createUser.should.have.been.calledWith barry
@@ -67,10 +65,8 @@ describe "UsersController", ->
 
 			usersController = UsersController scope, usersService
 
-			scope.userName = barry["name"]
-			scope.age = barry["age"]
-			scope.urNumber = barry["urNumber"]
-			scope.gender = barry["gender"]
+			scope.newUser = barry
+
 			scope.createUser(event)
 
 			scope.users.should.contain.members [barry]
@@ -82,16 +78,10 @@ describe "UsersController", ->
 
 			usersController = UsersController scope, usersService
 
-			scope.userName = barry["name"]
-			scope.age = barry["age"]
-			scope.urNumber = barry["urNumber"]
-			scope.gender = barry["gender"]
+			scope.newUser = barry
 			scope.createUser(event)
 
-			expect(scope.userName).to.be.undefined
-			expect(scope.urNumber).to.be.undefined
-			expect(scope.age).to.be.undefined
-			expect(scope.gender).to.be.undefined
+			expect(scope.newUser).to.be.undefined
 
 		it 'should mark all fields as pristine', ->
 			usersService = sinon.createStubInstance UsersService
@@ -100,10 +90,8 @@ describe "UsersController", ->
 
 			usersController = UsersController scope, usersService
 
-			scope.userName = barry["name"]
-			scope.age = barry["age"]
-			scope.urNumber = barry["urNumber"]
-			scope.gender = barry["gender"]
+			scope.newUser = barry
+
 			scope.createUser(event)
 
 			scope.userForm.$setPristine.should.be.called
