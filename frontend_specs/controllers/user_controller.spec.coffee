@@ -1,6 +1,6 @@
 describe "User controller", ->
 
-	scope = routeParams = service = timeout = undefined
+	scope = routeParams = usersService = activityService = timeout = location = undefined
 
 	test_user =
 		"_id": "some_user_id"
@@ -14,13 +14,17 @@ describe "User controller", ->
 
 	beforeEach ->
 		scope = {}
-		routeParams = userId: test_user.id
-		service = sinon.createStubInstance UsersService
-		service.getUser.withArgs(test_user.id).yields test_user
+		routeParams = userId: test_user._id
+		usersService = sinon.createStubInstance UsersService
+		usersService.getUser.withArgs(test_user._id).yields test_user
+
+		activityService = sinon.createStubInstance ActivityService
 
 		timeout = sinon.stub()
 
-		UserController scope, routeParams, service, timeout
+		location = path: sinon.stub()
+
+		UserController scope, routeParams, usersService, timeout, location, activityService
 
 	it "displays the user", ->
 		scope.user.should.be.eql test_user
@@ -38,11 +42,11 @@ describe "User controller", ->
 
 			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
 
-			service.updateUser.should.have.been.calledWith test_user.id, data
+			usersService.updateUser.should.have.been.calledWith test_user._id, data
 
 		it "alerts on success", ->
 			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
-			service.updateUser.withArgs(test_user.id, data).yields true
+			usersService.updateUser.withArgs(test_user._id, data).yields true
 
 			scope.save scope.userForm, "numberOfPeopleInvolved"
 
@@ -50,7 +54,7 @@ describe "User controller", ->
 
 		it "removes alerts", ->
 			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
-			service.updateUser.withArgs(test_user.id, data).yields true
+			usersService.updateUser.withArgs(test_user._id, data).yields true
 
 			timeout.withArgs(sinon.match.func, 5000).yields()
 
@@ -58,14 +62,25 @@ describe "User controller", ->
 
 			scope.alerts.should.be.empty
 
-
 		describe "when data is invalid", ->
 			beforeEach -> scope.userForm.numberOfHandovers.$valid = false
 
 			it "doesn't save the property", ->
 				scope.save scope.userForm, "numberOfHandovers"
 
-				service.updateUser.should.not.have.been.called
+				usersService.updateUser.should.not.have.been.called
+
+	describe "when creating a new activity", ->
+
+		it "display the new activity", ->
+			event = preventDefault: sinon.stub()
+			test_activity = _id: $oid: "activity identifier"
+			data = activityType: "activity type"
+			activityService.createActivity.withArgs(test_user._id, data).yields test_activity
+
+			scope.createActivity event, data.activityType
+
+			location.path.should.have.been.calledWith "/users/#{test_user._id}/activity/#{test_activity._id.$oid}"
 
 
 

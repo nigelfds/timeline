@@ -1,4 +1,4 @@
-UserController = ($scope, $routeParams, UsersService, $timeout) ->
+UserController = ($scope, $routeParams, UsersService, $timeout, $location, ActivityService) ->
 	userId = $routeParams.userId
 
 	UsersService.getUser userId, (user) -> $scope.user = user
@@ -22,6 +22,12 @@ UserController = ($scope, $routeParams, UsersService, $timeout) ->
 		$scope.alerts.push(message: _message)
 		removeAlert = -> $scope.alerts.shift()
 		$timeout(removeAlert, 5000)
+
+	$scope.createActivity = (event, activityType) ->
+		data = activityType: activityType
+
+		ActivityService.createActivity userId, data, (newActivity) ->
+			$location.path "/users/#{userId}/activity/#{newActivity._id.$oid}"
 
 angular.module('timeline')
     .controller 'UserController', UserController

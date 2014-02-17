@@ -26,7 +26,6 @@ describe "UsersController", ->
 
 		usersController = UsersController scope, usersService
 
-
 		scope.users.should.have.length 2
 		scope.users[0].should.equal barry
 		scope.users[1].should.equal michael
@@ -35,15 +34,15 @@ describe "UsersController", ->
 		event = barry = undefined
 
 		beforeEach ->
-			scope.userForm = {$setPristine: sinon.spy()}
+			scope.userForm = 
+				$setPristine: sinon.spy()
 			event =
 				preventDefault: sinon.stub()
-			barry = {
-						name: "Barry",
-						urNumber: "1234567890",
-						age:"35",
-						gender:"male"
-			}
+			barry =
+				name: "Barry",
+				urNumber: "1234567890",
+				age:"35",
+				gender:"male"
 
 		it 'should create a new user with the provided name', ->
 			usersService = sinon.createStubInstance UsersService
