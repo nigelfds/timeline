@@ -143,6 +143,7 @@
       return $scope.user = user;
     });
     $scope.validationClass = function(form, fieldName) {
+      console.log(fieldName);
       return {
         'has-success': form[fieldName].$valid,
         'has-error': form[fieldName].$invalid

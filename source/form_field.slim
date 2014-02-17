@@ -1,0 +1,7 @@
+ruby:
+	field_type = "text" if field_type.nil?
+
+.form-group
+    .input-group(ng-class="validationClass(#{form_name}, '#{field_name}')")
+        span.input-group-addon #{field_text}
+        input.form-control(name="#{field_name}" type="#{field_type}" ng-model="user.#{field_name}" ng-change="save(#{form_name}, '#{field_name}')" required)

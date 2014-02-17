@@ -21,3 +21,5 @@
 
 .env
 npm-debug.log
+
+items.todo
