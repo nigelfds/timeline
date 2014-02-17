@@ -18,19 +18,19 @@
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'userName')")
                                 span.input-group-addon Name
-                                input.form-control(name="userName" ng-model="userName" required)
+                                input.form-control(name="userName" ng-model="newUser.name" required)
 
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'urNumber')")
                                 span.input-group-addon UR Number
-                                input.form-control(name="urNumber" type="number" min="0" ng-model="urNumber" required)
+                                input.form-control(name="urNumber" type="number" min="0" ng-model="newUser.urNumber" required)
 
                         .form-group
                             .input-group(ng-class="validationClass(userForm, 'age')")
                                 span.input-group-addon Age
-                                input.form-control(name="age" type="number" min="0" ng-model="age" required)
+                                input.form-control(name="age" type="number" min="0" ng-model="newUser.age" required)
                         .form-group
-                            select.form-control(ng-model="gender" required)
+                            select.form-control(ng-model="newUser.gender" required)
                                 option (value="") Select A Gender
                                 option (value="male")Male
                                 option (value="female")Female
