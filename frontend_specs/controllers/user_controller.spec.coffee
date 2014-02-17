@@ -48,6 +48,17 @@ describe "User controller", ->
 
 			scope.alerts[0].message.should.eql "Updated user successfully"
 
+		it "removes alerts", ->
+			data = "numberOfPeopleInvolved": test_user.numberOfPeopleInvolved
+			service.updateUser.withArgs(test_user.id, data).yields true
+
+			timeout.withArgs(sinon.match.func, 5000).yields()
+
+			scope.save scope.userForm, "numberOfPeopleInvolved"
+
+			scope.alerts.should.be.empty
+
+
 		describe "when data is invalid", ->
 			beforeEach -> scope.userForm.numberOfHandovers.$valid = false
 
