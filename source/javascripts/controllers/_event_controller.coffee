@@ -14,11 +14,13 @@ EventController = ($scope, $routeParams, EventService) ->
             }
 
     EventService.getEvents($routeParams.userId, (events) ->
-
-    	$scope.events = events.events.map(mapEvent)
+        console.log "events returned"
+        console.log events
+        $scope.events = events.activities.map(mapEvent)
     )
 
     $scope.createEvent = () ->
+        console.log "create event"
 
         dateTime = new Date(
             $scope.date.getFullYear(),
@@ -32,6 +34,7 @@ EventController = ($scope, $routeParams, EventService) ->
             start: dateTime.toString()},
             $routeParams.userId,
             (new_event) ->
+                console.log new_event
                 $scope.events.push(mapEvent(new_event)))
 
 angular.module('timeline')

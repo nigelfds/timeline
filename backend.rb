@@ -151,7 +151,8 @@ class Backend < Sinatra::Base
 	end
 
 	def is_valid_activity(activity)
-		activity["activityType"]
+		# activity["activityType"]
+		true
 	end
 
 	# delete '/patient/:patient_id/event/:id' do
