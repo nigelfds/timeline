@@ -1,15 +1,20 @@
 describe "ActivityController", ->
 
-	scope = routeParams = undefined
+	scope = routeParams = service = undefined
 
 	beforeEach ->
 		scope = {}
 		routeParams =
-			userId: "something"
-			activityType: "activity-type"
+			userId: "user-id"
+			activityId: "activity-id"
 
-		ActivityController scope, routeParams
+		activity =
+			"activityType": "activity-type"
 
-	it "sets the activity type", ->
+		activityService = sinon.createStubInstance ActivityService
+		activityService.getActivity.withArgs("activity-id").yields activity
 
+		ActivityController scope, routeParams, activityService
+
+	it "shows the correct activity type", ->
 		scope.activityType.should.eql "activity-type"

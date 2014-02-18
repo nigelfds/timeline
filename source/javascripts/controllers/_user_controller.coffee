@@ -24,10 +24,13 @@ UserController = ($scope, $routeParams, UsersService, $timeout, $location, Activ
 		$timeout(removeAlert, 5000)
 
 	$scope.createActivity = (event, activityType) ->
-		data = activityType: activityType
+		event.preventDefault()
+		data =
+			userId: userId
+			activityType: activityType
 
-		ActivityService.createActivity userId, data, (newActivity) ->
-			$location.path "/users/#{userId}/activity/#{newActivity._id.$oid}"
+		ActivityService.createActivity data, (newActivity) ->
+			$location.path "/activities/#{newActivity._id.$oid}"
 
 angular.module('timeline')
     .controller 'UserController', UserController

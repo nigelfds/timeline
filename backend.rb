@@ -58,7 +58,7 @@ class Backend < Sinatra::Base
 
 	post '/users' do
 		body = JSON.parse(request.body.read)
-		if isValidPatient(body)
+		if isValidUser(body)
 			id = $db["users"].insert(body).to_s
 			body($db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
 			status 200
@@ -78,59 +78,93 @@ class Backend < Sinatra::Base
 		end
 	end
 
-
-	def isValidPatient(patient)
+	def isValidUser(patient)
 		patient["name"]
 	end
 
-	get '/patient/:id/event' do
+	# get '/activities/:activityId' do
+
+	# end
+
+	# post '/activities' do
+	# 	body = JSON.parse(request.body.read)
+
+	# 	if is_valid_activity(body)
+	# 		body["start"] = Time.now.utc
+	# 		id = $db["activities"].insert(body)
+	# 		activity = $db["activities"].find_one("_id" => id)
+	# 		body(activity.to_json)
+	# 	else
+	# 		error 400
+	# 	end
+	# end
+
+	# def is_valid_activity(activity)
+	# 	activity["activityType"]
+	# end
+
+	# ==============================================================================================
+
+	get '/users/:user_id/activities' do
 		content_type :json
-		events = $db["events"].find(:patient_id => BSON.ObjectId(params[:id])).sort(:start).to_a
-		{:events => events}.to_json
+		activities = $db["activities"].find(:user_id => BSON.ObjectId(params[:user_id])).sort(:start).to_a
+		{ :activities => activities }.to_json
 	end
 
-	get '/patient/:patient_id/event/:id' do
+	get '/users/:user_id/activities/:activity_id' do
 		content_type :json
-		event = $db["events"].find_one({"_id" => BSON.ObjectId(params[:id]), "patient_id" => BSON.ObjectId(params[:patient_id])})
-		if event
-			{:event => event}.to_json
+		query = {
+			"_id" => BSON.ObjectId(params[:activity_id]),
+			"user_id" => BSON.ObjectId(params[:user_id])
+		}
+
+		activity = $db["activities"].find_one(query)
+
+		if activity
+			activity.to_json
 		else
 			error 404
 		end
 	end
 
-	post '/patient/:patient_id/event' do
-		body = JSON.parse(request.body.read)
-		if isValidEvent(body)
-			id = $db["events"].insert({:description => body["description"], :patient_id => BSON.ObjectId(params[:patient_id]), :start => body["start"]}).to_s
-			body($db["events"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
-			status 200
+	post '/users/:user_id/activities' do
+		new_data = JSON.parse(request.body.read)
+
+		if is_valid_activity(new_data)
+			new_data = new_data.merge(:user_id => BSON.ObjectId(params[:user_id]))
+			id = $db["activities"].insert(new_data)
+
+			activity = $db["activities"].find_one("_id" => id)
+			activity.to_json
 		else
 			error 400
 		end
 	end
 
-	put '/patient/:patient_id/event/:id' do
-		body = JSON.parse(request.body.read)
-		new_values = body.select {|k,v| ["description","start"].include? k}
-		result = $db["events"].update({"_id" => BSON.ObjectId(params[:id])}, '$set' => new_values)
+	put '/users/:user_id/activities/:activity_id' do
+		user = $db["users"].find_one(BSON.ObjectId(params[:user_id]))
+		return error 400 if user.nil?
 
-		unless result["updatedExisting"]
-			error 400, result.to_json
-		end
+		update_data = JSON.parse(request.body.read)
+		result = $db["activities"].update({"_id" => BSON.ObjectId(params[:activity_id])}, '$set' => update_data)
+		error 400 unless result["updatedExisting"]
 	end
 
-	delete '/patient/:patient_id/event/:id' do
-		result = $db["events"].remove("_id" => BSON.ObjectId(params[:id]))
-		if result["n"] > 0
-			status 200
-		else
-			error 404
-		end
+	def is_valid_activity(activity)
+		activity["activityType"]
 	end
 
-	def isValidEvent(event)
-		event["description"] && event["start"] #Note patient_id is already coming through as part of the url...
-	end
+	# delete '/patient/:patient_id/event/:id' do
+	# 	result = $db["events"].remove("_id" => BSON.ObjectId(params[:id]))
+	# 	if result["n"] > 0
+	# 		status 200
+	# 	else
+	# 		error 404
+	# 	end
+	# end
+
+	# def isValidEvent(event)
+	# 	event["description"] && event["start"] #Note patient_id is already coming through as part of the url...
+	# end
 
 end

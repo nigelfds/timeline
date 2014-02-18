@@ -71,16 +71,27 @@ describe "User controller", ->
 				usersService.updateUser.should.not.have.been.called
 
 	describe "when creating a new activity", ->
+		event = undefined
 
-		it "display the new activity", ->
-			event = preventDefault: sinon.stub()
-			test_activity = _id: $oid: "activity identifier"
-			data = activityType: "activity type"
-			activityService.createActivity.withArgs(test_user._id, data).yields test_activity
+		beforeEach -> event = preventDefault: sinon.stub()
+
+
+		it "prevents the default behaviour", ->
+			scope.createActivity event, "activity-type"
+
+			event.preventDefault.should.have.been.called
+
+		it "displays the newly created activity", ->
+			test_activity = _id: $oid: "activity-identifier"
+			data =
+				userId: routeParams.userId
+				activityType: "activity-type"
+
+			activityService.createActivity.withArgs(data).yields test_activity
 
 			scope.createActivity event, data.activityType
 
-			location.path.should.have.been.calledWith "/users/#{test_user._id}/activity/#{test_activity._id.$oid}"
+			location.path.should.have.been.calledWith "/activities/#{test_activity._id.$oid}"
 
 
 
