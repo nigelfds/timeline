@@ -14,7 +14,7 @@ describe "EventController", ->
 
         beforeEach ->
             eventService = sinon.createStubInstance EventsService
-            eventService.getEvents.yields {"events":[]}
+            eventService.getEvents.yields {"activities":[]}
 
             eventController = EventController _scope, routeParams, eventService
 
@@ -29,7 +29,7 @@ describe "EventController", ->
             event1 = {description: "Some Event", userId: userId, start: date.toUTCString()}
             event2 = {description: "Another Event", userId: userId, start: date.toUTCString()}
             eventService = sinon.createStubInstance EventsService
-            eventService.getEvents.yields {"events":[event1, event2]}
+            eventService.getEvents.yields {"activities":[event1, event2]}
 
             eventController = EventController _scope, routeParams, eventService
 
@@ -49,7 +49,7 @@ describe "EventController", ->
         beforeEach ->
             event1 = {description: "Some Event", start: date.toUTCString()}
             eventService = sinon.createStubInstance EventsService
-            eventService.getEvents.yields {"events":[]}
+            eventService.getEvents.yields {"activities":[]}
             eventService.createEvent.yields {description: "Some Event"}
 
         it 'should create a new event with valid data', ->

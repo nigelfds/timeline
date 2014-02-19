@@ -12,13 +12,13 @@ describe 'EventService', () ->
 
     describe 'when retrieving a list of events', () ->
         it 'should make a get request to event api', () ->
-            $httpBackend.whenGET('/patient/'+userId+'/event').respond {"events":[]}
-            $httpBackend.expectGET('/patient/'+userId+'/event')
+            $httpBackend.whenGET('/users/'+userId+'/activities').respond {"activities":[]}
+            $httpBackend.expectGET('/users/'+userId+'/activities')
             EventService.getEvents(userId, () ->)
             $httpBackend.flush()
 
         it 'should execute the callback function', () ->
-            $httpBackend.whenGET('/patient/'+userId+'/event').respond {"events":[]}
+            $httpBackend.whenGET('/users/'+userId+'/activities').respond {"activities":[]}
             callback = sinon.spy()
 
             EventService.getEvents(userId, callback)
@@ -30,8 +30,8 @@ describe 'EventService', () ->
         it 'should make a post to the event api', ()->
 
             postedEvent = angular.toJson {description: "Some content", start: new Date(Date.now())}
-            $httpBackend.whenPOST('/patient/'+userId+'/event', postedEvent).respond {description: "Some content"}
-            $httpBackend.expectPOST('/patient/'+userId+'/event', postedEvent)
+            $httpBackend.whenPOST('/users/'+userId+'/activities', postedEvent).respond {description: "Some content"}
+            $httpBackend.expectPOST('/users/'+userId+'/activities', postedEvent)
 
             EventService.createEvent(postedEvent, userId, (new_event) ->
                 new_event.should.eql {description: "Some content"}
