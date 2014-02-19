@@ -184,14 +184,17 @@ describe "Activities API Spec" do
 			end
 
 			describe "with an invalid activity" do
+                                let(:activity) { {} }
+                                before { app.any_instance.should_receive(:is_valid_activity).with(activity).and_return(false) }
+
 				it "returns an OK response" do
-					post "/users/#{@user_id}/activities", {}.to_json
+					post "/users/#{@user_id}/activities", activity.to_json
 
 					last_response.status.should eq(400)
 				end
 
 				it "doesn't create a new activity" do
-					post "/users/#{@user_id}/activities", {}.to_json
+					post "/users/#{@user_id}/activities", activity.to_json
 
 					db_activities.find.to_a.should be_empty
 				end
@@ -199,9 +202,17 @@ describe "Activities API Spec" do
 
 		end
 
+                describe '#is_valid_activity' do
+                  xit 'should return true when ...' do
+                  end
+
+                  xit 'should return false when ...' do
+                  end
+                end
+
 	end
 
-	
+
 
 	describe "PUT activity" do
 
