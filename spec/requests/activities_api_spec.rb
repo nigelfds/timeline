@@ -151,7 +151,7 @@ describe "Activities API Spec" do
 
 				@user_id = db_users.insert({"name" => "Justin"})
 
-				@new_activity = { "activityType" => "Basis32" }
+				@new_activity = { "date" => "2012-12-1", "description" => "Some activity occurred" }
 			end
 
 			after(:each) do
