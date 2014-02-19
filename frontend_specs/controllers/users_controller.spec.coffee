@@ -1,96 +1,96 @@
 describe "UsersController", ->
 
-	scope = deferred = undefined
+  scope = deferred = undefined
 
-	beforeEach module("timeline")
+  beforeEach module("timeline")
 
-	beforeEach inject (_$rootScope_, _$q_) ->
-		scope = _$rootScope_.$new()
-		deferred = _$q_.defer()
+  beforeEach inject (_$rootScope_, _$q_) ->
+    scope = _$rootScope_.$new()
+    deferred = _$q_.defer()
 
-	it "should display an empty list", () ->
-		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields []
+  it "should display an empty list", () ->
+    usersService = sinon.createStubInstance UsersService
+    usersService.getUsers.yields []
 
-		usersController = UsersController scope, usersService
+    usersController = UsersController scope, usersService
 
-		scope.users.should.eql []
+    scope.users.should.eql []
 
 
-	it "should display users", ->
-		barry = name: "Barry"
-		michael = name: "Michael"
-		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields [ barry, michael ]
-		scope = {}
+  it "should display users", ->
+    barry = name: "Barry"
+    michael = name: "Michael"
+    usersService = sinon.createStubInstance UsersService
+    usersService.getUsers.yields [ barry, michael ]
+    scope = {}
 
-		usersController = UsersController scope, usersService
+    usersController = UsersController scope, usersService
 
-		scope.users.should.have.length 2
-		scope.users[0].should.equal barry
-		scope.users[1].should.equal michael
+    scope.users.should.have.length 2
+    scope.users[0].should.equal barry
+    scope.users[1].should.equal michael
 
-	describe 'when addining a new user', ->
-		event = barry = undefined
+  describe 'when addining a new user', ->
+    event = barry = undefined
 
-		beforeEach ->
-			scope.userForm = 
-				$setPristine: sinon.spy()
-			event =
-				preventDefault: sinon.stub()
-			barry =
-				name: "Barry",
-				urNumber: "1234567890",
-				age:"35",
-				gender:"male"
+    beforeEach ->
+      scope.userForm =
+      $setPristine: sinon.spy()
+      event =
+      preventDefault: sinon.stub()
+      barry =
+      name: "Barry",
+      urNumber: "1234567890",
+      age:"35",
+      gender:"male"
 
-		it 'should create a new user with the provided name', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
+    it 'should create a new user with the provided name', ->
+      usersService = sinon.createStubInstance UsersService
+      usersService.getUsers.yields []
 
-			usersController = UsersController scope, usersService
+      usersController = UsersController scope, usersService
 
-			scope.newUser = barry
+      scope.newUser = barry
 
-			scope.createUser(event)
+      scope.createUser(event)
 
-			usersService.createUser.should.have.been.calledWith barry
+      usersService.createUser.should.have.been.calledWith barry
 
-		it 'should add the new user to the scope', ->
+    it 'should add the new user to the scope', ->
 
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
+      usersService = sinon.createStubInstance UsersService
+      usersService.getUsers.yields []
+      usersService.createUser.yields barry
 
-			usersController = UsersController scope, usersService
+      usersController = UsersController scope, usersService
 
-			scope.newUser = barry
+      scope.newUser = barry
 
-			scope.createUser(event)
+      scope.createUser(event)
 
-			scope.users.should.contain.members [barry]
+      scope.users.should.contain.members [barry]
 
-		it 'should remove all the variables from the scope', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
+    it 'should remove all the variables from the scope', ->
+      usersService = sinon.createStubInstance UsersService
+      usersService.getUsers.yields []
+      usersService.createUser.yields barry
 
-			usersController = UsersController scope, usersService
+      usersController = UsersController scope, usersService
 
-			scope.newUser = barry
-			scope.createUser(event)
+      scope.newUser = barry
+      scope.createUser(event)
 
-			expect(scope.newUser).to.be.undefined
+      expect(scope.newUser).to.be.undefined
 
-		it 'should mark all fields as pristine', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
+    it 'should mark all fields as pristine', ->
+      usersService = sinon.createStubInstance UsersService
+      usersService.getUsers.yields []
+      usersService.createUser.yields barry
 
-			usersController = UsersController scope, usersService
+      usersController = UsersController scope, usersService
 
-			scope.newUser = barry
+      scope.newUser = barry
 
-			scope.createUser(event)
+      scope.createUser(event)
 
-			scope.userForm.$setPristine.should.be.called
+      scope.userForm.$setPristine.should.be.called

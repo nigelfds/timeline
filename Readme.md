@@ -4,62 +4,62 @@
 
 1. Update [Homebrew](http://brew.sh)
 
-		brew update
-	
+    brew update
+
 2. Install MongoDB
 
-		brew install mongo
-		
+    brew install mongo
+
 3. Make a folder for the MongoDB data (recommended to use a path outside of the codebase)
 
-		mkdir -p [path to data]
-		
+    mkdir -p [path to data]
+
 4. Run Mongo
 
-		mongod --dbpath [path to data]
+    mongod --dbpath [path to data]
 
 #### Run the server
 
 2. Install required gems (if you don't yet have bundler installed then go [here](http://bundler.io) to find out how to do that)
 
-		bundle install
-		
+    bundle install
+
 3. Run the server
 
-		middleman
-		
+    middleman
+
 4. You can now view the website in your browser
 
-		open http://localhost:4567
-	
+    open http://localhost:4567
+
 
 
 #### Running the tests (frontend)
 
 1. Install Node.js
 
-		brew install node
-		
+    brew install node
+
 2. Install Phantomjs
 
-		brew install phantomjs
-		
+    brew install phantomjs
+
 3. Install required packages
 
-		npm install
-		
+    npm install
+
 4. Start Karma test server (tests will run whenever files are updated)
 
-		./node_modules/.bin/karma start karma.conf.coffee
+    ./node_modules/.bin/karma start karma.conf.coffee
 
 #### Running the tests (backend)
 
 1. Create .env file containing (Optional if Mongo isn't running under this configuration)
 
-		MONGO_HOST=localhost
-		MONGO_PORT=27017
-		MONGO_DB_NAME=dandb
+    MONGO_HOST=localhost
+    MONGO_PORT=27017
+    MONGO_DB_NAME=dandb
 
 2. Run the tests)
 
-		foreman run rspec
+    foreman run rspec
