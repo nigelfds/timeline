@@ -1,13 +1,8 @@
 require 'rubygems'
 require 'spork'
-ENV['RACK_ENV'] = 'test'                    # force the environment to 'test'
-ENV["MONGO_DB_NAME"] = "TestDb"
 
-ENV["USER_NAME"] = "admin"
-ENV["USER_PASSWORD"] = "admin"
-
+ENV['RACK_ENV'] = 'test'  # force the environment to 'test'
 ENV["PASSWORD_PROTECTED"] = "true"
-
 
 Spork.prefork do
   require File.join(File.dirname(__FILE__), '..', 'backend.rb')
@@ -32,8 +27,12 @@ Spork.prefork do
     conf.include Capybara::DSL
   end
 
+  def db
+    @db ||= MongoClient.new('localhost', 27017).db('TestDb')
+  end
+
   def app
-    @app ||= Backend
+    @app ||= Backend.new(db)
   end
 end
 

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-username = 'admin'
-password = 'admin'
-
-db_activities = $db["activities"]
-db_users = $db["users"]
-
 describe "Activities API Spec" do
+
+  let(:username) { 'admin' }
+  let(:password) { 'admin' }
+
+  let(:db_activities) { db["activities"] }
+  let(:db_users) { db["users"] }
 
   describe "GET activities" do
 
@@ -184,17 +184,14 @@ describe "Activities API Spec" do
       end
 
       describe "with an invalid activity" do
-        let(:activity) { {} }
-        before { app.any_instance.should_receive(:is_valid_activity).with(activity).and_return(false) }
-
         it "returns an OK response" do
-          post "/users/#{@user_id}/activities", activity.to_json
+          post "/users/#{@user_id}/activities", {}.to_json
 
           last_response.status.should eq(400)
         end
 
         it "doesn't create a new activity" do
-          post "/users/#{@user_id}/activities", activity.to_json
+          post "/users/#{@user_id}/activities", {}.to_json
 
           db_activities.find.to_a.should be_empty
         end
