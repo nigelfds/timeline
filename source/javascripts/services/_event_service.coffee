@@ -5,9 +5,6 @@ class EventsService
 		@http.get("/users/#{userId}/activities").success(callback)
 
 	createEvent: (event, userId, callback) ->
-		console.log event
-		console.log userId
-
 		@http({
     		url: "/users/#{userId}/activities",
     		method: 'POST',

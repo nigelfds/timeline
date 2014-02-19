@@ -10,31 +10,22 @@ describe 'EventService', () ->
         EventService = _EventService_
         $httpBackend = _$httpBackend_
 
-    describe 'when retrieving a list of events', () ->
-        it 'should make a get request to event api', () ->
-            $httpBackend.whenGET('/patient/'+userId+'/event').respond {"events":[]}
-            $httpBackend.expectGET('/patient/'+userId+'/event')
-            EventService.getEvents(userId, () ->)
+    describe 'when retrieving a list of activities', ->
+        it 'returns the correct activities', ->
+            $httpBackend.whenGET("/users/#{userId}/activities").respond ["activity1", "activity2"]
+
+            EventService.getEvents userId, (activities) ->
+                activities.should.eql ["activity1", "activity2"]
+
             $httpBackend.flush()
 
-        it 'should execute the callback function', () ->
-            $httpBackend.whenGET('/patient/'+userId+'/event').respond {"events":[]}
-            callback = sinon.spy()
-
-            EventService.getEvents(userId, callback)
-            $httpBackend.flush()
-
-            expect(callback.called).to.be.true
-
-    describe 'when creating a new event' , ()->
+    describe 'when creating a new event' , ->
         it 'should make a post to the event api', ()->
+            values = angular.toJson {description: "Some content", start: Date.now()}
 
-            postedEvent = angular.toJson {description: "Some content", start: new Date(Date.now())}
-            $httpBackend.whenPOST('/patient/'+userId+'/event', postedEvent).respond {description: "Some content"}
-            $httpBackend.expectPOST('/patient/'+userId+'/event', postedEvent)
+            $httpBackend.whenPOST("/users/#{userId}/activities", values).respond {description: "Some content"}
 
-            EventService.createEvent(postedEvent, userId, (new_event) ->
-                new_event.should.eql {description: "Some content"}
-            )
+            EventService.createEvent values, userId, (activity) ->
+                activity.should.eql {description: "Some content"}
 
             $httpBackend.flush()
