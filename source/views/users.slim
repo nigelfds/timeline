@@ -2,7 +2,7 @@
     .row
         .col-xs-10.col-xs-offset-1
             .list-group
-                a.username.list-group-item.list-group-item-info(ng-repeat="user in users | orderBy:'name'" href="#/users/{{user._id.$oid}}")
+                a.username.list-group-item.list-group-item-info(ng-repeat="user in users | orderBy:'name'" href="#/activities/{{user._id.$oid}}")
                     span.badge
                         | UR {{user.urNumber}}
                     h4.list-group-item-heading

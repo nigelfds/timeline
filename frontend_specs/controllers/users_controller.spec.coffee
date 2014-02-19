@@ -1,96 +1,65 @@
 describe "UsersController", ->
 
-	scope = deferred = undefined
+  scope = usersService = users = undefined
 
-	beforeEach module("timeline")
+  beforeEach module("timeline")
 
-	beforeEach inject (_$rootScope_, _$q_) ->
-		scope = _$rootScope_.$new()
-		deferred = _$q_.defer()
+  beforeEach inject (_$rootScope_) ->
+    scope = _$rootScope_.$new()
 
-	it "should display an empty list", () ->
-		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields []
+  beforeEach ->
+    usersService = sinon.createStubInstance UsersService
+    barry = name: "Barry"
+    michael = name: "Michael"
+    users = [ barry, michael ]
+    usersService.getUsers.yields users
 
-		usersController = UsersController scope, usersService
+  it "should display the list of users", ->
+    usersController = UsersController scope, usersService
 
-		scope.users.should.eql []
+    scope.users.should.eql users
 
+  describe 'when adding a new user', ->
+    event = form_values = new_user = undefined
 
-	it "should display users", ->
-		barry = name: "Barry"
-		michael = name: "Michael"
-		usersService = sinon.createStubInstance UsersService
-		usersService.getUsers.yields [ barry, michael ]
-		scope = {}
+    beforeEach ->
+      scope.userForm = $setPristine: sinon.spy()
+      event = preventDefault: sinon.stub()
+      form_values =
+        name: "Barry",
+        urNumber: "1234567890",
+        age:"35",
+        gender:"male"
+      new_user = name: "Noob", urNumber: "12345678"
+      usersService.createUser.yields new_user
 
-		usersController = UsersController scope, usersService
+    it 'creates a new user', ->
+      usersController = UsersController scope, usersService
+      scope.newUser = form_values
 
-		scope.users.should.have.length 2
-		scope.users[0].should.equal barry
-		scope.users[1].should.equal michael
+      scope.createUser(event)
 
-	describe 'when addining a new user', ->
-		event = barry = undefined
+      usersService.createUser.should.have.been.calledWith form_values
 
-		beforeEach ->
-			scope.userForm = 
-				$setPristine: sinon.spy()
-			event =
-				preventDefault: sinon.stub()
-			barry =
-				name: "Barry",
-				urNumber: "1234567890",
-				age:"35",
-				gender:"male"
+    it 'displays the new user', ->
+      usersController = UsersController scope, usersService
 
-		it 'should create a new user with the provided name', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
+      scope.createUser(event)
 
-			usersController = UsersController scope, usersService
+      scope.users.should.contain.members [new_user]
 
-			scope.newUser = barry
+    it 'resets the new user values', ->
+      usersController = UsersController scope, usersService
 
-			scope.createUser(event)
+      scope.newUser = form_values
+      scope.createUser(event)
 
-			usersService.createUser.should.have.been.calledWith barry
+      scope.newUser.should.be.empty
 
-		it 'should add the new user to the scope', ->
+    it 'marks all fields as pristine', ->
+      usersController = UsersController scope, usersService
 
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
+      scope.newUser = form_values
+      scope.createUser(event)
 
-			usersController = UsersController scope, usersService
-
-			scope.newUser = barry
-
-			scope.createUser(event)
-
-			scope.users.should.contain.members [barry]
-
-		it 'should remove all the variables from the scope', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
-
-			usersController = UsersController scope, usersService
-
-			scope.newUser = barry
-			scope.createUser(event)
-
-			expect(scope.newUser).to.be.undefined
-
-		it 'should mark all fields as pristine', ->
-			usersService = sinon.createStubInstance UsersService
-			usersService.getUsers.yields []
-			usersService.createUser.yields barry
-
-			usersController = UsersController scope, usersService
-
-			scope.newUser = barry
-
-			scope.createUser(event)
-
-			scope.userForm.$setPristine.should.be.called
+      scope.userForm.$setPristine.should.have.been.called
