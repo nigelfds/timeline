@@ -2,29 +2,14 @@ require 'sinatra'
 require 'sinatra/base'
 
 require_relative 'lib/mongo_db'
-
-ENV["USER_NAME"] = "admin" unless ENV["USER_NAME"]
-ENV["USER_PASSWORD"] = "admin" unless ENV["USER_PASSWORD"]
-ENV["PASSWORD_PROTECTED"] = "false" unless ENV["PASSWORD_PROTECTED"]
+require_relative 'lib/application_helper'
 
 class Backend < Sinatra::Base
+  helpers ApplicationHelper
 
   def initialize db=nil
     super()
     @db = db || MongoDb.new
-  end
-
-  helpers do
-    def protected!
-      return if (ENV["PASSWORD_PROTECTED"]!="true" or authorized?)
-      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
-      halt 401, "Not authorized\n"
-    end
-
-    def authorized?
-      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [ENV["USER_NAME"], ENV["USER_PASSWORD"]]
-    end
   end
 
   before do
@@ -33,10 +18,7 @@ class Backend < Sinatra::Base
 
   get '/users' do
     content_type :json
-
-    users = @db["users"].find.to_a
-
-    users.to_json
+    @db["users"].find.to_a.to_json
   end
 
   get '/users/:id' do
