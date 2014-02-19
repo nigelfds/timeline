@@ -1,45 +1,34 @@
 require 'sinatra'
 require 'sinatra/base'
-require 'mongo'
 
-include Mongo
-
-ENV["MONGO_HOST"] = "localhost" unless ENV["MONGO_HOST"]
-ENV["MONGO_PORT"] = "27017" unless ENV["MONGO_PORT"]
-ENV["MONGO_DB_NAME"] = "dandb" unless ENV["MONGO_DB_NAME"]
+require_relative 'lib/mongo_db'
 
 ENV["USER_NAME"] = "admin" unless ENV["USER_NAME"]
 ENV["USER_PASSWORD"] = "admin" unless ENV["USER_PASSWORD"]
-
 ENV["PASSWORD_PROTECTED"] = "false" unless ENV["PASSWORD_PROTECTED"]
 
 class Backend < Sinatra::Base
 
   def initialize db=nil
     super()
-    @db = db || MongoClient.new(ENV["MONGO_HOST"], ENV["MONGO_PORT"]).db(ENV["MONGO_DB_NAME"])
+    @db = db || MongoDb.new
   end
 
   helpers do
-      def protected!
-        return if (ENV["PASSWORD_PROTECTED"]!="true" or authorized?)
-        headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
-        halt 401, "Not authorized\n"
-      end
+    def protected!
+      return if (ENV["PASSWORD_PROTECTED"]!="true" or authorized?)
+      headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+      halt 401, "Not authorized\n"
+    end
 
-      def authorized?
-        @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-        @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [ENV["USER_NAME"], ENV["USER_PASSWORD"]]
-      end
+    def authorized?
+      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [ENV["USER_NAME"], ENV["USER_PASSWORD"]]
+    end
   end
 
   before do
     protected!
-  end
-
-
-  if (ENV["MONGO_USER"] and ENV["MONGO_PASSWORD"])
-    @db.authenticate(ENV["MONGO_USER"], ENV["MONGO_PASSWORD"])
   end
 
   get '/users' do
