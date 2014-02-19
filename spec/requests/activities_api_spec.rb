@@ -28,7 +28,7 @@ describe "Activities API Spec" do
 
 			it "return an empty array" do
 				user_id = '52eeec750004deaf4d00000b'
-				
+
 				get "/users/#{user_id}/activities"
 
 				response = JSON.parse(last_response.body)
@@ -42,7 +42,7 @@ describe "Activities API Spec" do
 				db_activities.insert(:start => start, :description => "Activity 2", :user_id => BSON.ObjectId(user_id))
 				db_activities.insert(:start => start, :description => "Other Activity 1", :user_id => "2")
 				db_activities.insert(:start => start, :description => "Other Activity 2", :user_id => "2")
-				
+
 				get "/users/#{user_id}/activities"
 
 				response = JSON.parse(last_response.body)
@@ -66,7 +66,7 @@ describe "Activities API Spec" do
 				db_activities.insert(:start => start, :description => "Second", :user_id => BSON.ObjectId(user_id))
 				db_activities.insert(:start => start + 1000, :description => "Third", :user_id => BSON.ObjectId(user_id))
 				db_activities.insert(:start => start - 1000, :description => "First", :user_id => BSON.ObjectId(user_id))
-				
+
 				get "/users/#{user_id}/activities"
 
 				response = JSON.parse(last_response.body)
@@ -102,7 +102,7 @@ describe "Activities API Spec" do
 
 			it "returns the correct activity" do
 				user_id = '52eeec750004deaf4d00000b'
-				data = {:start => Time.now.utc, 
+				data = {:start => Time.now.utc,
 						:description => "Some Event",
 						:user_id => BSON.ObjectId(user_id)}
 				activity_id = db_activities.insert(data)
@@ -117,7 +117,7 @@ describe "Activities API Spec" do
 
 			it "does not return activities for wrong patient" do
 				user_id = '52eeec750004deaf4d00000b'
-				data = {:start => Time.now.utc, 
+				data = {:start => Time.now.utc,
 						:description => "Some Event",
 						:user_id => "another_user_id"}
 				activity_id = db_activities.insert(data)
