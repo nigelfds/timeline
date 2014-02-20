@@ -17,14 +17,14 @@ ActivitiesController = ($scope, $routeParams, ActivitiesService) ->
     $scope.createActivity = ->
         console.log "need to include $event here"
 
-        dateTime = new Date(
+        dateValue = new Date(
             $scope.date.getFullYear(),
             $scope.date.getMonth(),
             $scope.date.getDate(),
             $scope.time.getHours(),
             $scope.time.getMinutes()
         )
-        values = date: dateTime.toString(), description: $scope.description
+        values = date: dateValue.toString(), description: $scope.description
         ActivitiesService.createActivity $routeParams.userId, values, (new_activity) ->
             $scope.activities.push mapToTimeline(new_activity)
 

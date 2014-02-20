@@ -1,26 +1,30 @@
-nav(class="navbar navbar-default" role="navigation")
-    .navbar-header
-        .navbar-brand Events
+.username.list-group-item.list-group-item-info
+    span.badge
+        | UR XXXXXXX
+    h4.list-group-item-heading
+        | {{user.name}} Journey
 
-div(eventtimeline)
+form.form-horizontal#eventForm(name="eventForm" role="form" novalidate)
 
-form(id="eventForm" name="eventForm" novalidate)
+    h4 New Activity
+    .form-group
+        label.control-label.col-sm-2(for="date" ) Date
+        .col-sm-3
+            input.form-control(type="text" name="date" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)                
+    .form-group
+        label.control-label.col-sm-2(for="time" ) Time
+        .col-sm-3
+            timepicker(hour-step="1" minute-step="1" show-meridian="true" ng-model="time")
 
-    h4 Add a new event
-    .input-group
-        span.input-group-addon Description
-        input.form-control(type="text" placeholder="Please type the description of the event" ng-model="description" required)
+    .form-group
+        label.control-label.col-sm-2(for="description" ) Description
+        .col-sm-6
+            input.form-control(type="textarea" name="description" placeholder="Please type the description of the event" ng-model="description" required)
 
-    .input-group
-        span.input-group-addon
-            span.glyphicon.glyphicon-calendar
-        input.form-control(type="text" datepicker-popup="dd-MMMM-yyyy" ng-model="date" required)                
-
-    .input-group
-        span.input-group-addon
-            span.glyphicon.glyphicon-time
-        timepicker(hour-step="1" minute-step="30" show-meridian="true" ng-model="time")
 
     .input-group
         button(class="btn btn-primary top-margin-hack" ng-click="createActivity()" ng-disabled="eventForm.$invalid")
             | Add
+
+div(eventtimeline)
+
