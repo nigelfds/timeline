@@ -1,17 +1,11 @@
 class ActivitiesService
-	constructor: (@http) ->
+  constructor: (@http) ->
 
-	getActivities: (userId, callback) ->
-		@http.get("/users/#{userId}/activities").success(callback)
+  getActivities: (userId, callback) ->
+    @http.get("/users/#{userId}/activities").success(callback)
 
-	createActivity: (userId, values, callback) ->
-		@http({
-    		url: "/users/#{userId}/activities",
-    		method: 'POST',
-    		headers: { 'Content-Type': 'application/json' },
-    		data: values
-		}).success(callback).error((data) -> console.log data)
-
+  createActivity: (userId, values, callback) ->
+    @http.post("/users/#{userId}/activities", values).success(callback)
 
 angular.module('timeline')
-	.factory 'ActivitiesService', ($http) -> new ActivitiesService($http)
+  .factory 'ActivitiesService', ($http) -> new ActivitiesService($http)

@@ -108,7 +108,7 @@ class Backend < Sinatra::Base
 	get '/users/:user_id/activities' do
 		content_type :json
 		activities = $db["activities"].find(:user_id => BSON.ObjectId(params[:user_id])).sort(:start).to_a
-		{ :activities => activities }.to_json
+		activities.to_json
 	end
 
 	get '/users/:user_id/activities/:activity_id' do

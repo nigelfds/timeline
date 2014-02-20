@@ -22,5 +22,5 @@ form(id="eventForm" name="eventForm" novalidate)
         timepicker(hour-step="1" minute-step="30" show-meridian="true" ng-model="time")
 
     .input-group
-        button(class="btn btn-primary top-margin-hack" ng-click="createEvent()" ng-disabled="eventForm.$invalid")
+        button(class="btn btn-primary top-margin-hack" ng-click="createActivity()" ng-disabled="eventForm.$invalid")
             | Add

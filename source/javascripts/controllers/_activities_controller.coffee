@@ -14,7 +14,9 @@ ActivitiesController = ($scope, $routeParams, ActivitiesService) ->
     ActivitiesService.getActivities $routeParams.userId, (activities) ->
         $scope.activities = activities.map(mapToTimeline)
 
-    $scope.createActivity = () ->
+    $scope.createActivity = ->
+        console.log "need to include $event here"
+
         dateTime = new Date(
             $scope.date.getFullYear(),
             $scope.date.getMonth(),
@@ -23,7 +25,6 @@ ActivitiesController = ($scope, $routeParams, ActivitiesService) ->
             $scope.time.getMinutes()
         )
         values = date: dateTime.toString(), description: $scope.description
-
         ActivitiesService.createActivity $routeParams.userId, values, (new_activity) ->
             $scope.activities.push mapToTimeline(new_activity)
 

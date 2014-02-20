@@ -32,7 +32,7 @@ describe "Activities API Spec" do
 				get "/users/#{user_id}/activities"
 
 				response = JSON.parse(last_response.body)
-				response["activities"].should be_empty
+				response.should be_empty
 			end
 
 			it "returns all the users activities" do
@@ -45,9 +45,7 @@ describe "Activities API Spec" do
 				
 				get "/users/#{user_id}/activities"
 
-				response = JSON.parse(last_response.body)
-
-				activities = response["activities"]
+				activities = JSON.parse(last_response.body)
 
 				activities.length.should eql(2)
 
@@ -69,8 +67,7 @@ describe "Activities API Spec" do
 				
 				get "/users/#{user_id}/activities"
 
-				response = JSON.parse(last_response.body)
-				activities = response["activities"]
+				activities = JSON.parse(last_response.body)
 
 				activities[0]["description"].should eql("First")
 				activities[1]["description"].should eql("Second")
