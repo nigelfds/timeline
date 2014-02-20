@@ -4,11 +4,6 @@ describe "Basis32Controller", ->
 
 	beforeEach ->
 		scope = {}
-		routeParams =
-			userId: "something"
-			activityId: "id of the activity"
-
-		service = sinon.createStubInstance ActivityService
 		Basis32Controller scope, routeParams, service
 
 
@@ -31,16 +26,3 @@ describe "Basis32Controller", ->
 		scope.questions[12].should.eql text: "Developing indepencence, autonomy"
 		scope.questions[13].should.eql text: "Goals or direction of life"
 		scope.questions[14].should.eql text: "Lack of self-confidence, feeling bad about yourself"
-
-	describe "answers", ->
-
-	 	it "saves the answer to the question", ->
-
-	 		data = 
-	 			index: 4
-	 			answer: 3
-
-	 		scope.answer(data.index, data.answer)
-
-	 		service.updateActivity.should.have.been.calledWith routeParams.activityId, data
-

@@ -17,7 +17,9 @@
                   input.form-control(type="text" name="description" ng-model="selectedActivity.description" required)
 
                 .form-group
-                  button(ng-click="save()") SAVE
+                  button.btn.btn-success(ng-click="save()") SAVE
+                  button.btn.btn-default(ng-click="new()") NEW
+                  button.btn.btn-danger(ng-click="delete()") DELETE
 
   .row
     .col-xs-12
@@ -26,9 +28,13 @@
           h4.name.panel-title
             | User's Journey
           .panel-body
-            button.list-group-item.list-group-item-info(ng-repeat="activity in activities" ng-click="select($index)")
+            button.list-group-item.list-group-item-info(ng-repeat="activity in activities" ng-click="select($index, activity)")
               h4.list-group-item-heading
                   | {{activity.description}}
+
+alert.messages(ng-show="alerts.length != 0")
+  div.fade(ng-repeat="alert in alerts")
+    | {{alert}}
 
 
 

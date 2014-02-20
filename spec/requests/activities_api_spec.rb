@@ -198,8 +198,6 @@ describe "Activities API Spec" do
 
 	end
 
-	
-
 	describe "PUT activity" do
 
 		before(:each) do
@@ -250,64 +248,64 @@ describe "Activities API Spec" do
 
 				last_response.status.should eq(400)
 			end
-
-			# #TODO: check patient exists?
-			# it "should update a event" do
-			# 	patient_id = '52eeec750004deaf4d00000b'
-			# 	time = Time.now.utc
-			# 	id = $db["events"].insert({:description => "Some Event", :start => time, :patient_id => BSON.ObjectId(patient_id)}).to_s
-			# 	put '/patient/'+patient_id+'/event/'+id, {:description => "Super Special Event", :start => (time + 1000).to_s}.to_json
-
-			# 	result = $db["events"].find_one(BSON.ObjectId(id))
-			# 	result.should_not be_nil
-			# 	result.should include("description" => "Super Special Event")
-			# 	result.should include("start" => (time + 1000).to_s)
-			# 	result.should include("patient_id" => BSON.ObjectId(patient_id))
-			# end
-
-			# it "should return error if update fails" do
-			# 	put '/patient/52eeec750004deaf4d00000b/event/52eeec750004deaf4d00000b', {:description => "Super Special Event", :start => 1}.to_json
-
-			# 	last_response.status.should eq(400)
-			# end
 		end
 	end
 
-	# describe "DELETE event" do
-
-	# 	it "should be return 401 when not authorised" do
-	# 		patient_id = '52eeec750004deaf4d00000b'
-	# 		id = '52eeec750004deaf4d00000c'
-	# 		delete "/patient/#{patient_id}/event/#{id}"
-	# 		last_response.status.should eq(401)
-	# 	end
-
-	# 	describe "when authorised" do
-
-	# 		before (:each) do
-	# 			 authorize username, password
-	# 		end
 
 
-	# 		after(:each) do
-	# 			$db["events"].remove
-	# 		end
+	describe "DELETE event" do
+		before(:each) do
+			@user_id = db_users.insert({"name" => "Justin"})
+			@activity_id = db_activities.insert({"start" => Time.now.utc, "description" => "Something", "userId" => @user_id})
+			@activity = db_activities.find_one(@activity_id)
+		end
 
-	# 		it "should delete event" do
-	# 			patient_id = '52eeec750004deaf4d00000b'
-	# 			id = $db["events"].insert({:description => "Some Event", :start => Time.now.utc, :patient_id => BSON.ObjectId(patient_id)}).to_s
-	# 			raise "No event inserted" unless id
-	# 			delete '/patient/'+patient_id+'/event/'+id
+		it "should be return 401 when not authorised" do
+			delete "/users/#{@user_id}/activities/#{@activity_id}"
 
-	# 			$db["events"].find_one(BSON.ObjectId(id)).should be_nil
-	# 		end
+			last_response.status.should eq(401)
+		end
 
-	# 		it "return 404 if cannot find object to delete" do
-	# 			patient_id = id = '52eeec750004deaf4d00000b'
+		describe "when authorised" do
 
-	# 			delete '/patient/'+patient_id+'/event/'+id
-	# 			last_response.status.should eq(404)
-	# 		end
-	# 	end
-	# end
+			before (:each) do
+				 authorize username, password
+			end
+
+			after(:each) do
+				$db["events"].remove
+			end
+
+			it "should delete event" do
+				delete "/users/#{@user_id}/activities/#{@activity_id}"
+
+				db_activities.find_one(@activity_id).should be_nil
+			end
+
+			describe "activity doesn't exist" do
+				before(:each) do
+					non_existent_activity_id = "52eeec750004deaf4d00000b"
+
+					delete "/users/#{@user_id}/activities/#{non_existent_activity_id}"
+				end
+
+				it "returns an not found error" do
+					last_response.status.should eq(404)
+				end
+
+			end
+
+			describe "user doesn't exist" do
+				before(:each) do
+					non_existent_user_id = "52eeec750004deaf4d00000b"
+
+					delete "/users/#{non_existent_user_id}/activities/#{@activity_id}"
+				end
+
+				it "returns a not found error if the user doesn't exist" do
+					last_response.status.should eq(404)
+				end
+			end
+		end
+	end
 end

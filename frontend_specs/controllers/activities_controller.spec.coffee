@@ -1,7 +1,8 @@
 describe "ActivitiesController", ->
-  scope = routeParams = activitiesService = undefined
+  scope = routeParams = timeout = activitiesService = undefined
   userId = "the-user-id"
   activities = ["1", "2"]
+  activityId = values = undefined
 
   beforeEach module("timeline")
 
@@ -12,40 +13,92 @@ describe "ActivitiesController", ->
   beforeEach ->
     activitiesService = sinon.createStubInstance ActivitiesService
     activitiesService.getActivities.withArgs(userId).yields activities
+    activityId = "the-activity-id"
+    values = date: "the-date-of-the-activity", description: "the description of the activity"
+    activitiesService.updateActivity.withArgs(userId, activityId).yields true
+
+    timeout = sinon.stub()
+
+    ActivitiesController scope, routeParams, timeout, activitiesService
 
 
   it "displays all the activities", ->
-    ActivitiesController scope, routeParams, activitiesService
-
     scope.activities.should.eql activities
 
   it "selects the first activity by default", ->
-    ActivitiesController scope, routeParams, activitiesService
-
     scope.selectedActivity.should.eql activities[0]
 
   describe "selecting an activity", ->
 
     it "displays the selected activity", ->
-      ActivitiesController scope, routeParams, activitiesService
-
       scope.select(1)
 
       scope.selectedActivity.should.eql activities[1]
 
+  describe "adding a new activity", ->
+    new_activity = default_values = undefined
+
+    beforeEach ->
+      now = new Date("1/1/2014 14:00")
+      Date.now = sinon.stub()
+      Date.now.returns now.getTime()
+      default_values =
+        date: now,
+        description: "New Activity"
+      new_activity = "new-activity"
+      activitiesService.createActivity.withArgs(userId, default_values).yields new_activity
+
+
+    it "display the new activity", ->
+      scope.new()
+
+      scope.activities.should.contain new_activity
+
+    it "selected the new activity", ->
+      scope.new()
+
+      scope.selectedActivity.should.eql new_activity
+
   describe "saving the selected activity", ->
 
-    it "sends an update to the service", ->
-      activityId = "the-activity-id"
-      values = date: "the-date-of-the-activity", description: "the description of the activity"
-      activitiesService.updateActivity.withArgs(userId, activityId).yields true
-      ActivitiesController scope, routeParams, activitiesService
-
+    beforeEach ->
       scope.selectedActivity = 
         "_id": "$oid": activityId
         "date": values.date
         "description": values.description
         "user_id": "$oid": userId
+
+    it "sends an update to the service", ->
+      scope.save()
+      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+    it "alerts on success", ->
+      scope.save()
+      scope.alerts[0].should.eql "Updated successfully"
+
+    it "removes alerts after a timeout", ->
+      timeout.withArgs(sinon.match.func, 5000).yields()
+
       scope.save()
 
-      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+      scope.alerts.should.be.empty
+
+  describe "removing an activity", ->
+    selectedActivity = undefined
+    beforeEach ->
+      selectedActivity =
+        "_id": "$oid": activityId
+        "date": values.date
+        "description": values.description
+        "user_id": "$oid": userId
+      scope.selectedActivity = selectedActivity
+      activities.push selectedActivity
+      activitiesService.deleteActivity.withArgs(userId, activityId).yields true
+
+    it "removes the activity", ->
+      scope.delete()
+      scope.activities.should.not.contain selectedActivity
+
+    it "selects the first activity", ->
+      scope.delete()
+      scope.selectedActivity.should.eql activities[0]
