@@ -1,47 +1,22 @@
 ActivitiesController = ($scope, $routeParams, ActivitiesService) ->
-    $scope.currentActivity = {}
+  userId = $routeParams.userId
 
-    mapToTimeline = (activity) ->
-        start: new Date(activity.date)
-        content: activity.description
+  ActivitiesService.getActivities userId, (activities) ->
+    $scope.activities = activities
+    $scope.selectedActivity = activities[0]
 
-    ActivitiesService.getActivities $routeParams.userId, (activities) ->
-        $scope.activities = activities
-        $scope.timelineData = activities.map(mapToTimeline)
+  $scope.select = (index) ->
+    $scope.selectedActivity = $scope.activities[index]
 
-    $scope.newActivity = ->
-        now = new Date(Date.now())
-        values = date: now.toString(), description: "New Activity"
-        ActivitiesService.createActivity $routeParams.userId, values, (new_activity) ->
-            $scope.activities.push new_activity
-            $scope.timelineData.push mapToTimeline(new_activity)
-            $scope.currentActivity = new_activity
-
-    $scope.saveActivity = ->
-        activityId = $scope.currentActivity._id.$oid
-        values = {}
-        values[property] = value for property, value of $scope.currentActivity when property != "_id"
-
-        ActivitiesService.updateActivity $routeParams.userId, activityId, values, (success) ->
-            console.log "success"
-
-    $scope.selectActivity = (activity) ->
-        $scope.description = activity.description
-        console.log $scope.description
-
-    # $scope.createActivity = ->
-    #     console.log "need to include $event here"
-
-    #     dateValue = new Date(
-    #         $scope.date.getFullYear(),
-    #         $scope.date.getMonth(),
-    #         $scope.date.getDate(),
-    #         $scope.time.getHours(),
-    #         $scope.time.getMinutes()
-    #     )
-    #     values = date: dateValue.toString(), description: $scope.description
-    #     ActivitiesService.createActivity $routeParams.userId, values, (new_activity) ->
-    #         $scope.activities.push mapToTimeline(new_activity)
+  $scope.save = ->
+    activityId = $scope.selectedActivity._id.$oid
+    values = {}
+    for property, value of $scope.selectedActivity when property isnt "_id" and property isnt "user_id"
+      console.log property
+      values[property] = value 
+    console.log values
+    ActivitiesService.updateActivity userId, activityId, values, (success) ->
+      console.log "saved"
 
 angular.module('timeline')
-    .controller 'ActivitiesController', ActivitiesController
+  .controller 'ActivitiesController', ActivitiesController

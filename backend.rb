@@ -146,6 +146,9 @@ class Backend < Sinatra::Base
 		return error 400 if user.nil?
 
 		update_data = JSON.parse(request.body.read)
+
+		puts update_data
+		
 		result = $db["activities"].update({"_id" => BSON.ObjectId(params[:activity_id])}, '$set' => update_data)
 		error 400 unless result["updatedExisting"]
 	end
