@@ -1,20 +1,20 @@
-describe 'EventService', () ->
+describe 'ActivitiesService', () ->
 
-    EventService = undefined
+    ActivitiesService = undefined
     $httpBackend = undefined
     userId = '52f0329df6f4070ce200000'
 
     beforeEach module 'timeline'
 
-    beforeEach inject (_EventService_, _$httpBackend_) ->
-        EventService = _EventService_
+    beforeEach inject (_ActivitiesService_, _$httpBackend_) ->
+        ActivitiesService = _ActivitiesService_
         $httpBackend = _$httpBackend_
 
     describe 'when retrieving a list of activities', ->
         it 'returns the correct activities', ->
             $httpBackend.whenGET("/users/#{userId}/activities").respond ["activity1", "activity2"]
 
-            EventService.getEvents userId, (activities) ->
+            ActivitiesService.getActivities userId, (activities) ->
                 activities.should.eql ["activity1", "activity2"]
 
             $httpBackend.flush()
@@ -25,7 +25,7 @@ describe 'EventService', () ->
 
             $httpBackend.whenPOST("/users/#{userId}/activities", values).respond {description: "Some content"}
 
-            EventService.createEvent values, userId, (activity) ->
+            ActivitiesService.createActivity userId, values, (activity) ->
                 activity.should.eql {description: "Some content"}
 
             $httpBackend.flush()

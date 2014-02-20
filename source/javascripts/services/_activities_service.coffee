@@ -1,17 +1,17 @@
-class EventsService
+class ActivitiesService
 	constructor: (@http) ->
 
-	getEvents: (userId, callback) ->
+	getActivities: (userId, callback) ->
 		@http.get("/users/#{userId}/activities").success(callback)
 
-	createEvent: (event, userId, callback) ->
+	createActivity: (userId, values, callback) ->
 		@http({
     		url: "/users/#{userId}/activities",
     		method: 'POST',
     		headers: { 'Content-Type': 'application/json' },
-    		data: event
+    		data: values
 		}).success(callback).error((data) -> console.log data)
 
 
 angular.module('timeline')
-	.factory 'EventService', ($http) -> new EventsService($http)
+	.factory 'ActivitiesService', ($http) -> new ActivitiesService($http)
