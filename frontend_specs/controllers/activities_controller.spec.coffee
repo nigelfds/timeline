@@ -1,8 +1,9 @@
 describe "ActivitiesController", ->
 
     userId = '52f0329df6f4070ce200000'
-
-    scope = routeParams = undefined
+    now = new Date("1/1/2014 13:00")
+    activityId = '51a0329df6f4070ce200000'
+    scope = routeParams = activitiesService = activities = undefined
 
     beforeEach module("timeline")
 
@@ -11,39 +12,61 @@ describe "ActivitiesController", ->
 
     beforeEach ->
         routeParams = userId: userId
+        activity1 = date: now.toUTCString(), description: "Activity 1", userId: userId
+        activity2 = date: now.toUTCString(), description: "Activity 2", userId: userId
+        activities = [activity1, activity2]
+        activitiesService = sinon.createStubInstance ActivitiesService
+        activitiesService.getActivities.withArgs(userId).yields activities
 
+    it "displays the correct activities on the timeline", ->
+        ActivitiesController scope, routeParams, activitiesService
 
-    describe 'when there are no activities', ->
+        scope.timelineData[0].start.toUTCString().should.eql activities[0].date
+        scope.timelineData[0].content.should.eql activities[0].description
+
+        scope.timelineData[1].start.toUTCString().should.eql activities[1].date
+        scope.timelineData[1].content.should.eql activities[1].description
+
+    describe "when adding a new activity", ->
+
+        it "creates a new activity with defaults", ->
+            Date.now = sinon.stub()
+            Date.now.returns now.getTime()
+            values = date: now.toString(), description: "New Activity"
+            newActivity = date: now.toUTCString(), description: "Some activity"
+            activitiesService.createActivity.withArgs(userId, values).yields newActivity
+            
+            ActivitiesController scope, routeParams, activitiesService
+
+            scope.newActivity()
+
+            scope.currentActivity.should.eql newActivity
+
+            scope.timelineData[2].start.toUTCString().should.eql newActivity.date
+            scope.timelineData[2].content.should.eql newActivity.description
+
+    describe "saving the current activity", ->
+        activityId = values = currentActivity = undefined
 
         beforeEach ->
-            activitiesService = sinon.createStubInstance ActivitiesService
-            activitiesService.getActivities.withArgs(userId).yields []
+            activityId = '51a0329df6f4070ce200000'
+            values = date: now.toUTCString(), description: "Some activity"
+            currentActivity =
+                "_id": "$oid": activityId
+                date: values.date
+                description: values.description
+            activitiesService.updateActivity.withArgs(userId, activityId, values).yields true
 
             ActivitiesController scope, routeParams, activitiesService
 
-        it "should display an empty list", ->
-            scope.activities.length.should.eql 0
+            scope.currentActivity = currentActivity
+            scope.saveActivity()
 
 
-    describe 'when there are 2 activities', ->
-        date = new Date(Date.now())
+        it "saves the current activity", ->
+            activitiesService.updateActivity.should.have.been.calledWith userId, activityId, values
 
-        beforeEach ->
-            activity1 = date: date.toUTCString(), description: "Some activity", userId: userId
-            activity2 = date: date.toUTCString(), description: "Another activity", userId: userId
-            activitiesService = sinon.createStubInstance ActivitiesService
-            activitiesService.getActivities.yields [activity1, activity2]
-
-            ActivitiesController scope, routeParams, activitiesService
-
-        it "should display activities", ->
-            scope.activities[0].content.should.eql "Some activity"
-            expect(scope.activities[0].start).to.equalDate date
-
-            scope.activities[1].content.should.eql "Another activity"
-            expect(scope.activities[1].start).to.equalDate date
-
-    describe 'when adding a new activity' , ->
+    xdescribe 'when adding a new activity' , ->
         activity = undefined
         date = new Date(2013,2,12,0,0,0)
         time = new Date(2013,0,0,10,15,0)

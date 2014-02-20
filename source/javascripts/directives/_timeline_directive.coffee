@@ -5,6 +5,14 @@ angular.module('timeline')
       template: '<div id="user-timeline">'
       link: (scope, element, attrs) ->
         timeline = new links.Timeline(element.children()[0])
+
+        onSelect = (e) ->
+          activity = scope.activities[timeline.getSelection()[0].row]
+          scope.selectActivity activity
+
+
+        links.events.addListener(timeline, 'select', onSelect);
+
         options =
           "width":  "100%"
           "height": "400px"
@@ -13,13 +21,12 @@ angular.module('timeline')
 
         timeline.draw [], options
 
-        drawTimeline = (activities) ->
-          timeline.setData(activities)
-
+        drawTimeline = (data) ->
+          timeline.setData(data)
           timeline.setVisibleChartRangeAuto()
           timeline.zoom(-.1)
 
-        scope.$watchCollection 'activities', ->
-          drawTimeline(scope.activities) if(scope.activities)
+        scope.$watchCollection 'timelineData', ->
+          drawTimeline(scope.timelineData) if(scope.timelineData)
   ]
 )

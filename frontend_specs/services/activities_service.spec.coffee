@@ -1,8 +1,7 @@
 describe 'ActivitiesService', () ->
 
-    ActivitiesService = undefined
-    $httpBackend = undefined
     userId = '52f0329df6f4070ce200000'
+    ActivitiesService = $httpBackend = undefined
 
     beforeEach module 'timeline'
 
@@ -19,13 +18,29 @@ describe 'ActivitiesService', () ->
 
             $httpBackend.flush()
 
-    describe 'when creating a new event' , ->
-        it 'should make a post to the event api', ()->
-            values = angular.toJson {description: "Some content", start: Date.now()}
+    describe 'when creating a new activity' , ->
 
-            $httpBackend.whenPOST("/users/#{userId}/activities", values).respond {description: "Some content"}
+        it 'returns the activity', ->
+            new_activity = description: "Some content"
+            values = angular.toJson description: "Some content", date: "yesterday"
+
+            $httpBackend.whenPOST("/users/#{userId}/activities", values).respond new_activity
 
             ActivitiesService.createActivity userId, values, (activity) ->
-                activity.should.eql {description: "Some content"}
+                activity.should.eql new_activity
 
             $httpBackend.flush()
+
+    describe 'when updating an activity', ->
+
+        it 'saves the activity', ->
+            activityId = "an-activity-id"
+            values = angular.toJson date: new Date(), description: "Some content"
+
+            $httpBackend.whenPUT("/users/#{userId}/activities/#{activityId}", values).respond {}
+
+            ActivitiesService.updateActivity userId, activityId, values, (success) ->
+                success.should.be.true
+
+            $httpBackend.flush()
+

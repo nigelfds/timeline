@@ -20,7 +20,7 @@ describe("Timeline Directive", ->
         it 'should contain 2 events', ->
             event1 = {content: "Some event", start: new Date(Date.now())}
             event2 = {content: "Another event", start: new Date(Date.now())}
-            scope.activities = [event1, event2]
+            scope.timelineData = [event1, event2]
             scope.$apply()
 
             eventElements = element.find('.timeline-event-content')
@@ -30,7 +30,7 @@ describe("Timeline Directive", ->
             event1 = {content: "Some event", start: new Date(Date.now())}
             event2 = {content: "Another event", start: new Date(Date.now())}
             event3 = {content: "A third event", start: new Date(Date.now())}
-            scope.activities = [event1, event2, event3]
+            scope.timelineData = [event1, event2, event3]
             scope.$apply()
 
             eventElements = element.find('.timeline-event-content')
