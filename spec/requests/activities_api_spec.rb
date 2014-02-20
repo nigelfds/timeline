@@ -253,7 +253,7 @@ describe "Activities API Spec" do
 
 
 
-	describe "DELETE event" do
+	describe "DELETE an activity" do
 		before(:each) do
 			@user_id = db_users.insert({"name" => "Justin"})
 			@activity_id = db_activities.insert({"start" => Time.now.utc, "description" => "Something", "userId" => @user_id})
@@ -273,13 +273,19 @@ describe "Activities API Spec" do
 			end
 
 			after(:each) do
-				$db["events"].remove
+				db_activities.remove
 			end
 
-			it "should delete event" do
+			it "deletes the activity" do
 				delete "/users/#{@user_id}/activities/#{@activity_id}"
 
 				db_activities.find_one(@activity_id).should be_nil
+			end
+
+			it "responds with OK" do
+				delete "/users/#{@user_id}/activities/#{@activity_id}"
+
+				last_response.status.should eq(200)
 			end
 
 			describe "activity doesn't exist" do
