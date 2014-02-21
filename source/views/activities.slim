@@ -13,36 +13,32 @@
       .panel.panel-primary
         .panel-heading
           h4.name.panel-title
-            | Activity Details {{selectedActivity.description}}
+            | Activity Details
 
           .panel-body
               form(name="activity" role="form" novalidate)
                 .form-group
-                  button.btn.btn-success(ng-click="save()" ng-show="selectedActivity") SAVE
                   button.btn.btn-default(ng-click="new()") NEW
                   button.btn.btn-danger(ng-click="delete()" ng-show="selectedActivity") DELETE
-
                 .form-group(ng-show="selectedActivity")
                   label.control-label(for="date" ) Date
-                  input.form-control(type="datetime" name="date" ng-model="selectedActivity.date" ng-change="save()" required)
+                  datetimepicker
                 .form-group(ng-show="selectedActivity")
                   label.control-label(for="description" ) Description
                   input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
-
 
   .row
     .col-xs-12
       .panel.panel-info
         .panel-heading
           h4.name.panel-title
-            | Activities
+            | List of Activities
           .panel-body
-            a.list-group-item.list-group-item-info(ng-repeat="activity in activities" ng-click="select($index, activity)")
-              span.badge
-                | {{activity.date}}
-
-              h4.list-group-item-heading
-                  | {{activity.description}}
+            .list-group
+              a.list-group-item.list-group-item-default(ng-repeat="activity in activities" ng-click="select($index, activity)" ng-class="activity == selectedActivity ? 'active' : ''")
+                span.badge
+                  | {{activity.date}}
+                | {{activity.description}}
 
 alert.messages(ng-show="alerts.length != 0")
   .fade(ng-repeat="alert in alerts track by $index")

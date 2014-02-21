@@ -19,9 +19,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
     $scope.selectedActivity = $scope.activities[index]
 
   $scope.new = ->
-    default_values =
-      date: new Date(Date.now())
-      description: "New Activity"
+    now = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")
+    default_values = date: now, description: "New Activity"
     ActivitiesService.createActivity userId, default_values, (new_activity) ->
       addActivity new_activity
       $scope.selectedActivity = new_activity
@@ -43,41 +42,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
   ActivitiesService.getActivities userId, (activities) ->
     addActivity(activity) for activity in activities
     $scope.select(0)
-
-
-
-  # timeline stuff (NOT TESTED YET)
-
-  # onChanges = (newValue, oldValue) ->  updateTimeline()
-  # $scope.$watch "activities", onChanges, true
-
-  # mapToTimeline = (activity) ->
-  #   start: new Date(activity.date)
-  #   content: activity.description
-
-  # updateTimeline = ->
-  #   timelineData = $scope.activities.map mapToTimeline
-  #   timeline.setData timelineData
-  #   timeline.setVisibleChartRangeAuto()
-  #   timeline.zoom(-.2)
-
-  # timeline = new links.Timeline(angular.element("#timeline")[0])
-  # options =
-  #   "width":  "100%"
-  #   "height": "400px"
-  #   "style": "box"
-
-  # timeline.draw [], options
-
-  # onSelect =  ->
-  #   selection = timeline.getSelection()
-  #   console.log typeof selection
-  #   if selection.length > 0
-  #     $scope.select selection[0].row
-  #     $scope.$digest()
-
-  # links.events.addListener timeline, 'select', onSelect
-
 
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController

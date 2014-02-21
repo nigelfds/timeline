@@ -42,9 +42,9 @@ describe "ActivitiesController", ->
     new_activity = default_values = undefined
 
     beforeEach ->
-      now = new Date("1/1/2014 14:00")
+      now = "01/01/2014 02:00 PM"
       Date.now = sinon.stub()
-      Date.now.returns now.getTime()
+      Date.now.returns new Date(now).getTime()
       default_values =
         date: now,
         description: "New Activity"
@@ -52,7 +52,7 @@ describe "ActivitiesController", ->
       activitiesService.createActivity.withArgs(userId, default_values).yields new_activity
 
 
-    it "display the new activity", ->
+    it "displays the new activity", ->
       scope.new()
 
       scope.activities.should.contain new_activity

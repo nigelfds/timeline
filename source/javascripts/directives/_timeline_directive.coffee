@@ -30,6 +30,20 @@ angular.module('timeline')
           drawTimeline(scope.timelineData) if(scope.timelineData)
   ]
 )
+angular.module('timeline')
+  .directive('datetimepicker', [ ->
+    restrict: 'E',
+    templateUrl: 'views/date-time-picker.html'
+    link: (scope, element, attrs) ->
+
+      options =
+        format: "dd/mm/yyyy hh:ii P"
+        autoclose: true
+        todayHighlight: true
+        keyboardNavigation: false
+      $(element.children()[0]).datetimepicker options
+  ]
+) 
 
 
 # timeline stuff (NOT TESTED YET)
@@ -43,8 +57,9 @@ angular.module('timeline')
         scope.$watch "activities", onChanges, true
 
         mapToTimeline = (activity) ->
-          start: new Date(activity.date)
-          content: activity.description
+          start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate()
+          console.log new Date(start)
+          start: start, content: activity.description
 
         updateTimeline = ->
           timelineData = scope.activities.map mapToTimeline
