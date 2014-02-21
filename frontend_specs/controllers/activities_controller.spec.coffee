@@ -11,6 +11,9 @@ describe "ActivitiesController", ->
     routeParams = userId: userId
 
   beforeEach ->
+    angular.element '<div id="#timeline"></div>'
+
+  beforeEach ->
     activitiesService = sinon.createStubInstance ActivitiesService
     activitiesService.getActivities.withArgs(userId).yields activities
     activityId = "the-activity-id"

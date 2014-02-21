@@ -1,10 +1,19 @@
 ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
   userId = $routeParams.userId
   $scope.alerts = []
+  $scope.activities = []
 
-  ActivitiesService.getActivities userId, (activities) ->
-    $scope.activities = activities
-    $scope.selectedActivity = activities[0]
+  addAlert= (alert) ->
+    $scope.alerts.push alert  
+    $timeout(removeAlert, 5000)
+  removeAlert = ->
+    $scope.alerts.shift()
+
+  addActivity = (new_activity) ->
+    $scope.activities.push new_activity
+
+  removeActivity = (activity) ->
+    $scope.activities.splice($scope.activities.indexOf(activity), 1)
 
   $scope.select = (index) ->
     $scope.selectedActivity = $scope.activities[index]
@@ -14,7 +23,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
       date: new Date(Date.now())
       description: "New Activity"
     ActivitiesService.createActivity userId, default_values, (new_activity) ->
-      $scope.activities.push new_activity
+      addActivity new_activity
       $scope.selectedActivity = new_activity
 
   $scope.save = ->
@@ -28,14 +37,46 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
   $scope.delete = ->
     activityId = $scope.selectedActivity._id.$oid
     ActivitiesService.deleteActivity userId, activityId, (success) ->
-      $scope.activities.splice($scope.activities.indexOf($scope.selectedActivity), 1)
+      removeActivity $scope.selectedActivity
       $scope.select(0)
 
-  addAlert= (alert) ->
-    $scope.alerts.push alert  
-    $timeout(removeAlert, 5000)
-  removeAlert = ->
-    $scope.alerts.shift()
+  ActivitiesService.getActivities userId, (activities) ->
+    addActivity(activity) for activity in activities
+    $scope.select(0)
+
+
+
+  # timeline stuff (NOT TESTED YET)
+
+  # onChanges = (newValue, oldValue) ->  updateTimeline()
+  # $scope.$watch "activities", onChanges, true
+
+  # mapToTimeline = (activity) ->
+  #   start: new Date(activity.date)
+  #   content: activity.description
+
+  # updateTimeline = ->
+  #   timelineData = $scope.activities.map mapToTimeline
+  #   timeline.setData timelineData
+  #   timeline.setVisibleChartRangeAuto()
+  #   timeline.zoom(-.2)
+
+  # timeline = new links.Timeline(angular.element("#timeline")[0])
+  # options =
+  #   "width":  "100%"
+  #   "height": "400px"
+  #   "style": "box"
+
+  # timeline.draw [], options
+
+  # onSelect =  ->
+  #   selection = timeline.getSelection()
+  #   console.log typeof selection
+  #   if selection.length > 0
+  #     $scope.select selection[0].row
+  #     $scope.$digest()
+
+  # links.events.addListener timeline, 'select', onSelect
 
 
 angular.module('timeline')
