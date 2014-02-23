@@ -25,14 +25,16 @@ Spork.prefork do
   RSpec.configure do |conf|
     conf.include Rack::Test::Methods
     conf.include Capybara::DSL
+
+    conf.before(:each) { Backend.any_instance.stub(:db).and_return(test_db) }
   end
 
-  def db
-    @db ||= MongoClient.new('localhost', 27017).db('TestDb')
+  def test_db
+    MongoClient.new('localhost', 27017).db('TestDb')
   end
 
   def app
-    @app ||= Backend.new(db)
+    @app ||= Backend.new
   end
 end
 

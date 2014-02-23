@@ -14,4 +14,8 @@ module ApplicationHelper
     @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [username, password]
   end
 
+  def db
+    settings.mongo_db
+  end
+
 end

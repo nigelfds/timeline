@@ -5,8 +5,8 @@ describe "Activities API Spec" do
   let(:username) { 'admin' }
   let(:password) { 'admin' }
 
-  let(:db_activities) { db["activities"] }
-  let(:db_users) { db["users"] }
+  let(:db_activities) { test_db["activities"] }
+  let(:db_users) { test_db["users"] }
 
   describe "GET activities" do
 

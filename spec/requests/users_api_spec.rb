@@ -5,7 +5,7 @@ describe 'User API' do
   let(:username) { 'admin' }
   let(:password) { 'admin' }
 
-  let(:db_users) { db["users"] }
+  let(:db_users) { test_db["users"] }
 
   after(:each) do
     db_users.remove
