@@ -1,0 +1,57 @@
+<p>Unit tests, written with <a href="http://docs.jquery.com/QUnit">QUnit</a>, are used to
+expose bugs for squashing, prevent bugs from respawning, and suppress new
+bugs when adding new features and making changes.</p>
+
+<h1 id="running-the-tests">Running the tests</h1>
+
+<p>The simplest way to run the tests is to open <code>tests/tests.html</code> in your browser.
+The test suites will automatically run themselves and present their results.</p>
+
+<p>To run the tests from the command line, download and install
+<a href="http://phantomjs.org/">PhantomJS</a>, and run <code>run-qunit.js</code> with it:</p>
+
+<pre><code>$ cd tests/
+$ phantomjs run-qunit.js tests.html
+</code></pre>
+
+<p>Failed tests and their failed assertions will be printed to the console.  A
+results summary will be printed at the end.</p>
+
+<p>To generate coverage statistics, use <a href="http://siliconforks.com/jscoverage/">JSCoverage</a>
+to instrument the js files:</p>
+
+<pre><code>$ cd tests/
+$ jscoverage ../js/ ../instrumented/
+$ phantomjs run-qunit.js tests.html
+</code></pre>
+
+<p>Coverage percentage will be included in the output summary, and a highlighted
+line-by-line html file will be generated.</p>
+
+<h1 id="shout-out">Shout-out</h1>
+
+<p>Thanks to Rod @ While One Fork for the
+<a href="http://whileonefork.blogspot.com/2011/10/integrating-javascript-tests-into-cli.html">CIS guide</a>
+on putting the above together.</p>
+
+<h1 id="adding-tests">Adding tests</h1>
+
+<p>Tests go in js files in the <code>tests/suites/</code> directory tree.  QUnit organizes
+tests into suites called "modules"; there is one module per js file.  If the
+tests you are adding do not fit into an existing module, create a new one at
+<code>tests/suites/&lt;new module&gt;.js</code>, where <code>&lt;new module&gt;</code> is a broad yet
+descriptive name for the suite.  If tests have many year-specific cases (ie,
+behave differently in leap years vs normal years, or have specific buggy
+behavior in a certain year), create the module in a new directory,
+<code>tests/suites/&lt;new module&gt;/&lt;year&gt;.js</code>, where <code>&lt;new module&gt;</code> is the decriptive
+name and <code>&lt;year&gt;</code> is the four-digit year the tests pertain to.</p>
+
+<p>In order for new tests to be run, they must be imported into <code>tests/tests.html</code>.
+Find the script includes headed by the html comment <code>&lt;!-- Test suites --&gt;</code>, and
+add a new one to the list which includes the new js files.</p>
+
+<h1 id="can-i-use-this">Can I use this?</h1>
+
+<p>By all means, please do!  Just note that I stopped working on this structure
+once it fit my needs, there's no real support for it, and it may change in the
+future.  Otherwise, have at it.</p>

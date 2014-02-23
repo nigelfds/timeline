@@ -1,4 +1,4 @@
-Basis32Controller = ($scope, $routeParams, ActivityService) ->
+Basis32Controller = ($scope, $routeParams) ->
 
   $scope.questions = [
     { text: "Managing day to day life (e.g. Getting to places on time, handling money, making everyday decisions)" }
@@ -18,14 +18,5 @@ Basis32Controller = ($scope, $routeParams, ActivityService) ->
     { text: "Lack of self-confidence, feeling bad about yourself" }
   ]
 
-  $scope.answer = (i, answer) ->
-    id = $routeParams.activityId
-
-    data = index: i, answer: answer
-
-    ActivityService.updateActivity id, data
-
-
-
-angular.module('timeline')
-    .controller 'Basis32Controller', Basis32Controller
+# angular.module('timeline')
+#     .controller 'Basis32Controller', Basis32Controller

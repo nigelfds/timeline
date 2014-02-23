@@ -57,33 +57,12 @@ class Backend < Sinatra::Base
     patient["name"]
   end
 
-  # get '/activities/:activityId' do
-
-  # end
-
-  # post '/activities' do
-  #   body = JSON.parse(request.body.read)
-
-  #   if is_valid_activity(body)
-  #     body["start"] = Time.now.utc
-  #     id = db["activities"].insert(body)
-  #     activity = db["activities"].find_one("_id" => id)
-  #     body(activity.to_json)
-  #   else
-  #     error 400
-  #   end
-  # end
-
-  # def is_valid_activity(activity)
-  #   activity["activityType"]
-  # end
-
   # ==============================================================================================
 
   get '/users/:user_id/activities' do
     content_type :json
     activities = db["activities"].find(:user_id => BSON.ObjectId(params[:user_id])).sort(:start).to_a
-    { :activities => activities }.to_json
+    activities.to_json
   end
 
   get '/users/:user_id/activities/:activity_id' do
@@ -121,27 +100,24 @@ class Backend < Sinatra::Base
     return error 400 if user.nil?
 
     update_data = JSON.parse(request.body.read)
-    result = db["activities"].update({"_id" => BSON.ObjectId(params[:activity_id])}, '$set' => update_data)
+    
+    activity_id = BSON.ObjectId(params[:activity_id])
+    result = db["activities"].update({ :_id => activity_id }, '$set' => update_data)
     error 400 unless result["updatedExisting"]
   end
 
-  def is_valid_activity(activity)
-    return false if activity.empty?
-    # activity["activityType"]
-    true
+  delete '/users/:user_id/activities/:activity_id' do
+    user = db["users"].find_one(BSON.ObjectId(params[:user_id]))
+    return error 404 if user.nil?
+
+    activity_id = BSON.ObjectId(params[:activity_id])
+    result = db["activities"].remove(:_id => activity_id)
+
+    return error 404 if result["n"] != 1
   end
 
-  # delete '/patient/:patient_id/event/:id' do
-  #   result = db["events"].remove("_id" => BSON.ObjectId(params[:id]))
-  #   if result["n"] > 0
-  #     status 200
-  #   else
-  #     error 404
-  #   end
-  # end
-
-  # def isValidEvent(event)
-  #   event["description"] && event["start"] #Note patient_id is already coming through as part of the url...
-  # end
+  def is_valid_activity(activity)
+    activity["date"] && activity["description"]
+  end
 
 end

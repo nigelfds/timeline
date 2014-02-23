@@ -11,22 +11,23 @@ module.exports = (config) ->
 
     # list of files / patterns to load in the browser
     files: [
-       "source/lib/jquery/jquery-1.11.0.min.js"
-       "source/lib/angularjs/angular.min.js"
-       "source/lib/angularjs/angular-animate.min.js"
-       "source/lib/angularjs/angular-route.min.js"
-       "source/lib/angularjs/angular-mocks.js"
-       "source/lib/angular-ui/ui-bootstrap-tpls-0.10.0.min.js"
-       "source/frameworks/timeline-chap-links/timeline.js"
-        "source/lib/sinon/*.js"
-        "source/lib/chai/*.js"
-        "source/javascripts/**"
-        "frontend_specs/**"
+      "source/lib/jquery/jquery-1.11.0.min.js"
+      "source/lib/angularjs/angular.min.js"
+      "source/lib/angularjs/angular-animate.min.js"
+      "source/lib/angularjs/angular-route.min.js"
+      "source/lib/angularjs/angular-mocks.js"
+      "source/lib/angular-ui/ui-bootstrap-tpls-0.10.0.min.js"
+      "source/frameworks/timeline-chap-links/timeline.js"
+      "source/lib/sinon/*.js"
+      "source/lib/chai/*.js"
+      "source/lib/moment/*.js"
+      "source/javascripts/**"
+      "frontend_specs/**"
     ]
 
     # list of files to exclude
     exclude: [
-        "source/javascripts/site.coffee"
+      "source/javascripts/site.coffee"
     ]
 
     # test results reporter to use
