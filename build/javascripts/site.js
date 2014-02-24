@@ -413,6 +413,27 @@
 
 }).call(this);
 (function() {
+  angular.module('timeline').directive('datetimepicker', [
+    function() {
+      return {
+        restrict: 'E',
+        templateUrl: 'views/date-time-picker.html',
+        link: function(scope, element, attrs) {
+          var options;
+          options = {
+            format: "dd/mm/yyyy hh:ii P",
+            autoclose: true,
+            todayHighlight: true,
+            keyboardNavigation: false
+          };
+          return $(element.children()[0]).datetimepicker(options);
+        }
+      };
+    }
+  ]);
+
+}).call(this);
+(function() {
   angular.module('timeline').directive('eventtimeline', [
     function() {
       return {
@@ -449,25 +470,8 @@
     }
   ]);
 
-  angular.module('timeline').directive('datetimepicker', [
-    function() {
-      return {
-        restrict: 'E',
-        templateUrl: 'views/date-time-picker.html',
-        link: function(scope, element, attrs) {
-          var options;
-          options = {
-            format: "dd/mm/yyyy hh:ii P",
-            autoclose: true,
-            todayHighlight: true,
-            keyboardNavigation: false
-          };
-          return $(element.children()[0]).datetimepicker(options);
-        }
-      };
-    }
-  ]);
-
+}).call(this);
+(function() {
   angular.module('timeline').directive('timeline', [
     function() {
       return {
@@ -475,13 +479,13 @@
         template: '<div></div>',
         link: function(scope, element, attrs) {
           var mapToTimeline, onChanges, onSelect, onSelectionChange, options, timeline, updateTimeline;
-          onChanges = function(newValue, oldValue) {
+          onChanges = function() {
             return updateTimeline();
           };
           scope.$watch("activities", onChanges, true);
-          onSelectionChange = function(newValue, oldValue) {
+          onSelectionChange = function(activity) {
             var index;
-            index = scope.activities.indexOf(newValue);
+            index = scope.activities.indexOf(activity);
             return timeline.setSelection([
               {
                 row: index
@@ -490,14 +494,13 @@
           };
           scope.$watch("selectedActivity", onSelectionChange, true);
           mapToTimeline = function(activity) {
-            var group, start;
-            start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate();
-            group = activity.isAPM ? "Part of APM" : "Not APM";
+            var start;
+            start = moment(activity.date, "DD/MM/YYYY hh:mm A").toDate();
             return {
               start: start,
               content: activity.description,
-              group: group,
-              className: activity.isAPM ? "apm" : ""
+              className: activity.isAPM ? "apm" : "",
+              group: activity.isAPM ? "APM" : "Outside APM"
             };
           };
           updateTimeline = function() {
@@ -505,7 +508,7 @@
             timelineData = scope.activities.map(mapToTimeline);
             timeline.setData(timelineData);
             timeline.setVisibleChartRangeAuto();
-            return timeline.zoom(-.2);
+            return timeline.zoom(-0.2);
           };
           timeline = new links.Timeline(element.children()[0]);
           options = {
