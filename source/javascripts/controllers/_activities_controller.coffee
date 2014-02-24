@@ -7,9 +7,10 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   $scope.alerts = []
   $scope.activities = []
 
-  addAlert= (alert) ->
-    $scope.alerts.push alert  
+  addAlert = (alert) ->
+    $scope.alerts.push alert
     $timeout(removeAlert, 5000)
+
   removeAlert = ->
     $scope.alerts.shift()
 
@@ -33,7 +34,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     activityId = $scope.selectedActivity._id.$oid
     values = {}
     for property, value of $scope.selectedActivity when property isnt "_id" and property isnt "user_id"
-      values[property] = value 
+      values[property] = value
     ActivitiesService.updateActivity userId, activityId, values, (success) ->
       addAlert "Updated successfully"
 
@@ -46,6 +47,12 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   ActivitiesService.getActivities userId, (activities) ->
     addActivity(activity) for activity in activities
     $scope.select activities[0]
+
+  $scope.numberOfHandoffs = (activities) ->
+    sum = 0
+    for activity in activities
+      sum += 1 if activity.involveHandoff
+    sum
 
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController

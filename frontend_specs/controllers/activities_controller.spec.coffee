@@ -14,7 +14,7 @@ describe "ActivitiesController", ->
     activitiesService = sinon.createStubInstance ActivitiesService
     activitiesService.getActivities.withArgs(userId).yields activities
     activityId = "the-activity-id"
-    values = date: "the-date-of-the-activity", description: "the description of the activity"
+    values = date: "the-date-of-the-activity", description: "the description of the activity", involveHandoff: true
     activitiesService.updateActivity.withArgs(userId, activityId).yields true
 
     usersService = sinon.createStubInstance UsersService
@@ -33,6 +33,24 @@ describe "ActivitiesController", ->
 
   it "selects the first activity by default", ->
     scope.selectedActivity.should.eql activities[0]
+
+  describe "number of handsoff", ->
+
+    it "display the total number of handoffs when there is any", ->
+      fake_activities = [
+        { date: "date", description: "play with kitty", involveHandoff: true },
+        { date: "date", description: "feed ferrets",    involveHandoff: no },
+        { date: "date", description: "sleep",           involveHandoff: true }
+      ]
+      scope.numberOfHandoffs(fake_activities).should.eql 2
+
+    it "display the 0 if there is no handoff", ->
+      fake_activities = [
+        { date: "date", description: "play with kitty", involveHandoff: no },
+        { date: "date", description: "feed ferrets",    involveHandoff: no },
+        { date: "date", description: "sleep",           involveHandoff: no }
+      ]
+      scope.numberOfHandoffs(fake_activities).should.eql 0
 
   describe "selecting an activity", ->
 
@@ -72,6 +90,7 @@ describe "ActivitiesController", ->
         "_id": "$oid": activityId
         "date": values.date
         "description": values.description
+        "involveHandoff": values.involveHandoff
         "user_id": "$oid": userId
 
     it "sends an update to the service", ->
