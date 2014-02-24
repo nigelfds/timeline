@@ -7,6 +7,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   $scope.alerts = []
   $scope.activities = []
 
+  $scope.selectAllOnClick = (_event) -> _event.target.select()
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)

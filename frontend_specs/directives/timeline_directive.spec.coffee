@@ -36,7 +36,7 @@ describe "Timeline Directive", ->
 
     options =
       "width":  "100%"
-      "height": "400px"
+      "height": "500px"
       "style": "box"
       "zoomMax": 31536000000 # one year in milliseconds
       "zoomMin": 86400000 # one day in milliseconds

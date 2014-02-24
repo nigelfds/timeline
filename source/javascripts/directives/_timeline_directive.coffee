@@ -30,7 +30,7 @@ angular.module('timeline')
         timeline = new links.Timeline(element.children()[0])
         options =
           "width":  "100%"
-          "height": "400px"
+          "height": "500px"
           "style": "box"
           # "zoomable": false
           "zoomMax": 31536000000 # one year in milliseconds
