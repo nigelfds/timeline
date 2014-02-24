@@ -6,32 +6,34 @@
         .panel-heading
           h4.name.panel-title
             | Journey for {{user.name}}
-          .panel-body
-            timeline
+        .panel-body
+          timeline
   .row
-    .col-xs-10.col-xs-offset-1
-      .panel.panel-primary
+    .col-xs-12
+      .panel.panel-info
         .panel-heading
-          h4.name.panel-title
-            | Activity Details
+          button.btn.btn-default.pull-right(ng-click="new()") NEW
+          h4.name.panel-title Selected Activity Details
 
-          .panel-body
-              form(name="activity" role="form" novalidate)
-                .form-group
-                  button.btn.btn-default(ng-click="new()") NEW
-                  button.btn.btn-danger(ng-click="delete()" ng-show="selectedActivity") DELETE
-                .form-group(ng-show="selectedActivity")
-                  label.control-label(for="date" ) Date
-                  datetimepicker
-                .form-group(ng-show="selectedActivity")
-                  label.control-label(for="description" ) Description
-                  input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
-                .form-group(ng-show="selectedActivity")
-                  label.control-label(for="isAPM" ) Is APM?
-                  input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
-                .form-group(ng-show="selectedActivity")
-                  label.control-label(for="isHandoff" ) Involve handoff?
-                  input.form-control(type="checkbox" name="isHandoff" ng-model="selectedActivity.isHandoff" ng-change="save()" required)
+        .panel-body(ng-show="selectedActivity")
+            form(name="activity" role="form" novalidate)
+              .form-group
+
+              .form-group
+                label.control-label(for="date" ) Date
+                datetimepicker
+              .form-group
+                label.control-label(for="description" ) Description
+                input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
+              .form-group
+                label.control-label(for="isAPM" ) Is APM?
+                input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
+              .form-group
+                label.control-label(for="isHandoff" ) Involve handoff?
+                input.form-control(type="checkbox" name="isHandoff" ng-model="selectedActivity.isHandoff" ng-change="save()" required)
+
+              button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
+
 
   .row
     .col-xs-12
@@ -39,12 +41,12 @@
         .panel-heading
           h4.name.panel-title
             | List of Activities
-          .panel-body
-            .list-group
-              a.list-group-item.list-group-item-default(ng-repeat="activity in activities" ng-click="select(activity)" ng-class="activity == selectedActivity ? 'active' : ''")
-                span.badge
-                  | {{activity.date}}
-                | {{activity.description}}
+        .panel-body
+          .list-group
+            a.list-group-item.list-group-item-default(ng-repeat="activity in activities" ng-click="select(activity)" ng-class="activity == selectedActivity ? 'active' : ''")
+              span.badge
+                | {{activity.date}}
+              | {{activity.description}}
 
 alert.messages(ng-show="alerts.length != 0")
   .fade(ng-repeat="alert in alerts track by $index")
