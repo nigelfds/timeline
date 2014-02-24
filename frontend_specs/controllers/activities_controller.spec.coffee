@@ -1,8 +1,8 @@
 describe "ActivitiesController", ->
-  scope = routeParams = timeout = activitiesService = undefined
+  scope = routeParams = timeout = activitiesService = usersService = undefined
   userId = "the-user-id"
   activities = ["1", "2"]
-  activityId = values = undefined
+  activityId = values = currentUser = undefined
 
   beforeEach module("timeline")
 
@@ -11,19 +11,22 @@ describe "ActivitiesController", ->
     routeParams = userId: userId
 
   beforeEach ->
-    angular.element '<div id="#timeline"></div>'
-
-  beforeEach ->
     activitiesService = sinon.createStubInstance ActivitiesService
     activitiesService.getActivities.withArgs(userId).yields activities
     activityId = "the-activity-id"
     values = date: "the-date-of-the-activity", description: "the description of the activity"
     activitiesService.updateActivity.withArgs(userId, activityId).yields true
 
+    usersService = sinon.createStubInstance UsersService
+    currentUser = name: "Pei Shi", urNumber: "243342342345"
+    usersService.getUser.withArgs(userId).yields currentUser
+
     timeout = sinon.stub()
 
-    ActivitiesController scope, routeParams, timeout, activitiesService
+    ActivitiesController scope, routeParams, timeout, activitiesService, usersService
 
+  it "displays the users details", ->
+    scope.user.should.eql currentUser
 
   it "displays all the activities", ->
     scope.activities.should.eql activities

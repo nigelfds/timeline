@@ -1,5 +1,9 @@
-ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService) ->
+ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, UsersService) ->
   userId = $routeParams.userId
+
+  UsersService.getUser userId, (user) ->
+    $scope.user = user
+
   $scope.alerts = []
   $scope.activities = []
 
