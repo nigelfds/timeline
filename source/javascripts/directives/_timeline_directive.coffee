@@ -1,32 +1,31 @@
-# timeline stuff (NOT TESTED YET)
 angular.module('timeline')
   .directive('timeline', [ ->
       restrict: 'E',
       template: '<div></div>'
       link: (scope, element, attrs) ->
 
-        onChanges = (newValue, oldValue) ->  updateTimeline()
+        onChanges = ->  updateTimeline()
         scope.$watch "activities", onChanges, true
 
-        onSelectionChange = (newValue, oldValue) -> 
-          index = scope.activities.indexOf(newValue)
+        onSelectionChange = (activity) -> 
+          index = scope.activities.indexOf(activity)
           timeline.setSelection [ row: index ]
 
         scope.$watch "selectedActivity", onSelectionChange, true
 
         mapToTimeline = (activity) ->
-          start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate()
-          group = if activity.isAPM then "Part of APM" else "Not APM"
+          start = moment(activity.date, "DD/MM/YYYY hh:mm A").toDate()
+
           start: start
           content: activity.description
-          group: group
           className: if activity.isAPM then "apm" else ""
+          group: if activity.isAPM then "APM" else "Outside APM"
 
         updateTimeline = ->
           timelineData = scope.activities.map mapToTimeline
           timeline.setData timelineData
           timeline.setVisibleChartRangeAuto()
-          timeline.zoom(-.2)
+          timeline.zoom -0.2
 
         timeline = new links.Timeline(element.children()[0])
         options =
