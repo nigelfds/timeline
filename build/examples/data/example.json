@@ -35,7 +35,7 @@
                 "endDate":"2011,12,30",
                 "headline":"Era headline",
                 "tag":"Not sure what the tag does but the era creates a styled area in the timeline between the dates of the era"
-            }            
+            }
         ],
         "chart": [
             {
@@ -44,8 +44,8 @@
                 "headline":"Headline Goes Here",
                 "value":"28"
             }
-            
+
         ]
-        
+
     }
 }

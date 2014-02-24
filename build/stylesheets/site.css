@@ -50,3 +50,14 @@ form.newuser {
   right: 30px;
   opacity: 0.7;
 }
+.apm.timeline-event-box {
+  border-color: #000;
+  border-width: 3px;
+  border-radius: 0;
+}
+.apm.timeline-event-selected {
+  background-color: #fff;
+}
+.apm .timeline-event-content {
+  color: #000;
+}
