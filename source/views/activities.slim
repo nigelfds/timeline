@@ -26,6 +26,9 @@
                 .form-group(ng-show="selectedActivity")
                   label.control-label(for="description" ) Description
                   input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
+                .form-group(ng-show="selectedActivity")
+                  label.control-label(for="isAPM" ) Is APM?
+                  input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
 
   .row
     .col-xs-12

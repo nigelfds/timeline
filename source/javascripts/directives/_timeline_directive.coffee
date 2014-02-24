@@ -65,7 +65,11 @@ angular.module('timeline')
 
         mapToTimeline = (activity) ->
           start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate()
-          start: start, content: activity.description
+          group = if activity.isAPM then "Part of APM" else "Not APM"
+          start: start
+          content: activity.description
+          group: group
+          className: if activity.isAPM then "apm" else ""
 
         updateTimeline = ->
           timelineData = scope.activities.map mapToTimeline
@@ -78,6 +82,9 @@ angular.module('timeline')
           "width":  "100%"
           "height": "400px"
           "style": "box"
+          # "zoomable": false
+          "zoomMax": 31536000000 # one year in milliseconds
+          "zoomMin": 86400000 # one day in milliseconds
 
         timeline.draw [], options
 
