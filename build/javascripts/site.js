@@ -197,13 +197,17 @@
       return $scope.selectedActivity = activity;
     };
     $scope["new"] = function() {
-      var default_values, now;
-      now = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A");
-      default_values = {
-        date: now,
+      var defaultDate, defaults, length;
+      length = $scope.activities.length;
+      defaultDate = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A");
+      if (length > 0) {
+        defaultDate = $scope.activities[length - 1].date;
+      }
+      defaults = {
+        date: defaultDate,
         description: "New Activity"
       };
-      return ActivitiesService.createActivity(userId, default_values, function(new_activity) {
+      return ActivitiesService.createActivity(userId, defaults, function(new_activity) {
         addActivity(new_activity);
         return $scope.selectedActivity = new_activity;
       });
@@ -231,7 +235,7 @@
         return $scope.select(void 0);
       });
     };
-    return ActivitiesService.getActivities(userId, function(activities) {
+    ActivitiesService.getActivities(userId, function(activities) {
       var activity, _i, _len;
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
         activity = activities[_i];
@@ -239,6 +243,17 @@
       }
       return $scope.select(activities[0]);
     });
+    return $scope.numberOfHandoffs = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.involveHandoff) {
+          sum += 1;
+        }
+      }
+      return sum;
+    };
   };
 
   angular.module('timeline').controller('ActivitiesController', ActivitiesController);

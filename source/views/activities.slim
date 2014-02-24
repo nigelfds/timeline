@@ -32,8 +32,8 @@
               label.control-label(for="isAPM" ) Is APM?
               input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
             .form-group
-              label.control-label(for="isHandoff" ) Involve handoff?
-              input.form-control(type="checkbox" name="isHandoff" ng-model="selectedActivity.isHandoff" ng-change="save()" required)
+              label.control-label(for="involveHandoff" ) Involve handoff?
+              input.form-control(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()" required)
 
             button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
 
