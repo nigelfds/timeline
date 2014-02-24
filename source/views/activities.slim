@@ -7,6 +7,11 @@
           h4.name.panel-title
             | Journey for {{user.name}}
         .panel-body
+          .well.well-sm.pull-right
+            div
+            | Total number of handoffs: {{numberOfHandoffs(activities)}}
+            div
+            | Total number of contact: 100
           timeline
   .row
     .col-xs-12
@@ -16,24 +21,21 @@
           h4.name.panel-title Selected Activity Details
 
         .panel-body(ng-show="selectedActivity")
-            form(name="activity" role="form" novalidate)
-              .form-group
+          form(name="activity" role="form" novalidate)
+            .form-group
+              label.control-label(for="date" ) Date
+              datetimepicker
+            .form-group
+              label.control-label(for="description" ) Description
+              input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
+            .form-group
+              label.control-label(for="isAPM" ) Is APM?
+              input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
+            .form-group
+              label.control-label(for="isHandoff" ) Involve handoff?
+              input.form-control(type="checkbox" name="isHandoff" ng-model="selectedActivity.isHandoff" ng-change="save()" required)
 
-              .form-group
-                label.control-label(for="date" ) Date
-                datetimepicker
-              .form-group
-                label.control-label(for="description" ) Description
-                input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" required)
-              .form-group
-                label.control-label(for="isAPM" ) Is APM?
-                input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
-              .form-group
-                label.control-label(for="isHandoff" ) Involve handoff?
-                input.form-control(type="checkbox" name="isHandoff" ng-model="selectedActivity.isHandoff" ng-change="save()" required)
-
-              button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
-
+            button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
 
   .row
     .col-xs-12
