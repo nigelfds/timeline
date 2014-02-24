@@ -38,23 +38,31 @@ describe "ActivitiesController", ->
   it "selects the first activity by default", ->
     scope.selectedActivity.should.eql activities[0]
 
-  describe "number of handsoff", ->
+  describe "number of handsoff and number of contact", ->
+
+    fakeActivities1 = [
+      { date: "date", description: "play with kitty", involveHandoff: true,  involveContact: false},
+      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: false},
+      { date: "date", description: "sleep",           involveHandoff: true,  involveContact: false}
+    ]
+
+    fakeActivities2 = [
+      { date: "date", description: "play with kitty", involveHandoff: false, involveContact: false },
+      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: true },
+      { date: "date", description: "sleep",           involveHandoff: false, involveContact: true }
+    ]
 
     it "display the total number of handoffs when there is any", ->
-      fake_activities = [
-        { date: "date", description: "play with kitty", involveHandoff: true },
-        { date: "date", description: "feed ferrets",    involveHandoff: no },
-        { date: "date", description: "sleep",           involveHandoff: true }
-      ]
-      scope.numberOfHandoffs(fake_activities).should.eql 2
+      scope.numberOfHandoffs(fakeActivities1).should.eql 2
 
-    it "display the 0 if there is no handoff", ->
-      fake_activities = [
-        { date: "date", description: "play with kitty", involveHandoff: no },
-        { date: "date", description: "feed ferrets",    involveHandoff: no },
-        { date: "date", description: "sleep",           involveHandoff: no }
-      ]
-      scope.numberOfHandoffs(fake_activities).should.eql 0
+    it "display the total number of contacts when there is any", ->
+      scope.numberOfContacts(fakeActivities2).should.eql 2
+
+    it "display 0 if there is no handoff", ->
+      scope.numberOfHandoffs(fakeActivities2).should.eql 0
+
+    it "display 0 if there is no contact", ->
+      scope.numberOfContacts(fakeActivities1).should.eql 0
 
   describe "selecting an activity", ->
 

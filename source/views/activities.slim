@@ -9,9 +9,9 @@
         .panel-body
           .well.well-sm.pull-right
             div
-            | Total number of handoffs: {{numberOfHandoffs(activities)}}
+              | Total number of handoffs: {{numberOfHandoffs(activities)}}
             div
-            | Total number of contact: 100
+              | Total number of contact: {{numberOfContacts(activities)}}
           timeline
   .row
     .col-xs-12
@@ -34,6 +34,9 @@
             .form-group
               label.control-label(for="involveHandoff" ) Involve handoff?
               input.form-control(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()" required)
+            .form-group
+              label.control-label(for="involveContact" ) Involve contact with the user?
+              input.form-control(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()" required)
 
             button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
 
@@ -53,6 +56,3 @@
 alert.messages(ng-show="alerts.length != 0")
   .fade(ng-repeat="alert in alerts track by $index")
     | {{alert}}
-
-
-

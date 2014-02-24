@@ -57,5 +57,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       sum += 1 if activity.involveHandoff
     sum
 
+  $scope.numberOfContacts = (activities) ->
+    sum = 0
+    for activity in activities
+      sum += 1 if activity.involveContact
+    sum
+
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController
