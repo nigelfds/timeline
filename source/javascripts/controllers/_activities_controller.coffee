@@ -23,9 +23,12 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity = activity
 
   $scope.new = ->
-    now = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")
-    default_values = date: now, description: "New Activity"
-    ActivitiesService.createActivity userId, default_values, (new_activity) ->
+    length = $scope.activities.length 
+    defaultDate = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")    
+    defaultDate = $scope.activities[length - 1].date if length > 0
+    defaults = date: defaultDate, description: "New Activity"
+
+    ActivitiesService.createActivity userId, defaults, (new_activity) ->
       addActivity new_activity
       $scope.selectedActivity = new_activity
 

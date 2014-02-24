@@ -1,8 +1,12 @@
 describe "ActivitiesController", ->
   scope = routeParams = timeout = activitiesService = usersService = undefined
   userId = "the-user-id"
-  activities = ["1", "2"]
   activityId = values = currentUser = undefined
+
+  firstActivity = date: "11/11/2011 02:55 PM", description: "Some description", isAPM: true
+  secondActivity = date: "12/11/2011 03:55 PM", description: "Some other description", isAPM: false
+  activities = [ firstActivity, secondActivity ]
+
 
   beforeEach module("timeline")
 
@@ -42,28 +46,43 @@ describe "ActivitiesController", ->
       scope.selectedActivity.should.eql activities[1]
 
   describe "adding a new activity", ->
-    new_activity = default_values = undefined
+    newActivity = defaultValues = now = undefined
+
+    mockTheClockWith = (_now) ->
+      Date.now = sinon.stub()
+      Date.now.returns new Date(_now).getTime()
+      _now
 
     beforeEach ->
-      now = "01/01/2014 02:00 PM"
-      Date.now = sinon.stub()
-      Date.now.returns new Date(now).getTime()
-      default_values =
-        date: now,
-        description: "New Activity"
-      new_activity = "new-activity"
-      activitiesService.createActivity.withArgs(userId, default_values).yields new_activity
+      newActivity = "some new activity returned by the server"
+      defaultValues = date: newActivity.date, description: newActivity.description
+      activitiesService.createActivity.yields newActivity
+      now = mockTheClockWith "01/01/2014 02:00 PM"
 
+    describe "when no activities exist", ->
+      beforeEach -> scope.activities = []
+
+      it "defaults to the current date and time", ->
+        scope.new()
+ 
+        values = date: now, description: "New Activity"
+        activitiesService.createActivity.should.have.been.calledWith userId, values
+
+    it "uses the date of the most recently entered activity", ->
+      scope.new()
+
+      values = date: secondActivity.date, description: "New Activity"
+      activitiesService.createActivity.should.have.been.calledWith userId, values
 
     it "displays the new activity", ->
       scope.new()
 
-      scope.activities.should.contain new_activity
+      scope.activities.should.contain newActivity
 
-    it "selected the new activity", ->
+    it "selects the new activity", ->
       scope.new()
 
-      scope.selectedActivity.should.eql new_activity
+      scope.selectedActivity.should.eql newActivity
 
   describe "saving the selected activity", ->
 
