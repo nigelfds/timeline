@@ -57,6 +57,12 @@ angular.module('timeline')
         onChanges = (newValue, oldValue) ->  updateTimeline()
         scope.$watch "activities", onChanges, true
 
+        onSelectionChange = (newValue, oldValue) -> 
+          index = scope.activities.indexOf(newValue)
+          timeline.setSelection [ row: index ]
+
+        scope.$watch "selectedActivity", onSelectionChange, true
+
         mapToTimeline = (activity) ->
           start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate()
           start: start, content: activity.description
@@ -77,9 +83,9 @@ angular.module('timeline')
 
         onSelect =  ->
           selection = timeline.getSelection()
-          if selection.length > 0
-            scope.select selection[0].row
-            scope.$apply()
+          selectActivity = scope.activities[selection[0].row] if selection.length > 0
+          scope.select selectActivity
+          scope.$apply()
 
         links.events.addListener timeline, 'select', onSelect
   ]

@@ -19,8 +19,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   removeActivity = (activity) ->
     $scope.activities.splice($scope.activities.indexOf(activity), 1)
 
-  $scope.select = (index) ->
-    $scope.selectedActivity = $scope.activities[index]
+  $scope.select = (activity) ->
+    $scope.selectedActivity = activity
 
   $scope.new = ->
     now = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")
@@ -41,11 +41,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     activityId = $scope.selectedActivity._id.$oid
     ActivitiesService.deleteActivity userId, activityId, (success) ->
       removeActivity $scope.selectedActivity
-      $scope.select(0)
+      $scope.select undefined
 
   ActivitiesService.getActivities userId, (activities) ->
     addActivity(activity) for activity in activities
-    $scope.select(0)
+    $scope.select activities[0]
 
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController

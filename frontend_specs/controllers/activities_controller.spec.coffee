@@ -37,7 +37,7 @@ describe "ActivitiesController", ->
   describe "selecting an activity", ->
 
     it "displays the selected activity", ->
-      scope.select(1)
+      scope.select activities[1]
 
       scope.selectedActivity.should.eql activities[1]
 
@@ -105,6 +105,6 @@ describe "ActivitiesController", ->
       scope.delete()
       scope.activities.should.not.contain selectedActivity
 
-    it "selects the first activity", ->
+    it "unselects the activity", ->
       scope.delete()
-      scope.selectedActivity.should.eql activities[0]
+      expect(scope.selectedActivity).to.eql undefined
