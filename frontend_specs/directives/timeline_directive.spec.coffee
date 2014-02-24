@@ -1,39 +1,21 @@
-describe("Timeline Directive", ->
-
-  scope = element = undefined
-  userId = '52f0329df6f4070ce200000'
-
+describe "Timeline Directive", ->
 
   beforeEach module 'timeline'
 
   beforeEach inject ($rootScope, $compile) ->
-    element = angular.element '<div eventtimeline>'
+    element = angular.element '<timeline></timeline>'
     scope = $rootScope.$new()
-
-    sinon.spy(scope, "$watch");
-
     element = $compile(element) scope
-    scope.$apply()
 
-  describe('when events are avaliable in scope', ->
+  xit "draws an empty timeline", ->
 
-        it 'should contain 2 events', ->
-            event1 = {content: "Some event", start: new Date(Date.now())}
-            event2 = {content: "Another event", start: new Date(Date.now())}
-            scope.timelineData = [event1, event2]
-            scope.$apply()
+    options =
+      "width":  "100%"
+      "height": "400px"
+      "style": "box"
+      "zoomMax": 31536000000 # one year in milliseconds
+      "zoomMin": 86400000 # one day in milliseconds
 
-            eventElements = element.find('.timeline-event-content')
-            eventElements.length.should.eql 2
 
-        it 'should contain 3 elements', ->
-            event1 = {content: "Some event", start: new Date(Date.now())}
-            event2 = {content: "Another event", start: new Date(Date.now())}
-            event3 = {content: "A third event", start: new Date(Date.now())}
-            scope.timelineData = [event1, event2, event3]
-            scope.$apply()
+    timeline.draw.should.be.calledWith [], options
 
-            eventElements = element.find('.timeline-event-content')
-            eventElements.length.should.eql 3
-  )
-)
