@@ -59,7 +59,6 @@ angular.module('timeline')
 
         mapToTimeline = (activity) ->
           start = moment(activity.date, "DD/mm/YYYY hh:mm P").toDate()
-          console.log new Date(start)
           start: start, content: activity.description
 
         updateTimeline = ->
