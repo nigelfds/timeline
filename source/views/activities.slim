@@ -66,11 +66,10 @@
                   input.form-control(type="text" name="newStaffName" typeahead="staff for staff in staffInvolved | filter:$viewValue" ng-model="newStaffName" required autocomplete="off")
                   span.input-group-btn
                     button.btn.btn-default(ng-click="addNewStaffInvolved()" ng-disabled="staffInvolvedForm.$invalid") +
-              .form-group
-                .input-group(ng-repeat="staffName in selectedActivity.staffInvolved track by $index")
-                  input.staffName.form-control(readonly ng-value="staffName")
-                  span.input-group-btn
-                    button.btn.btn-danger(ng-click="removeStaffInvolved(staffName)") &times;
+            ul.list-group.staff-involved
+              ls.list-group-item(ng-repeat="staffName in selectedActivity.staffInvolved track by $index")
+                | {{staffName}}
+                button.close(type="button" class="close" aria-hidden="true" ng-click="removeStaffInvolved(staffName)") &times;
 
           / .col-xs-3.col-xs-offset-1
           /   form.form-horizontal
