@@ -78,6 +78,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   ActivitiesService.getActivities userId, (activities) ->
     addActivity(activity) for activity in activities
     $scope.select activities[0]
+    $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
 
   $scope.numberOfHandoffs = (activities) ->
     sum = 0

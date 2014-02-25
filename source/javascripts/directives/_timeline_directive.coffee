@@ -28,10 +28,10 @@ angular.module('timeline')
         timeline = new links.Timeline(element.children()[0])
         options =
           width:  "100%"
-          minHeight: "400px"
+          minHeight: 400
           style: "box"
-          "zoomMax": 31536000000 # one year in milliseconds
-          "zoomMin": 86400000 # one day in milliseconds
+          zoomMax: 31536000000 # one year in milliseconds
+          zoomMin: 86400000 # one day in milliseconds
           customStackOrder: (item1, item2) -> item1.start - item2.start
 
         timeline.draw [], options
