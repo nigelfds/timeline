@@ -57,7 +57,7 @@
               .col-xs-4
                 form(name="staffInvolvedForm" role="form" novalidate)
                   .input-group
-                    input.form-control(type="text" name="newStaffName" ng-model="newStaffName" required)
+                    input.form-control(type="text" name="newStaffName" typeahead="staff for staff in staffInvolved | filter:$viewValue" ng-model="newStaffName" required autocomplete="off")
                     span.input-group-btn
                       button.btn.btn-default(ng-click="addNewStaffInvolved()" ng-disabled="staffInvolvedForm.$invalid") +
 

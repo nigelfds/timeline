@@ -28,6 +28,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       if activity.staffInvolved?
         for staffName in activity.staffInvolved
           staff.push staffName unless staff.indexOf(staffName) != -1
+    $scope.staffInvolved = staff
     staff.length
 
   addAlert = (alert) ->
