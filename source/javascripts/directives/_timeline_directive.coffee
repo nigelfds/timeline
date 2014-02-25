@@ -4,7 +4,7 @@ angular.module('timeline')
       template: '<div></div>'
       link: (scope, element, attrs) ->
 
-        onChanges = ->  updateTimeline()
+        onChanges = -> updateTimeline()
         scope.$watch "activities", onChanges, true
 
         onSelectionChange = (activity) -> 
@@ -24,8 +24,6 @@ angular.module('timeline')
         updateTimeline = ->
           timelineData = scope.activities.map mapToTimeline
           timeline.setData timelineData
-          timeline.setVisibleChartRangeAuto()
-          timeline.zoom -0.2
 
         timeline = new links.Timeline(element.children()[0])
         options =
@@ -35,10 +33,6 @@ angular.module('timeline')
           zoomMax: 31536000000 # one year in milliseconds
           zoomMin: 86400000 # one day in milliseconds
           customStackOrder: (item1, item2) -> item1.start - item2.start
-
-
-
-        timeline.draw [], options
 
         onSelect =  ->
           selection = timeline.getSelection()

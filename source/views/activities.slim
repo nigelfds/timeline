@@ -38,19 +38,19 @@
               .col-xs-10.col-xs-offset-2
                 .checkbox
                   label(for="isAPM")
-                    input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()") Is APM?
+                    input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()") Was this activity part of the APM clinic?
 
             .form-group
               .col-xs-10.col-xs-offset-2
                 .checkbox
                   label.control-label(for="involveHandoff")
-                    input(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()") Involve handoff?
+                    input(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()") Did this activity involve a handoff?
 
             .form-group
               .col-xs-10.col-xs-offset-2
                 .checkbox
-                  label.control-label(for="involveContact")
-                    input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") Involve contact with the user?
+                  input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") Did this activity involve direct contact with the client?
+                  / label.control-label(for="involveContact") 
 
             .form-group
               label.col-xs-2.control-label(for="staffInvolved") Staff(s) involved

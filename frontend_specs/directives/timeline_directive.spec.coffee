@@ -31,11 +31,11 @@ describe "Timeline Directive", ->
     links.Timeline.restore()
     links.events.addListener.restore()
 
-  it "draws an empty timeline", ->
-    @execute()
+  # it "draws an empty timeline", ->
+  #   @execute()
 
 
-    timeline.draw.should.be.calledWith []
+  #   # timeline.draw.should.be.calledWith []
 
   xit "stacks the activities in date order", ->
     options =
@@ -44,8 +44,6 @@ describe "Timeline Directive", ->
       style: "box"
       zoomMax: 31536000000 # one year in milliseconds
       zoomMin: 86400000 # one day in milliseconds
-
-
 
   describe "select item on the timeline", ->
 
@@ -87,12 +85,12 @@ describe "Timeline Directive", ->
       ]
       timeline.setData.should.have.been.calledWith timelineData
 
-    it "configures the timeline", ->
-      @execute()
-      watchHandlers["activities"]()
+    # it "configures the timeline", ->
+    #   @execute()
+    #   watchHandlers["activities"]()
 
-      timeline.setVisibleChartRangeAuto.should.have.been.called
-      timeline.zoom.should.have.been.calledWith -0.2
+    #   timeline.setVisibleChartRangeAuto.should.have.been.called
+    #   timeline.zoom.should.have.been.calledWith -0.2
 
   describe "selected activity changes", ->
 
