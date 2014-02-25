@@ -154,3 +154,43 @@ describe "ActivitiesController", ->
     it "unselects the activity", ->
       scope.delete()
       expect(scope.selectedActivity).to.eql undefined
+
+  describe "addNewStaffInvolved", ->
+    beforeEach ->
+      scope.selectedActivity =
+        "_id": "$oid": activityId
+        "date": values.date
+        "description": values.description
+        "involveHandoff": values.involveHandoff
+        "user_id": "$oid": userId
+
+    it "sends an update to the service", ->
+      values.staffInvolved = [ "Justin" ]
+      scope.newStaffName = "Justin"
+
+      scope.addNewStaffInvolved()
+      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+    it "should have newly entered name with all the existing staff involved", ->
+      scope.selectedActivity.staffInvolved = [ "kitty" ]
+      scope.newStaffName = "panda"
+
+      scope.addNewStaffInvolved()
+      scope.selectedActivity.staffInvolved.should.eql [ "kitty", "panda"]
+
+
+    it "should empty the textbox after name is entered", ->
+      scope.newStaffName = "panda"
+
+      scope.addNewStaffInvolved()
+
+      scope.newStaffName.should.be.empty
+
+
+  #   it "should autocomplete if the characters typed match invloved staff name", ->
+
+  # describe "removing a staff from an activity"
+  #   it "should remove the staff from that activity", ->
+
+
+

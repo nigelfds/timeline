@@ -9,6 +9,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
 
   $scope.selectAllOnClick = (_event) -> _event.target.select()
 
+  $scope.addNewStaffInvolved = ->
+    $scope.selectedActivity.staffInvolved = [] if $scope.selectedActivity.staffInvolved is undefined
+    $scope.selectedActivity.staffInvolved.push $scope.newStaffName
+    $scope.save()
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
@@ -42,6 +47,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       values[property] = value
     ActivitiesService.updateActivity userId, activityId, values, (success) ->
       addAlert "Updated successfully"
+      $scope.newStaffName = ""
 
   $scope.delete = ->
     activityId = $scope.selectedActivity._id.$oid

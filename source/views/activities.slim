@@ -21,24 +21,49 @@
           h4.name.panel-title Selected Activity Details
 
         .panel-body(ng-show="selectedActivity")
-          form(name="activity" role="form" novalidate)
+          .container-fluid.form-horizontal
             .form-group
-              label.control-label(for="date" ) Date
-              datetimepicker
-            .form-group
-              label.control-label(for="description" ) Description
-              input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" ng-click="selectAllOnClick($event)")
-            .form-group
-              label.control-label(for="isAPM" ) Is APM?
-              input.form-control(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()" required)
-            .form-group
-              label.control-label(for="involveHandoff" ) Involve handoff?
-              input.form-control(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()" required)
-            .form-group
-              label.control-label(for="involveContact" ) Involve contact with the user?
-              input.form-control(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()" required)
+              label.col-xs-2.control-label(for="date" ) Date
+              .col-xs-4
+                datetimepicker
 
-            button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
+            .form-group
+              label.col-xs-2.control-label(for="description" ) Description
+              .col-xs-10
+                input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" ng-click="selectAllOnClick($event)")
+
+            .form-group
+              .col-xs-10.col-xs-offset-2
+                .checkbox
+                  label(for="isAPM")
+                    input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()") Is APM?
+
+            .form-group
+              .col-xs-10.col-xs-offset-2
+                .checkbox
+                  label.control-label(for="involveHandoff")
+                    input(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()") Involve handoff?
+
+            .form-group
+              .col-xs-10.col-xs-offset-2
+                .checkbox
+                  label.control-label(for="involveContact")
+                    input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") Involve contact with the user?
+
+            .form-group
+              label.col-xs-2.control-label(for="staffInvolved") Staff(s) involved
+              .col-xs-4
+                form(name="staffInvolvedForm" role="form" novalidate)
+                  .input-group
+                      input.form-control(type="text" name="newStaffName" ng-model="newStaffName")
+                      span.input-group-btn
+                        button.btn.btn-default(ng-click="addNewStaffInvolved()") +
+                ul.list-group
+                  li.list-group-item(ng-repeat="staffName in selectedActivity.staffInvolved track by $index")
+                    | {{staffName}}
+
+          button.btn.btn-danger.pull-right(ng-click="delete()" ng-show="selectedActivity") DELETE
+
 
   -if false
     .row
