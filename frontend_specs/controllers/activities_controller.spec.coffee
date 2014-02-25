@@ -239,3 +239,39 @@ describe "ActivitiesController", ->
 
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
+
+
+  describe "addNewITSystem", ->
+    beforeEach ->
+      scope.selectedActivity =
+        "_id": "$oid": activityId
+        "date": values.date
+        "description": values.description
+        "involveHandoff": values.involveHandoff
+        "user_id": "$oid": userId
+
+    it "sends an update to the service", ->
+      values.itSystems = [ "Justin" ]
+      scope.newITSystemName = "Justin"
+
+      scope.addNewITSystem()
+      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+    it "should have newly entered IT System name with all the existing IT Systems", ->
+      scope.selectedActivity.itSystems = [ "system 1" ]
+      scope.newITSystemName = "system 2"
+
+      scope.addNewITSystem()
+      scope.selectedActivity.itSystems.should.eql [ "system 1", "system 2"]
+
+    it "should empty the textbox after system name is entered", ->
+      scope.newITSystemName = "new system"
+      scope.addNewITSystem()
+      scope.newITSystemName.should.be.empty
+
+    it "should not allow adding the same IT system name twice", ->
+      scope.selectedActivity.itSystems = [ "system A" ]
+      scope.newITSystemName = "system A"
+
+      scope.addNewITSystem()
+      scope.selectedActivity.itSystems.should.eql [ "system A" ]

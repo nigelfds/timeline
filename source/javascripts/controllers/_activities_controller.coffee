@@ -33,6 +33,14 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   $scope.numberOfStaffInvolved = (activities) ->
     uniqueStaffInvolved(activities).length
 
+  $scope.addNewITSystem = ->
+    $scope.selectedActivity.itSystems = [] if $scope.selectedActivity.itSystems is undefined
+    unless $scope.selectedActivity.itSystems.indexOf($scope.newITSystemName) != -1
+      $scope.selectedActivity.itSystems.push $scope.newITSystemName
+      $scope.save()
+    else
+      addAlert "Duplicated IT System name"
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
@@ -67,6 +75,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     ActivitiesService.updateActivity userId, activityId, values, (success) ->
       addAlert "Updated successfully"
       $scope.newStaffName = ""
+      $scope.newITSystemName = ""
       $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
 
   $scope.delete = ->
