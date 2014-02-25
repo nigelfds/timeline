@@ -22,14 +22,16 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.staffInvolved.splice index, 1
     $scope.save()
 
-  $scope.numberOfStaffInvolved = (activities) ->
+  uniqueStaffInvolved = (activities) ->
     staff = []
     for activity in activities
       if activity.staffInvolved?
         for staffName in activity.staffInvolved
           staff.push staffName unless staff.indexOf(staffName) != -1
-    $scope.staffInvolved = staff
-    staff.length
+    staff
+
+  $scope.numberOfStaffInvolved = (activities) ->
+    uniqueStaffInvolved(activities).length
 
   addAlert = (alert) ->
     $scope.alerts.push alert
@@ -65,6 +67,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     ActivitiesService.updateActivity userId, activityId, values, (success) ->
       addAlert "Updated successfully"
       $scope.newStaffName = ""
+      $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
 
   $scope.delete = ->
     activityId = $scope.selectedActivity._id.$oid
