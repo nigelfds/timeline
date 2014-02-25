@@ -321,9 +321,7 @@
           updateTimeline = function() {
             var timelineData;
             timelineData = scope.activities.map(mapToTimeline);
-            timeline.setData(timelineData);
-            timeline.setVisibleChartRangeAuto();
-            return timeline.zoom(-0.2);
+            return timeline.setData(timelineData);
           };
           timeline = new links.Timeline(element.children()[0]);
           options = {
@@ -336,7 +334,6 @@
               return item1.start - item2.start;
             }
           };
-          timeline.draw([], options);
           onSelect = function() {
             var selectActivity, selection;
             selection = timeline.getSelection();

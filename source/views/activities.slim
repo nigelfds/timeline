@@ -49,8 +49,9 @@
             .form-group
               .col-xs-10.col-xs-offset-2
                 .checkbox
-                  input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") Did this activity involve direct contact with the client?
-                  / label.control-label(for="involveContact") 
+                  label.control-label(for="involveContact") 
+                    input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") 
+                      | Did this activity involve direct contact with the client?
 
             .form-group
               label.col-xs-2.control-label(for="staffInvolved") Staff(s) involved
