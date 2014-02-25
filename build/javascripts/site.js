@@ -54,75 +54,6 @@
 
 }).call(this);
 (function() {
-  var ActivityService;
-
-  ActivityService = (function() {
-    function ActivityService(http) {
-      this.http = http;
-    }
-
-    ActivityService.prototype.getActivity = function(activityId, callback) {
-      return this.http.get("/activities/" + activityId);
-    };
-
-    ActivityService.prototype.createActivity = function(data, callback) {
-      var options;
-      options = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-      return this.http.post("/activities", data, options).success(function(new_activity) {
-        return callback(new_activity);
-      });
-    };
-
-    ActivityService.prototype.updateActivity = function(id, data, callback) {};
-
-    return ActivityService;
-
-  })();
-
-  angular.module('timeline').factory('ActivityService', function($http) {
-    return new ActivityService($http);
-  });
-
-}).call(this);
-(function() {
-  var EventsService;
-
-  EventsService = (function() {
-    function EventsService(http) {
-      this.http = http;
-    }
-
-    EventsService.prototype.getEvents = function(userId, callback) {
-      return this.http.get("/users/" + userId + "/activities").success(callback);
-    };
-
-    EventsService.prototype.createEvent = function(event, userId, callback) {
-      return this.http({
-        url: "/users/" + userId + "/activities",
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: event
-      }).success(callback).error(function(data) {
-        return console.log(data);
-      });
-    };
-
-    return EventsService;
-
-  })();
-
-  angular.module('timeline').factory('EventService', function($http) {
-    return new EventsService($http);
-  });
-
-}).call(this);
-(function() {
   var UsersService;
 
   UsersService = (function() {
@@ -180,6 +111,44 @@
     });
     $scope.alerts = [];
     $scope.activities = [];
+    $scope.selectAllOnClick = function(_event) {
+      return _event.target.select();
+    };
+    $scope.addNewStaffInvolved = function() {
+      if ($scope.selectedActivity.staffInvolved === void 0) {
+        $scope.selectedActivity.staffInvolved = [];
+      }
+      if ($scope.selectedActivity.staffInvolved.indexOf($scope.newStaffName) === -1) {
+        $scope.selectedActivity.staffInvolved.push($scope.newStaffName);
+        return $scope.save();
+      } else {
+        return addAlert("Existing Staff Member Name!");
+      }
+    };
+    $scope.removeStaffInvolved = function(staffName) {
+      var index;
+      index = $scope.selectedActivity.staffInvolved.indexOf(staffName);
+      $scope.selectedActivity.staffInvolved.splice(index, 1);
+      return $scope.save();
+    };
+    $scope.numberOfStaffInvolved = function(activities) {
+      var activity, staff, staffName, _i, _j, _len, _len1, _ref;
+      staff = [];
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.staffInvolved != null) {
+          _ref = activity.staffInvolved;
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            staffName = _ref[_j];
+            if (staff.indexOf(staffName) === -1) {
+              staff.push(staffName);
+            }
+          }
+        }
+      }
+      $scope.staffInvolved = staff;
+      return staff.length;
+    };
     addAlert = function(alert) {
       $scope.alerts.push(alert);
       return $timeout(removeAlert, 5000);
@@ -224,7 +193,8 @@
         }
       }
       return ActivitiesService.updateActivity(userId, activityId, values, function(success) {
-        return addAlert("Updated successfully");
+        addAlert("Updated successfully");
+        return $scope.newStaffName = "";
       });
     };
     $scope["delete"] = function() {
@@ -243,7 +213,7 @@
       }
       return $scope.select(activities[0]);
     });
-    return $scope.numberOfHandoffs = function(activities) {
+    $scope.numberOfHandoffs = function(activities) {
       var activity, sum, _i, _len;
       sum = 0;
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
@@ -254,152 +224,20 @@
       }
       return sum;
     };
+    return $scope.numberOfContacts = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.involveContact) {
+          sum += 1;
+        }
+      }
+      return sum;
+    };
   };
 
   angular.module('timeline').controller('ActivitiesController', ActivitiesController);
-
-}).call(this);
-(function() {
-  var ActivityController;
-
-  ActivityController = function($scope, $routeParams, ActivityService) {
-    var activityId;
-    activityId = $routeParams.activityId;
-    return ActivityService.getActivity(activityId, function(activity) {
-      return $scope.activityType = activity.activityType;
-    });
-  };
-
-  angular.module('timeline').controller('ActivityController', ActivityController);
-
-}).call(this);
-(function() {
-  var Basis32Controller;
-
-  Basis32Controller = function($scope, $routeParams) {
-    return $scope.questions = [
-      {
-        text: "Managing day to day life (e.g. Getting to places on time, handling money, making everyday decisions)"
-      }, {
-        text: "Household responsibilities (e.g. Shopping, cooking, laundry, keeping room clean, other chores)"
-      }, {
-        text: "Work (e.g. Completing tasks, performance level, finding / keeping a job)"
-      }, {
-        text: "School (e.g. academic performance, completing assignments, attendance)"
-      }, {
-        text: "Leisure time or recreational activities"
-      }, {
-        text: "Adjusting to major life stresses (e.g. separation, divorce, moving, new job, new school, a death)"
-      }, {
-        text: "Relationships with family members"
-      }, {
-        text: "Getting along with people outside of the family"
-      }, {
-        text: "Isolation or feelings of loneliness"
-      }, {
-        text: "Being able to feel close to others"
-      }, {
-        text: "Being realistic about yourself to others"
-      }, {
-        text: "Recognising and expressing emotions appropriately"
-      }, {
-        text: "Developing indepencence, autonomy"
-      }, {
-        text: "Goals or direction of life"
-      }, {
-        text: "Lack of self-confidence, feeling bad about yourself"
-      }
-    ];
-  };
-
-}).call(this);
-(function() {
-  var EventController;
-
-  EventController = function($scope, $routeParams, EventService) {
-    var mapEvent;
-    $scope.date = new Date();
-    $scope.time = new Date();
-    $scope.time.setHours(12);
-    $scope.time.setMinutes(0);
-    $scope.events = [];
-    mapEvent = function(event) {
-      return {
-        content: event.description,
-        start: new Date(event.start)
-      };
-    };
-    EventService.getEvents($routeParams.userId, function(events) {
-      return $scope.events = events.activities.map(mapEvent);
-    });
-    return $scope.createEvent = function() {
-      var dateTime;
-      dateTime = new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate(), $scope.time.getHours(), $scope.time.getMinutes());
-      return EventService.createEvent({
-        description: $scope.description,
-        start: dateTime.toString()
-      }, $routeParams.userId, function(new_event) {
-        return $scope.events.push(mapEvent(new_event));
-      });
-    };
-  };
-
-  angular.module('timeline').controller('EventController', EventController);
-
-}).call(this);
-(function() {
-  var UserController;
-
-  UserController = function($scope, $routeParams, UsersService, $timeout, $location, ActivityService) {
-    var addAlert, userId;
-    userId = $routeParams.userId;
-    UsersService.getUser(userId, function(user) {
-      return $scope.user = user;
-    });
-    $scope.validationClass = function(form, fieldName) {
-      return {
-        'has-success': form[fieldName].$valid,
-        'has-error': form[fieldName].$invalid
-      };
-    };
-    $scope.save = function(form, property) {
-      var data, formValue;
-      formValue = form[property];
-      if (formValue != null ? formValue.$valid : void 0) {
-        data = {};
-        data[property] = $scope.user[property];
-        return UsersService.updateUser(userId, data, function(success) {
-          return addAlert("Updated user successfully");
-        });
-      } else {
-        return addAlert("Invalid value.  User wasn't updated.");
-      }
-    };
-    $scope.alerts = [];
-    addAlert = function(_message) {
-      var removeAlert;
-      $scope.alerts.push({
-        message: _message
-      });
-      removeAlert = function() {
-        return $scope.alerts.shift();
-      };
-      return $timeout(removeAlert, 5000);
-    };
-    return $scope.createActivity = function(event, activityType) {
-      var data;
-      event.preventDefault();
-      data = {
-        userId: userId,
-        activityType: activityType
-      };
-      return ActivityService.createActivity(data, function(newActivity) {
-        return $location.path("/activities/" + newActivity._id.$oid);
-      });
-    };
-  };
-
-  angular.module('timeline').controller('UserController', UserController);
 
 }).call(this);
 (function() {
@@ -449,44 +287,6 @@
 
 }).call(this);
 (function() {
-  angular.module('timeline').directive('eventtimeline', [
-    function() {
-      return {
-        restrict: 'A',
-        template: '<div id="user-timeline">',
-        link: function(scope, element, attrs) {
-          var drawTimeline, onSelect, options, timeline;
-          timeline = new links.Timeline(element.children()[0]);
-          onSelect = function(e) {
-            var activity;
-            activity = scope.activities[timeline.getSelection()[0].row];
-            return scope.selectActivity(activity);
-          };
-          links.events.addListener(timeline, 'select', onSelect);
-          options = {
-            "width": "100%",
-            "height": "400px",
-            "style": "box",
-            "groupsOnRight": "true"
-          };
-          timeline.draw([], options);
-          drawTimeline = function(data) {
-            timeline.setData(data);
-            timeline.setVisibleChartRangeAuto();
-            return timeline.zoom(-.1);
-          };
-          return scope.$watchCollection('timelineData', function() {
-            if (scope.timelineData) {
-              return drawTimeline(scope.timelineData);
-            }
-          });
-        }
-      };
-    }
-  ]);
-
-}).call(this);
-(function() {
   angular.module('timeline').directive('timeline', [
     function() {
       return {
@@ -527,11 +327,14 @@
           };
           timeline = new links.Timeline(element.children()[0]);
           options = {
-            "width": "100%",
-            "height": "400px",
-            "style": "box",
-            "zoomMax": 31536000000,
-            "zoomMin": 86400000
+            width: "100%",
+            minHeight: "400px",
+            style: "box",
+            zoomMax: 31536000000,
+            zoomMin: 86400000,
+            customStackOrder: function(item1, item2) {
+              return item1.start - item2.start;
+            }
           };
           timeline.draw([], options);
           onSelect = function() {
