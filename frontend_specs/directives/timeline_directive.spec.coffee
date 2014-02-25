@@ -31,11 +31,9 @@ describe "Timeline Directive", ->
     links.Timeline.restore()
     links.events.addListener.restore()
 
-  # it "draws an empty timeline", ->
-  #   @execute()
-
-
-  #   # timeline.draw.should.be.calledWith []
+  it "draws an empty timeline", ->
+    @execute()
+    timeline.draw.should.be.calledWith []
 
   xit "stacks the activities in date order", ->
     options =
