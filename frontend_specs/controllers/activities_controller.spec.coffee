@@ -186,6 +186,14 @@ describe "ActivitiesController", ->
 
       scope.newStaffName.should.be.empty
 
+    it "should not allow adding the same staff name twice", ->
+      scope.selectedActivity.staffInvolved = [ "kitty" ]
+      scope.newStaffName = "kitty"
+
+      scope.addNewStaffInvolved()
+      scope.selectedActivity.staffInvolved.should.eql [ "kitty" ]
+
+
 
   #   it "should autocomplete if the characters typed match invloved staff name", ->
 

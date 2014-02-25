@@ -11,8 +11,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
 
   $scope.addNewStaffInvolved = ->
     $scope.selectedActivity.staffInvolved = [] if $scope.selectedActivity.staffInvolved is undefined
-    $scope.selectedActivity.staffInvolved.push $scope.newStaffName
-    $scope.save()
+    unless $scope.selectedActivity.staffInvolved.indexOf($scope.newStaffName) != -1
+      $scope.selectedActivity.staffInvolved.push $scope.newStaffName
+      $scope.save()
+    else
+      addAlert "Existing Staff Member Name!"
 
   $scope.removeStaffInvolved = (staffName) ->
     index = $scope.selectedActivity.staffInvolved.indexOf staffName
