@@ -212,7 +212,22 @@ describe "ActivitiesController", ->
       values.staffInvolved = [ "kitty", "teddy" ]
       activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
 
+  describe "total number of staff involved", ->
 
+    fakeActivities1 = [
+      { date: "date", description: "play with kitty", involveHandoff: true,  involveContact: false, staffInvolved: ["a", "b", "c"]},
+      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: false, staffInvolved: ["a"]},
+      { date: "date", description: "sleep",           involveHandoff: true,  involveContact: false, staffInvolved: ["c", "e"]}
+    ]
 
+    fakeActivities2 = [
+      { date: "date", description: "play with kitty", involveHandoff: true,  involveContact: false},
+      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: false},
+      { date: "date", description: "sleep",           involveHandoff: true,  involveContact: false}
+    ]
 
+    it "display the total number of staff involve when there is any across all activities", ->
+      scope.numberOfStaffInvolved(fakeActivities1).should.eql 4
 
+    it "display 0 if there is no staff involved", ->
+      scope.numberOfStaffInvolved(fakeActivities2).should.eql 0

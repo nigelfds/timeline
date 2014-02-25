@@ -19,6 +19,14 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.staffInvolved.splice index, 1
     $scope.save()
 
+  $scope.numberOfStaffInvolved = (activities) ->
+    staff = []
+    for activity in activities
+      if activity.staffInvolved?
+        for staffName in activity.staffInvolved
+          staff.push staffName unless staff.indexOf(staffName) != -1
+    staff.length
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
