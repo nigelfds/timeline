@@ -189,8 +189,30 @@ describe "ActivitiesController", ->
 
   #   it "should autocomplete if the characters typed match invloved staff name", ->
 
-  # describe "removing a staff from an activity"
-  #   it "should remove the staff from that activity", ->
+  describe "removeStaffInvolved", ->
+    beforeEach ->
+      scope.selectedActivity =
+        "_id": "$oid": activityId
+        "date": values.date
+        "description": values.description
+        "involveHandoff": values.involveHandoff
+        "user_id": "$oid": userId
+
+    it "should remove the staff from that activity", ->
+      scope.selectedActivity.staffInvolved = [ "kitty", "panda", "teddy" ]
+
+      scope.removeStaffInvolved("panda")
+      scope.selectedActivity.staffInvolved.should.eql [ "kitty", "teddy"]
+
+    it "sends an update to the service", ->
+      scope.selectedActivity.staffInvolved = [ "kitty", "panda", "teddy" ]
+
+      scope.removeStaffInvolved("panda")
+
+      values.staffInvolved = [ "kitty", "teddy" ]
+      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+
 
 
 
