@@ -1,0 +1,35 @@
+.userDetails(ng-controller="UserDetailsController")
+  .panel.panel-success
+    .panel-heading 
+      h3.panel-title
+        | Details for {{user.name}}
+    .panel-body
+       form(ng-submit="save(user)")
+        .form-group
+          .input-group
+            span.input-group-addon Name
+            input.form-control(name="userName" ng-model="user.name" required)
+
+        .form-group
+          .input-group
+            span.input-group-addon UR Number
+            input.form-control(name="urNumber" type="number" min="0" ng-model="user.urNumber" required)
+
+        .form-group
+          .input-group
+            span.input-group-addon Age
+            input.form-control(name="age" type="number" min="0" ng-model="user.age" required)
+
+        .form-group
+          select.form-control(ng-model="user.gender" required)
+            option (value="") Select A Gender
+            option (value="male")Male
+            option (value="female")Female
+
+        .form-group
+          button.btn.btn-primary(type="submit" ng-disabled="") Update
+
+  .messages
+    ul.list-group
+      li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+        | {{message.text}}
