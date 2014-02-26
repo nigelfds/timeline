@@ -291,8 +291,8 @@ describe "ActivitiesController", ->
 
       it "should empty the textbox after system name is entered", ->
         scope.newPaperRecord = "new Form"
-        scope.addNewITSystem()
-        scope.newITSystemName.should.be.empty
+        scope.addNewPaperRecord()
+        scope.newPaperRecord.should.be.empty
 
     describe "removePaperRecord", ->
       beforeEach ->

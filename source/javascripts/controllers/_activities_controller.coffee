@@ -100,6 +100,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       addAlert "Updated successfully"
       $scope.newStaffName = ""
       $scope.newITSystemName = ""
+      $scope.newPaperRecord = ""
 
   $scope.delete = ->
     activityId = $scope.selectedActivity._id.$oid
