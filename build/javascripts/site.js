@@ -104,7 +104,7 @@
   var ActivitiesController;
 
   ActivitiesController = function($scope, $routeParams, $timeout, ActivitiesService, UsersService) {
-    var addActivity, addAlert, removeActivity, removeAlert, uniqueStaffInvolved, userId;
+    var addActivity, addAlert, removeActivity, removeAlert, uniqueITSystems, uniqueStaffInvolved, userId;
     userId = $routeParams.userId;
     UsersService.getUser(userId, function(user) {
       return $scope.user = user;
@@ -148,8 +148,59 @@
       }
       return staff;
     };
-    $scope.numberOfStaffInvolved = function(activities) {
-      return uniqueStaffInvolved(activities).length;
+    $scope.addNewITSystem = function() {
+      if ($scope.selectedActivity.itSystems === void 0) {
+        $scope.selectedActivity.itSystems = [];
+      }
+      if ($scope.selectedActivity.itSystems.indexOf($scope.newITSystemName) === -1) {
+        $scope.selectedActivity.itSystems.push($scope.newITSystemName);
+        return $scope.save();
+      } else {
+        return addAlert("Duplicated IT System name");
+      }
+    };
+    $scope.removeITSystem = function(systemName) {
+      var index;
+      index = $scope.selectedActivity.itSystems.indexOf(systemName);
+      $scope.selectedActivity.itSystems.splice(index, 1);
+      return $scope.save();
+    };
+    uniqueITSystems = function(activities) {
+      var activity, systemName, systems, _i, _j, _len, _len1, _ref;
+      systems = [];
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.itSystems != null) {
+          _ref = activity.itSystems;
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            systemName = _ref[_j];
+            if (systems.indexOf(systemName) === -1) {
+              systems.push(systemName);
+            }
+          }
+        }
+      }
+      return systems;
+    };
+    $scope.itSystemsUpdated = function(activities) {
+      return uniqueITSystems(activities);
+    };
+    $scope.addNewPaperRecord = function() {
+      if ($scope.selectedActivity.paperRecords === void 0) {
+        $scope.selectedActivity.paperRecords = [];
+      }
+      if ($scope.selectedActivity.paperRecords.indexOf($scope.newPaperRecord) === -1) {
+        $scope.selectedActivity.paperRecords.push($scope.newPaperRecord);
+        return $scope.save();
+      } else {
+        return addAlert("Duplicated Paper Record name");
+      }
+    };
+    $scope.removePaperRecord = function(paperRecordName) {
+      var index;
+      index = $scope.selectedActivity.paperRecords.indexOf(paperRecordName);
+      $scope.selectedActivity.paperRecords.splice(index, 1);
+      return $scope.save();
     };
     addAlert = function(alert) {
       $scope.alerts.push(alert);
@@ -197,6 +248,7 @@
       return ActivitiesService.updateActivity(userId, activityId, values, function(success) {
         addAlert("Updated successfully");
         $scope.newStaffName = "";
+        $scope.newITSystemName = "";
         return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
       });
     };
@@ -208,7 +260,7 @@
         return $scope.select(void 0);
       });
     };
-    ActivitiesService.getActivities(userId, function(activities) {
+    return ActivitiesService.getActivities(userId, function(activities) {
       var activity, _i, _len;
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
         activity = activities[_i];
@@ -217,6 +269,56 @@
       $scope.select(activities[0]);
       return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
     });
+  };
+
+  angular.module('timeline').controller('ActivitiesController', ActivitiesController);
+
+}).call(this);
+(function() {
+  var JourneySummaryController;
+
+  JourneySummaryController = function($scope) {
+    var uniqueITSystems, uniqueStaffInvolved;
+    uniqueStaffInvolved = function(activities) {
+      var activity, staff, staffName, _i, _j, _len, _len1, _ref;
+      staff = [];
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.staffInvolved != null) {
+          _ref = activity.staffInvolved;
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            staffName = _ref[_j];
+            if (staff.indexOf(staffName) === -1) {
+              staff.push(staffName);
+            }
+          }
+        }
+      }
+      return staff;
+    };
+    $scope.numberOfStaffInvolved = function(activities) {
+      return uniqueStaffInvolved(activities).length;
+    };
+    uniqueITSystems = function(activities) {
+      var activity, systemName, systems, _i, _j, _len, _len1, _ref;
+      systems = [];
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.itSystems != null) {
+          _ref = activity.itSystems;
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            systemName = _ref[_j];
+            if (systems.indexOf(systemName) === -1) {
+              systems.push(systemName);
+            }
+          }
+        }
+      }
+      return systems;
+    };
+    $scope.numberOfITSystemUpdated = function(activities) {
+      return uniqueITSystems(activities).length;
+    };
     $scope.numberOfHandoffs = function(activities) {
       var activity, sum, _i, _len;
       sum = 0;
@@ -228,7 +330,7 @@
       }
       return sum;
     };
-    return $scope.numberOfContacts = function(activities) {
+    $scope.numberOfContacts = function(activities) {
       var activity, sum, _i, _len;
       sum = 0;
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
@@ -239,9 +341,31 @@
       }
       return sum;
     };
+    $scope.numberOfTherapeuticContributions = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.isAPM && activity.contributesTherapeutically) {
+          sum++;
+        }
+      }
+      return sum;
+    };
+    return $scope.numberOfAPMActivities = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.isAPM) {
+          sum++;
+        }
+      }
+      return sum;
+    };
   };
 
-  angular.module('timeline').controller('ActivitiesController', ActivitiesController);
+  angular.module('timeline').controller('JourneySummaryController', JourneySummaryController);
 
 }).call(this);
 (function() {

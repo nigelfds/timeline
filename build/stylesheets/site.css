@@ -72,7 +72,14 @@ input.form-control.staffName {
   background-color: #fff;
   color: #000;
 }
-ul.staff-involved li {
+ul.staff-involved,
+ul.it-systems-updated,
+ul.paper-records-updated {
+  margin-right: 35px;
+}
+ul.staff-involved li,
+ul.it-systems-updated li,
+ul.paper-records-updated li {
   padding-top: 6px;
   padding-bottom: 6px;
 }
