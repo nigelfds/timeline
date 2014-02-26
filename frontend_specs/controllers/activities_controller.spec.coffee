@@ -1,5 +1,5 @@
 describe "ActivitiesController", ->
-  scope = routeParams = timeout = activitiesService = usersService = undefined
+  scope = routeParams = timeout = activitiesService = usersService = alerts = undefined
   userId = "the-user-id"
   activityId = values = currentUser = undefined
 
@@ -26,7 +26,12 @@ describe "ActivitiesController", ->
 
     timeout = sinon.stub()
 
+    alerts = sinon.createStubInstance MessagesList
+    sinon.stub(window, "MessagesList").returns alerts
+
     ActivitiesController scope, routeParams, timeout, activitiesService, usersService
+
+  afterEach -> MessagesList.restore()
 
   it "displays the users details", ->
     scope.user.should.eql currentUser
@@ -99,14 +104,8 @@ describe "ActivitiesController", ->
 
     it "alerts on success", ->
       scope.save()
-      scope.alerts[0].should.eql "Updated successfully"
+      alerts.add.should.have.been.calledWith "Updated successfully", "success"
 
-    it "removes alerts after a timeout", ->
-      timeout.withArgs(sinon.match.func, 5000).yields()
-
-      scope.save()
-
-      scope.alerts.should.be.empty
 
   describe "removing an activity", ->
     selectedActivity = undefined

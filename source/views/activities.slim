@@ -124,9 +124,10 @@
                   | {{activity.date}}
                 | {{activity.description}}
 
-alert.messages(ng-show="alerts.length != 0")
-  .fade(ng-repeat="alert in alerts track by $index")
-    | {{alert}}
+.messages
+  ul.list-group
+    li.list-group-item.fade(ng-repeat="message in alerts track by $index" ng-class="'list-group-item-' + message.type")
+      | {{message.text}}
 
 = partial "journey_summary"
 

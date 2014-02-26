@@ -4,7 +4,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   UsersService.getUser userId, (user) ->
     $scope.user = user
 
-  $scope.alerts = []
+  $scope.alerts = new MessagesList($timeout)
+  addAlert = (text, type) -> $scope.alerts.add text, type
   $scope.activities = []
 
   $scope.selectAllOnClick = (_event) -> _event.target.select()
@@ -15,7 +16,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.selectedActivity.staffInvolved.push $scope.newStaffName
       $scope.save()
     else
-      addAlert "Existing Staff Member Name!"
+      addAlert "Existing Staff Member Name!", "danger"
 
   $scope.removeStaffInvolved = (staffName) ->
     index = $scope.selectedActivity.staffInvolved.indexOf staffName
@@ -36,7 +37,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.selectedActivity.itSystems.push $scope.newITSystemName
       $scope.save()
     else
-      addAlert "Duplicated IT System name"
+      addAlert "Duplicated IT System name", "danger"
 
   $scope.removeITSystem = (systemName) ->
     index = $scope.selectedActivity.itSystems.indexOf systemName
@@ -60,19 +61,12 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.selectedActivity.paperRecords.push $scope.newPaperRecord
       $scope.save()
     else
-      addAlert "Duplicated Paper Record name"
+      addAlert "Duplicated Paper Record name", "danger"
 
   $scope.removePaperRecord = (paperRecordName) ->
     index = $scope.selectedActivity.paperRecords.indexOf paperRecordName
     $scope.selectedActivity.paperRecords.splice index, 1
     $scope.save()
-
-  addAlert = (alert) ->
-    $scope.alerts.push alert
-    $timeout(removeAlert, 5000)
-
-  removeAlert = ->
-    $scope.alerts.shift()
 
   addActivity = (new_activity) ->
     $scope.activities.push new_activity
@@ -99,7 +93,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     for property, value of $scope.selectedActivity when property isnt "_id" and property isnt "user_id"
       values[property] = value
     ActivitiesService.updateActivity userId, activityId, values, (success) ->
-      addAlert "Updated successfully"
+      addAlert "Updated successfully", "success"
       $scope.newStaffName = ""
       $scope.newITSystemName = ""
       $scope.staffInvolved = uniqueStaffInvolved($scope.activities)

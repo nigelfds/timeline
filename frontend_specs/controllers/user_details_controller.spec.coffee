@@ -16,6 +16,13 @@ describe "UserDetailsController", ->
   beforeEach ->
     service = sinon.createStubInstance UsersService
 
+    messages = sinon.createStubInstance MessagesList
+    sinon.stub(window, "MessagesList").returns messages
+
+  afterEach ->
+    MessagesList.restore()    
+
+
   describe "saving the user", ->
 
     values = name: user.name, urNumber: user.urNumber, age: user.age, gender: user.gender
@@ -29,17 +36,7 @@ describe "UserDetailsController", ->
 
         scope.save(user)
 
-        scope.messages[0].should.eql text: "Updated successfully", type: "success"
-
-
-      it "removes alerts after a timeout", ->
-        UserDetailsController scope, timeout, service
-
-        scope.save(user)
-
-        timeout.flush(10000)
-        scope.messages.should.be.empty
-
+        scope.messages.add.should.have.been.calledWith "Updated successfully", "success"
 
     describe "the update fails", ->
 
@@ -50,7 +47,5 @@ describe "UserDetailsController", ->
 
         scope.save(user)
 
-        scope.messages[0].should.eql text: "Update failed", type: "danger"
-
-
+        scope.messages.add.should.have.been.calledWith "Update failed", "danger"
 
