@@ -5,7 +5,7 @@ describe "JourneySummaryController", ->
   beforeEach module("timeline")
 
   beforeEach inject (_$rootScope_) ->
-    scope = _$rootScope_.$new()    
+    scope = _$rootScope_.$new()
 
   beforeEach ->
     JourneySummaryController scope
@@ -61,15 +61,15 @@ describe "JourneySummaryController", ->
   describe "total number of staff involved", ->
 
     fakeActivities1 = [
-      { date: "date", description: "play with kitty", involveHandoff: true,  involveContact: false, staffInvolved: ["a", "b", "c"]},
-      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: false, staffInvolved: ["a"]},
-      { date: "date", description: "sleep",           involveHandoff: true,  involveContact: false, staffInvolved: ["c", "e"]}
+      { date: "date", description: "play with kitty", staffInvolved: ["a", "b", "c"]},
+      { date: "date", description: "feed ferrets",    staffInvolved: ["a"]},
+      { date: "date", description: "sleep",           staffInvolved: ["c", "e"]}
     ]
 
     fakeActivities2 = [
-      { date: "date", description: "play with kitty", involveHandoff: true,  involveContact: false},
-      { date: "date", description: "feed ferrets",    involveHandoff: false, involveContact: false},
-      { date: "date", description: "sleep",           involveHandoff: true,  involveContact: false}
+      { date: "date", description: "play with kitty"},
+      { date: "date", description: "feed ferrets"   },
+      { date: "date", description: "sleep"          }
     ]
 
     it "display the total number of staff involve when there is any across all activities", ->
