@@ -66,7 +66,7 @@
               .form-group
                 label.control-label(for="staffInvolved") Staff involved
                 .input-group
-                  input.form-control(type="text" name="newStaffName" typeahead="staff for staff in staffInvolved | filter:$viewValue" ng-model="newStaffName" required autocomplete="off")
+                  input.form-control(type="text" name="newStaffName" typeahead="staff for staff in staffInvolved(activities) | filter:$viewValue" ng-model="newStaffName" required autocomplete="off")
                   span.input-group-btn
                     button.btn.btn-default(ng-click="addNewStaffInvolved()" ng-disabled="staffInvolvedForm.$invalid") +
 

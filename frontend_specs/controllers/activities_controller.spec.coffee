@@ -151,12 +151,9 @@ describe "ActivitiesController", ->
       scope.addNewStaffInvolved()
       scope.selectedActivity.staffInvolved.should.eql [ "kitty", "panda"]
 
-
     it "should empty the textbox after name is entered", ->
       scope.newStaffName = "panda"
-
       scope.addNewStaffInvolved()
-
       scope.newStaffName.should.be.empty
 
     it "should not allow adding the same staff name twice", ->
@@ -165,10 +162,6 @@ describe "ActivitiesController", ->
 
       scope.addNewStaffInvolved()
       scope.selectedActivity.staffInvolved.should.eql [ "kitty" ]
-
-
-
-  #   it "should autocomplete if the characters typed match invloved staff name", ->
 
   describe "removeStaffInvolved", ->
     beforeEach ->
