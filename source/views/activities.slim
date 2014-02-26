@@ -126,25 +126,6 @@ alert.messages(ng-show="alerts.length != 0")
   .fade(ng-repeat="alert in alerts track by $index")
     | {{alert}}
 
-.journeySummary.panel.panel-success
-  .panel-heading 
-    h3.panel-title Journey Summary
-  ul.list-group
-    li.list-group-item
-      span.badge
-        | {{numberOfHandoffs(activities)}}
-      | Number of handoffs
-    li.list-group-item
-      span.badge
-        | {{numberOfContacts(activities)}}
-      | Number of direct contacts
-    li.list-group-item
-      span.badge
-        | {{numberOfStaffInvolved(activities)}}
-      | Number of staff involved 
-    li.list-group-item
-      span.badge
-        | {{numberOfITSystemUpdated(activities)}}
-      | Number of IT Systems updated
+= partial "journey_summary"
 
 

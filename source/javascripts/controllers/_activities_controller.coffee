@@ -30,9 +30,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
           staff.push staffName unless staff.indexOf(staffName) != -1
     staff
 
-  $scope.numberOfStaffInvolved = (activities) ->
-    uniqueStaffInvolved(activities).length
-
   $scope.addNewITSystem = ->
     $scope.selectedActivity.itSystems = [] if $scope.selectedActivity.itSystems is undefined
     unless $scope.selectedActivity.itSystems.indexOf($scope.newITSystemName) != -1
@@ -56,9 +53,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
 
   $scope.itSystemsUpdated = (activities) ->
     uniqueITSystems activities
-
-  $scope.numberOfITSystemUpdated = (activities) ->
-    uniqueITSystems(activities).length
 
   addAlert = (alert) ->
     $scope.alerts.push alert
@@ -107,18 +101,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     addActivity(activity) for activity in activities
     $scope.select activities[0]
     $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
-
-  $scope.numberOfHandoffs = (activities) ->
-    sum = 0
-    for activity in activities
-      sum += 1 if activity.involveHandoff
-    sum
-
-  $scope.numberOfContacts = (activities) ->
-    sum = 0
-    for activity in activities
-      sum += 1 if activity.involveContact
-    sum
 
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController
