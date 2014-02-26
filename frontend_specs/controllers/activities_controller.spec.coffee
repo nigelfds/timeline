@@ -301,3 +301,17 @@ describe "ActivitiesController", ->
         scope.addNewITSystem()
         scope.newITSystemName.should.be.empty
 
+    describe "removePaperRecord", ->
+      beforeEach ->
+        scope.selectedActivity.paperRecords = [ "Form A", "Form B", "Form C" ]
+
+      it "should remove the paper record name from that activity", ->
+        scope.removePaperRecord("Form B")
+        scope.selectedActivity.paperRecords.should.eql [ "Form A", "Form C" ]
+
+      it "sends an update to the service", ->
+        scope.removePaperRecord("Form B")
+
+        values.paperRecords = [ "Form A", "Form C" ]
+        activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+

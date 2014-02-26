@@ -62,6 +62,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     else
       addAlert "Duplicated Paper Record name"
 
+  $scope.removePaperRecord = (paperRecordName) ->
+    index = $scope.selectedActivity.paperRecords.indexOf paperRecordName
+    $scope.selectedActivity.paperRecords.splice index, 1
+    $scope.save()
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
