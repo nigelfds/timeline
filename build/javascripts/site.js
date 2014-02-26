@@ -104,7 +104,7 @@
   var ActivitiesController;
 
   ActivitiesController = function($scope, $routeParams, $timeout, ActivitiesService, UsersService) {
-    var addActivity, addAlert, removeActivity, removeAlert, userId;
+    var addActivity, addAlert, removeActivity, removeAlert, uniqueStaffInvolved, userId;
     userId = $routeParams.userId;
     UsersService.getUser(userId, function(user) {
       return $scope.user = user;
@@ -131,7 +131,7 @@
       $scope.selectedActivity.staffInvolved.splice(index, 1);
       return $scope.save();
     };
-    $scope.numberOfStaffInvolved = function(activities) {
+    uniqueStaffInvolved = function(activities) {
       var activity, staff, staffName, _i, _j, _len, _len1, _ref;
       staff = [];
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
@@ -146,8 +146,10 @@
           }
         }
       }
-      $scope.staffInvolved = staff;
-      return staff.length;
+      return staff;
+    };
+    $scope.numberOfStaffInvolved = function(activities) {
+      return uniqueStaffInvolved(activities).length;
     };
     addAlert = function(alert) {
       $scope.alerts.push(alert);
@@ -194,7 +196,8 @@
       }
       return ActivitiesService.updateActivity(userId, activityId, values, function(success) {
         addAlert("Updated successfully");
-        return $scope.newStaffName = "";
+        $scope.newStaffName = "";
+        return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
       });
     };
     $scope["delete"] = function() {
@@ -211,7 +214,8 @@
         activity = activities[_i];
         addActivity(activity);
       }
-      return $scope.select(activities[0]);
+      $scope.select(activities[0]);
+      return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
     });
     $scope.numberOfHandoffs = function(activities) {
       var activity, sum, _i, _len;
@@ -238,6 +242,46 @@
   };
 
   angular.module('timeline').controller('ActivitiesController', ActivitiesController);
+
+}).call(this);
+(function() {
+  var UserDetailsController;
+
+  UserDetailsController = function($scope, $timeout, UsersService) {
+    var addMessage, removeAlert;
+    $scope.messages = [];
+    $scope.save = function(user) {
+      var property, userId, value, values;
+      userId = user._id.$oid;
+      values = {};
+      for (property in user) {
+        value = user[property];
+        if (property !== "_id") {
+          values[property] = value;
+        }
+      }
+      return UsersService.updateUser(userId, values, function(success) {
+        if (success) {
+          addMessage("Updated successfully", "success");
+        }
+        if (!success) {
+          return addMessage("Update failed", "danger");
+        }
+      });
+    };
+    addMessage = function(text, type) {
+      $scope.messages.push({
+        text: text,
+        type: type
+      });
+      return $timeout(removeAlert, 5000);
+    };
+    return removeAlert = function() {
+      return $scope.messages.shift();
+    };
+  };
+
+  angular.module('timeline').controller('UserDetailsController', UserDetailsController);
 
 }).call(this);
 (function() {
@@ -326,7 +370,7 @@
           timeline = new links.Timeline(element.children()[0]);
           options = {
             width: "100%",
-            minHeight: "400px",
+            minHeight: 400,
             style: "box",
             zoomMax: 31536000000,
             zoomMin: 86400000,
@@ -334,6 +378,7 @@
               return item1.start - item2.start;
             }
           };
+          timeline.draw([], options);
           onSelect = function() {
             var selectActivity, selection;
             selection = timeline.getSelection();
