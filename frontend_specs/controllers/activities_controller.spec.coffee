@@ -192,6 +192,7 @@ describe "ActivitiesController", ->
 
       values.staffInvolved = [ "kitty", "teddy" ]
       activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+      
   describe "unique IT systems", ->
 
     fakeActivities1 = [
