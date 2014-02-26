@@ -78,6 +78,27 @@ describe "JourneySummaryController", ->
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
 
+  describe "total number of paper record updated", ->
+
+    fakeActivities1 = [
+      { date: "date", description: "play with kitty", paperRecords: ["a", "b", "c"]},
+      { date: "date", description: "feed ferrets",    paperRecords: ["a"]},
+      { date: "date", description: "sleep",           paperRecords: ["c", "e"]}
+    ]
+
+    fakeActivities2 = [
+      { date: "date", description: "play with kitty"},
+      { date: "date", description: "feed ferrets"   },
+      { date: "date", description: "sleep"          }
+    ]
+
+    it "display the total number of paper records", ->
+      scope.numberOfPaperRecordUpdated(fakeActivities1).should.eql 4
+
+    it "display 0 if no paper records get updated", ->
+      scope.numberOfPaperRecordUpdated(fakeActivities2).should.eql 0
+
+
   describe "therapeutic contributions", ->
     activities = [
       { date: "date", description: "play with kitty" },

@@ -68,7 +68,7 @@ describe "ActivitiesController", ->
 
       it "defaults to the current date and time", ->
         scope.new()
- 
+
         values = date: now, description: "New Activity"
         activitiesService.createActivity.should.have.been.calledWith userId, values
 
@@ -91,7 +91,7 @@ describe "ActivitiesController", ->
   describe "saving the selected activity", ->
 
     beforeEach ->
-      scope.selectedActivity = 
+      scope.selectedActivity =
         "_id": "$oid": activityId
         "date": values.date
         "description": values.description
@@ -150,12 +150,9 @@ describe "ActivitiesController", ->
       scope.addNewStaffInvolved()
       scope.selectedActivity.staffInvolved.should.eql [ "kitty", "panda"]
 
-
     it "should empty the textbox after name is entered", ->
       scope.newStaffName = "panda"
-
       scope.addNewStaffInvolved()
-
       scope.newStaffName.should.be.empty
 
     it "should not allow adding the same staff name twice", ->
@@ -164,10 +161,6 @@ describe "ActivitiesController", ->
 
       scope.addNewStaffInvolved()
       scope.selectedActivity.staffInvolved.should.eql [ "kitty" ]
-
-
-
-  #   it "should autocomplete if the characters typed match invloved staff name", ->
 
   describe "removeStaffInvolved", ->
     beforeEach ->
@@ -191,7 +184,7 @@ describe "ActivitiesController", ->
 
       values.staffInvolved = [ "kitty", "teddy" ]
       activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
-      
+
   describe "unique IT systems", ->
 
     fakeActivities1 = [
@@ -297,8 +290,8 @@ describe "ActivitiesController", ->
 
       it "should empty the textbox after system name is entered", ->
         scope.newPaperRecord = "new Form"
-        scope.addNewITSystem()
-        scope.newITSystemName.should.be.empty
+        scope.addNewPaperRecord()
+        scope.newPaperRecord.should.be.empty
 
     describe "removePaperRecord", ->
       beforeEach ->
@@ -313,4 +306,23 @@ describe "ActivitiesController", ->
 
         values.paperRecords = [ "Form A", "Form C" ]
         activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+    describe "unique Paper Record name", ->
+      fakeActivities1 = [
+        { date: "date", description: "play with kitty", paperRecords:  ["a", "b", "c"]},
+        { date: "date", description: "feed ferrets",    paperRecords:  ["b"]},
+        { date: "date", description: "sleep",           paperRecords:  ["a", "e"]}
+      ]
+
+      fakeActivities2 = [
+        { date: "date", description: "play with kitty"},
+        { date: "date", description: "feed ferrets"   },
+        { date: "date", description: "sleep"          }
+      ]
+
+      it "sort out the unique IT System updated across all activities", ->
+        scope.paperRecordslist(fakeActivities1).should.eql ["a", "b", "c", "e"]
+
+      it "return empty list if no IT systems get updated", ->
+        scope.paperRecordslist(fakeActivities2).should.eql []
 

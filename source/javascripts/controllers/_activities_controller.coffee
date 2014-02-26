@@ -10,6 +10,14 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
 
   $scope.selectAllOnClick = (_event) -> _event.target.select()
 
+  uniqueAcrossActivities = (name, activities) ->
+    unique = []
+    for activity in activities
+      if activity[name]?
+        for element in activity[name]
+          unique.push element unless unique.indexOf(element) != -1
+    unique
+
   $scope.addNewStaffInvolved = ->
     $scope.selectedActivity.staffInvolved = [] if $scope.selectedActivity.staffInvolved is undefined
     unless $scope.selectedActivity.staffInvolved.indexOf($scope.newStaffName) != -1
@@ -23,13 +31,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.staffInvolved.splice index, 1
     $scope.save()
 
-  uniqueStaffInvolved = (activities) ->
-    staff = []
-    for activity in activities
-      if activity.staffInvolved?
-        for staffName in activity.staffInvolved
-          staff.push staffName unless staff.indexOf(staffName) != -1
-    staff
+  $scope.staffInvolved = (activities) ->
+    uniqueAcrossActivities("staffInvolved", activities)
 
   $scope.addNewITSystem = ->
     $scope.selectedActivity.itSystems = [] if $scope.selectedActivity.itSystems is undefined
@@ -44,16 +47,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.itSystems.splice index, 1
     $scope.save()
 
-  uniqueITSystems = (activities) ->
-    systems = []
-    for activity in activities
-      if activity.itSystems?
-        for systemName in activity.itSystems
-          systems.push systemName unless systems.indexOf(systemName) != -1
-    systems
-
   $scope.itSystemsUpdated = (activities) ->
-    uniqueITSystems activities
+    uniqueAcrossActivities("itSystems", activities)
 
   $scope.addNewPaperRecord = ->
     $scope.selectedActivity.paperRecords = [] if $scope.selectedActivity.paperRecords is undefined
@@ -67,6 +62,9 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     index = $scope.selectedActivity.paperRecords.indexOf paperRecordName
     $scope.selectedActivity.paperRecords.splice index, 1
     $scope.save()
+
+  $scope.paperRecordslist = (activities) ->
+    uniqueAcrossActivities("paperRecords", activities)
 
   addActivity = (new_activity) ->
     $scope.activities.push new_activity
@@ -96,7 +94,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       addAlert "Updated successfully", "success"
       $scope.newStaffName = ""
       $scope.newITSystemName = ""
-      $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
+      $scope.newPaperRecord = ""
 
   $scope.delete = ->
     activityId = $scope.selectedActivity._id.$oid
@@ -107,7 +105,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   ActivitiesService.getActivities userId, (activities) ->
     addActivity(activity) for activity in activities
     $scope.select activities[0]
-    $scope.staffInvolved = uniqueStaffInvolved($scope.activities)
 
 angular.module('timeline')
   .controller 'ActivitiesController', ActivitiesController
