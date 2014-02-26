@@ -7,7 +7,6 @@ describe "ActivitiesController", ->
   secondActivity = date: "12/11/2011 03:55 PM", description: "Some other description", isAPM: false
   activities = [ firstActivity, secondActivity ]
 
-
   beforeEach module("timeline")
 
   beforeEach inject (_$rootScope_) ->
@@ -240,8 +239,8 @@ describe "ActivitiesController", ->
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
 
+  describe "IT Systems", ->
 
-  describe "addNewITSystem", ->
     beforeEach ->
       scope.selectedActivity =
         "_id": "$oid": activityId
@@ -250,28 +249,44 @@ describe "ActivitiesController", ->
         "involveHandoff": values.involveHandoff
         "user_id": "$oid": userId
 
-    it "sends an update to the service", ->
-      values.itSystems = [ "Justin" ]
-      scope.newITSystemName = "Justin"
+    describe "addNewITSystem", ->
+      it "sends an update to the service", ->
+        values.itSystems = [ "Justin" ]
+        scope.newITSystemName = "Justin"
 
-      scope.addNewITSystem()
-      activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+        scope.addNewITSystem()
+        activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
 
-    it "should have newly entered IT System name with all the existing IT Systems", ->
-      scope.selectedActivity.itSystems = [ "system 1" ]
-      scope.newITSystemName = "system 2"
+      it "should have newly entered IT System name with all the existing IT Systems", ->
+        scope.selectedActivity.itSystems = [ "system 1" ]
+        scope.newITSystemName = "system 2"
 
-      scope.addNewITSystem()
-      scope.selectedActivity.itSystems.should.eql [ "system 1", "system 2"]
+        scope.addNewITSystem()
+        scope.selectedActivity.itSystems.should.eql [ "system 1", "system 2"]
 
-    it "should empty the textbox after system name is entered", ->
-      scope.newITSystemName = "new system"
-      scope.addNewITSystem()
-      scope.newITSystemName.should.be.empty
+      it "should not allow adding the same IT system name twice", ->
+        scope.selectedActivity.itSystems = [ "system A" ]
+        scope.newITSystemName = "system A"
 
-    it "should not allow adding the same IT system name twice", ->
-      scope.selectedActivity.itSystems = [ "system A" ]
-      scope.newITSystemName = "system A"
+        scope.addNewITSystem()
+        scope.selectedActivity.itSystems.should.eql [ "system A" ]
 
-      scope.addNewITSystem()
-      scope.selectedActivity.itSystems.should.eql [ "system A" ]
+      it "should empty the textbox after system name is entered", ->
+        scope.newITSystemName = "new system"
+        scope.addNewITSystem()
+        scope.newITSystemName.should.be.empty
+
+    describe "removeITSystem", ->
+      beforeEach ->
+        scope.selectedActivity.itSystems = [ "system A", "system B", "system C" ]
+
+      it "should remove the IT system name from that activity", ->
+        scope.removeITSystem("system B")
+        scope.selectedActivity.itSystems.should.eql [ "system A", "system C" ]
+
+      it "sends an update to the service", ->
+        scope.removeITSystem("system B")
+
+        values.itSystems = [ "system A", "system C" ]
+        activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+

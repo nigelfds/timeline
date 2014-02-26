@@ -85,6 +85,7 @@
                 ul.list-group.it-systems-updated
                   li.list-group-item(ng-repeat="systemName in selectedActivity.itSystems track by $index")
                     | {{systemName}}
+                    button.close(type="button" aria-hidden="true" ng-click="removeITSystem(systemName)") &times;
 
           / .col-xs-3.col-xs-offset-1
           /   form.form-horizontal

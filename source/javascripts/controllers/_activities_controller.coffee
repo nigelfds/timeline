@@ -41,6 +41,11 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     else
       addAlert "Duplicated IT System name"
 
+  $scope.removeITSystem = (systemName) ->
+    index = $scope.selectedActivity.itSystems.indexOf systemName
+    $scope.selectedActivity.itSystems.splice index, 1
+    $scope.save()
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
@@ -58,8 +63,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity = activity
 
   $scope.new = ->
-    length = $scope.activities.length 
-    defaultDate = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")    
+    length = $scope.activities.length
+    defaultDate = moment(new Date(Date.now())).format("DD/MM/YYYY hh:mm A")
     defaultDate = $scope.activities[length - 1].date if length > 0
     defaults = date: defaultDate, description: "New Activity"
 
