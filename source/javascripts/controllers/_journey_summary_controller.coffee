@@ -14,8 +14,20 @@ JourneySummaryController = ($scope) ->
   $scope.numberOfITSystemUpdated = (activities) ->
     uniqueAcrossActivities("itSystems", activities).length
 
+  $scope.countOfITSystemUpdates = (activities) ->
+    sum = 0
+    for activity in activities
+      sum += activity.itSystems.length if activity.itSystems
+    sum
+
   $scope.numberOfPaperRecordUpdated = (activities) ->
     uniqueAcrossActivities("paperRecords", activities).length
+
+  $scope.countOfPaperRecordUpdates = (activities) ->
+    sum = 0
+    for activity in activities
+      sum += activity.paperRecords.length if activity.paperRecords
+    sum
 
   numOccurrenceOf = (name, activities) ->
     occurrence = 0
@@ -37,6 +49,7 @@ JourneySummaryController = ($scope) ->
 
   $scope.numberOfAPMActivities = (activities) ->
     numOccurrenceOf( "isAPM", activities)
+
 
 angular.module('timeline')
   .controller 'JourneySummaryController', JourneySummaryController

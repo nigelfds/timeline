@@ -36,7 +36,7 @@ describe "JourneySummaryController", ->
     it "display 0 if there is no contact", ->
       scope.numberOfContacts(fakeActivities1).should.eql 0
 
-  describe "unique IT systems", ->
+  describe "IT systems", ->
 
     fakeActivities1 = [
       { date: "date", description: "play with kitty", itSystems:  ["a", "b", "c"]},
@@ -49,6 +49,10 @@ describe "JourneySummaryController", ->
       { date: "date", description: "feed ferrets"   },
       { date: "date", description: "sleep"          }
     ]
+
+    describe "count of IT systems", ->
+      it "returns the correct count", ->
+        scope.countOfITSystemUpdates(fakeActivities1).should.eql 6
 
     describe "numberOfITSystemUpdated", ->
 
@@ -78,7 +82,8 @@ describe "JourneySummaryController", ->
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
 
-  describe "total number of paper record updated", ->
+
+  describe "Paper record updated", ->
 
     fakeActivities1 = [
       { date: "date", description: "play with kitty", paperRecords: ["a", "b", "c"]},
@@ -92,11 +97,21 @@ describe "JourneySummaryController", ->
       { date: "date", description: "sleep"          }
     ]
 
-    it "display the total number of paper records", ->
-      scope.numberOfPaperRecordUpdated(fakeActivities1).should.eql 4
+    describe "count of paper record updates", ->
 
-    it "display 0 if no paper records get updated", ->
-      scope.numberOfPaperRecordUpdated(fakeActivities2).should.eql 0
+      it "returns the correct count", ->
+        scope.countOfPaperRecordUpdates(fakeActivities1).should.eql 6
+
+      it "returns zero if there are none"
+        scope.countOfPaperRecordUpdates(fakeActivities2).should.eql 0
+
+    describe "unique paper records", ->
+
+      it "display the total number of paper records", ->
+        scope.numberOfPaperRecordUpdated(fakeActivities1).should.eql 4
+
+      it "display 0 if no paper records get updated", ->
+        scope.numberOfPaperRecordUpdated(fakeActivities2).should.eql 0
 
 
   describe "therapeutic contributions", ->

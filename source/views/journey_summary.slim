@@ -19,11 +19,19 @@
       li.list-group-item
         span.badge
           | {{numberOfITSystemUpdated(activities)}}
-        | IT Systems updated
+        | Different IT Systems
+      li.list-group-item
+        span.badge
+          | {{countOfITSystemUpdates(activities)}}
+        | Updates to IT Systems
       li.list-group-item
         span.badge
           | {{numberOfPaperRecordUpdated(activities)}}
         | Paper records updated
+      li.list-group-item
+        span.badge
+          | {{countOfPaperRecordUpdates(activities)}}
+        | Updates to paper records
       li.list-group-item
         span.badge
           | {{numberOfTherapeuticContributions(activities)}} of {{numberOfAPMActivities(activities)}}
