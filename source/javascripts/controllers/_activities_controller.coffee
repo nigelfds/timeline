@@ -46,6 +46,20 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.itSystems.splice index, 1
     $scope.save()
 
+  uniqueITSystems = (activities) ->
+    systems = []
+    for activity in activities
+      if activity.itSystems?
+        for systemName in activity.itSystems
+          systems.push systemName unless systems.indexOf(systemName) != -1
+    systems
+
+  $scope.itSystemsUpdated = (activities) ->
+    uniqueITSystems activities
+
+  $scope.numberOfITSystemUpdated = (activities) ->
+    uniqueITSystems(activities).length
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)

@@ -77,7 +77,7 @@
               .form-group
                 label.control-label(for="itSystem") IT System updated
                 .input-group
-                  input.form-control(type="text" name="newITSystemName" ng-model="newITSystemName" required autocomplete="off")
+                  input.form-control(type="text" name="newITSystemName" typeahead="system for system in itSystemsUpdated(activities) | filter:$viewValue" ng-model="newITSystemName" required autocomplete="off")
                   span.input-group-btn
                     button.btn.btn-default(ng-click="addNewITSystem()" ng-disabled="itSystemForm.$invalid") +
 
@@ -142,5 +142,9 @@ alert.messages(ng-show="alerts.length != 0")
       span.badge
         | {{numberOfStaffInvolved(activities)}}
       | Number of staff involved 
+    li.list-group-item
+      span.badge
+        | {{numberOfITSystemUpdated(activities)}}
+      | Number of IT Systems updated
 
 
