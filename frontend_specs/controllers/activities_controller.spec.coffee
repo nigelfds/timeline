@@ -264,3 +264,40 @@ describe "ActivitiesController", ->
         values.itSystems = [ "system A", "system C" ]
         activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
 
+  describe "Paper Records", ->
+
+    beforeEach ->
+      scope.selectedActivity =
+        "_id": "$oid": activityId
+        "date": values.date
+        "description": values.description
+        "involveHandoff": values.involveHandoff
+        "user_id": "$oid": userId
+
+    describe "addNewPaperRecord", ->
+      it "sends an update to the service", ->
+        values.paperRecords = [ "Form A" ]
+        scope.newPaperRecord = "Form A"
+
+        scope.addNewPaperRecord()
+        activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+
+      it "should have newly entered IT System name with all the existing IT Systems", ->
+        scope.selectedActivity.paperRecords = [ "Form A" ]
+        scope.newPaperRecord = "Form B"
+
+        scope.addNewPaperRecord()
+        scope.selectedActivity.paperRecords.should.eql [ "Form A", "Form B"]
+
+      it "should not allow adding the same IT system name twice", ->
+        scope.selectedActivity.paperRecords = [ "Form A" ]
+        scope.newPaperRecord = "Form A"
+
+        scope.addNewPaperRecord()
+        scope.selectedActivity.paperRecords.should.eql [ "Form A" ]
+
+      it "should empty the textbox after system name is entered", ->
+        scope.newPaperRecord = "new Form"
+        scope.addNewITSystem()
+        scope.newITSystemName.should.be.empty
+

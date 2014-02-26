@@ -54,6 +54,14 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   $scope.itSystemsUpdated = (activities) ->
     uniqueITSystems activities
 
+  $scope.addNewPaperRecord = ->
+    $scope.selectedActivity.paperRecords = [] if $scope.selectedActivity.paperRecords is undefined
+    unless $scope.selectedActivity.paperRecords.indexOf($scope.newPaperRecord) != -1
+      $scope.selectedActivity.paperRecords.push $scope.newPaperRecord
+      $scope.save()
+    else
+      addAlert "Duplicated Paper Record name"
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)
