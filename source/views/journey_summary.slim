@@ -7,16 +7,20 @@
       li.list-group-item
         span.badge
           | {{numberOfHandoffs(activities)}}
-        | Number of handoffs
+        | Handoffs
       li.list-group-item
         span.badge
           | {{numberOfContacts(activities)}}
-        | Number of direct contacts
+        | Direct contacts
       li.list-group-item
         span.badge
           | {{numberOfStaffInvolved(activities)}}
-        | Number of staff involved 
+        | Staff involved 
       li.list-group-item
         span.badge
           | {{numberOfITSystemUpdated(activities)}}
-        | Number of IT Systems updated
+        | IT Systems updated
+      li.list-group-item
+        span.badge
+          | {{numberOfTherapeuticContributions(activities)}} of {{numberOfAPMActivities(activities)}}
+        | APM therapeutic contributions

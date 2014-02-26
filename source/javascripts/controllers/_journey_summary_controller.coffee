@@ -34,5 +34,18 @@ JourneySummaryController = ($scope) ->
       sum += 1 if activity.involveContact
     sum
 
+
+  $scope.numberOfTherapeuticContributions = (activities) ->
+    sum = 0
+    for activity in activities
+      sum++ if activity.isAPM and activity.contributesTherapeutically
+    sum
+
+  $scope.numberOfAPMActivities = (activities) ->
+    sum = 0
+    for activity in activities
+      sum++ if activity.isAPM
+    sum
+
 angular.module('timeline')
   .controller 'JourneySummaryController', JourneySummaryController

@@ -40,6 +40,10 @@
                   label
                     input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()")
                     | Was this activity part of the APM clinic?
+                .checkbox(ng-show="selectedActivity.isAPM")
+                  label
+                    input(type="checkbox" name="contributesTherapeutically" ng-model="selectedActivity.contributesTherapeutically" ng-change="save()") 
+                    | Did this activity contribute to the therapeutic outcome?
 
           form.form-horizontal
             .form-group

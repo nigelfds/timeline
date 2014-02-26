@@ -77,3 +77,49 @@ describe "JourneySummaryController", ->
 
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
+
+  describe "therapeutic contributions", ->
+    activities = [
+      { date: "date", description: "play with kitty" },
+      { date: "date", description: "feed ferrets" },
+      { date: "date", description: "sleep" }
+    ]
+
+    it "returns zero if there are none", ->
+      result = scope.numberOfTherapeuticContributions(activities)
+
+      result.should.be.eql 0
+
+    it "returns the correct count", ->
+      activities[0].isAPM = true
+      activities[0].contributesTherapeutically = true
+      activities[1].isAPM = true
+      activities[1].contributesTherapeutically = false
+      activities[2].isAPM = false
+      activities[2].contributesTherapeutically = true
+
+      result = scope.numberOfTherapeuticContributions(activities)
+
+      result.should.be.eql 1
+
+  describe "APM activities", ->
+
+    activities = [
+      { date: "date", description: "play with kitty" },
+      { date: "date", description: "feed ferrets" },
+      { date: "date", description: "sleep" }
+    ]
+
+    it "returns zero if there are none", ->
+      result = scope.numberOfAPMActivities(activities)
+
+      result.should.be.eql 0
+
+    it "returns the correct count", ->
+      activities[0].isAPM = true
+      activities[1].isAPM = true
+      activities[2].isAPM = false
+
+      result = scope.numberOfAPMActivities(activities)
+
+      result.should.be.eql 2
