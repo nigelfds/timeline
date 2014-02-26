@@ -50,12 +50,6 @@ describe "JourneySummaryController", ->
       { date: "date", description: "sleep"          }
     ]
 
-    # it "sort out the unique IT System updated across all activities", ->
-    #   scope.itSystemsUpdated(fakeActivities1).should.eql ["a", "b", "c", "e"]
-
-    # it "return empty list if no IT systems get updated", ->
-    #   scope.itSystemsUpdated(fakeActivities2).should.eql []
-
     describe "numberOfITSystemUpdated", ->
 
       it "display the total number of IT system updated across all activities when there is any", ->

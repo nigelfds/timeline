@@ -192,7 +192,25 @@ describe "ActivitiesController", ->
 
       values.staffInvolved = [ "kitty", "teddy" ]
       activitiesService.updateActivity.should.have.been.calledWith(userId, activityId, values)
+  describe "unique IT systems", ->
 
+    fakeActivities1 = [
+      { date: "date", description: "play with kitty", itSystems:  ["a", "b", "c"]},
+      { date: "date", description: "feed ferrets",    itSystems:  ["c"]},
+      { date: "date", description: "sleep",           itSystems:  ["b", "e"]}
+    ]
+
+    fakeActivities2 = [
+      { date: "date", description: "play with kitty"},
+      { date: "date", description: "feed ferrets"   },
+      { date: "date", description: "sleep"          }
+    ]
+
+    it "sort out the unique IT System updated across all activities", ->
+      scope.itSystemsUpdated(fakeActivities1).should.eql ["a", "b", "c", "e"]
+
+    it "return empty list if no IT systems get updated", ->
+      scope.itSystemsUpdated(fakeActivities2).should.eql []
 
   describe "IT Systems", ->
 
