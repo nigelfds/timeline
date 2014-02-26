@@ -1,50 +1,33 @@
 JourneySummaryController = ($scope) ->
 
-  uniqueStaffInvolved = (activities) ->
-    staff = []
+  uniqueAcrossActivities = (name, activities) ->
+    unique = []
     for activity in activities
-      if activity.staffInvolved?
-        for staffName in activity.staffInvolved
-          staff.push staffName unless staff.indexOf(staffName) != -1
-    staff
+      if activity[name]?
+        for element in activity[name]
+          unique.push element unless unique.indexOf(element) != -1
+    unique
 
   $scope.numberOfStaffInvolved = (activities) ->
-    uniqueStaffInvolved(activities).length
-
-  uniqueITSystems = (activities) ->
-    systems = []
-    for activity in activities
-      if activity.itSystems?
-        for systemName in activity.itSystems
-          systems.push systemName unless systems.indexOf(systemName) != -1
-    systems
+    uniqueAcrossActivities("staffInvolved", activities).length
 
   $scope.numberOfITSystemUpdated = (activities) ->
-    uniqueITSystems(activities).length
-
-  uniquePaperRecords = (activities) ->
-    paperRecords = []
-    for activity in activities
-      if activity.paperRecords?
-        for paperName in activity.paperRecords
-          paperRecords.push paperName unless paperRecords.indexOf(paperName) != -1
-    paperRecords
+    uniqueAcrossActivities("itSystems", activities).length
 
   $scope.numberOfPaperRecordUpdated = (activities) ->
-    uniquePaperRecords(activities).length
+    uniqueAcrossActivities("paperRecords", activities).length
+
+  numOccurrenceOf = (name, activities) ->
+    occurrence = 0
+    for activity in activities
+      occurrence += 1 if activity[name]
+    occurrence
 
   $scope.numberOfHandoffs = (activities) ->
-    sum = 0
-    for activity in activities
-      sum += 1 if activity.involveHandoff
-    sum
+    numOccurrenceOf( "involveHandoff", activities)
 
   $scope.numberOfContacts = (activities) ->
-    sum = 0
-    for activity in activities
-      sum += 1 if activity.involveContact
-    sum
-
+    numOccurrenceOf( "involveContact", activities)
 
   $scope.numberOfTherapeuticContributions = (activities) ->
     sum = 0
@@ -53,10 +36,7 @@ JourneySummaryController = ($scope) ->
     sum
 
   $scope.numberOfAPMActivities = (activities) ->
-    sum = 0
-    for activity in activities
-      sum++ if activity.isAPM
-    sum
+    numOccurrenceOf( "isAPM", activities)
 
 angular.module('timeline')
   .controller 'JourneySummaryController', JourneySummaryController
