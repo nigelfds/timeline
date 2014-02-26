@@ -1,5 +1,5 @@
 JourneySummaryController = ($scope) ->
- 
+
   uniqueStaffInvolved = (activities) ->
     staff = []
     for activity in activities
@@ -21,6 +21,17 @@ JourneySummaryController = ($scope) ->
 
   $scope.numberOfITSystemUpdated = (activities) ->
     uniqueITSystems(activities).length
+
+  uniquePaperRecords = (activities) ->
+    paperRecords = []
+    for activity in activities
+      if activity.paperRecords?
+        for paperName in activity.paperRecords
+          paperRecords.push paperName unless paperRecords.indexOf(paperName) != -1
+    paperRecords
+
+  $scope.numberOfPaperRecordUpdated = (activities) ->
+    uniquePaperRecords(activities).length
 
   $scope.numberOfHandoffs = (activities) ->
     sum = 0
