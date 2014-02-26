@@ -1,0 +1,97 @@
+.selected-activity
+  .panel.panel-info
+    .panel-heading
+      h4.panel-title Selected Activity Details
+
+      form.form-inline.pull-right
+        .form-group
+          button.btn.btn-primary(ng-click="new()") New Activity
+        .form-group
+          button.btn.btn-danger(ng-click="delete()" ng-show="selectedActivity") Delete Activity
+
+
+    .panel-body(ng-show="selectedActivity")
+      form.form-horizontal(role="form")
+        .form-group
+          label.col-xs-1.control-label(for="date" ) Date
+          .col-xs-2
+            datetimepicker
+
+      form.form-horizontal
+        .form-group
+          label.col-xs-1.control-label(for="description" ) Description
+          .col-xs-11
+            input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-change="save()" ng-click="selectAllOnClick($event)")
+
+      form.form-horizontal
+        .form-group
+          .col-xs-11.col-xs-offset-1
+            .checkbox
+              label
+                input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM" ng-change="save()")
+                | Was this activity part of the APM clinic?
+            .checkbox(ng-show="selectedActivity.isAPM")
+              label
+                input(type="checkbox" name="contributesTherapeutically" ng-model="selectedActivity.contributesTherapeutically" ng-change="save()") 
+                | Did this activity contribute to the therapeutic outcome?
+
+      form.form-horizontal
+        .form-group
+          .col-xs-11.col-xs-offset-1
+            .checkbox
+              label
+                input(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff" ng-change="save()")
+                | Did this activity involve a handoff?
+
+      form.form-horizontal
+        .form-group
+          .col-xs-11.col-xs-offset-1
+            .checkbox
+              label
+                input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact" ng-change="save()") 
+                | Did this activity involve direct contact with the client?
+
+      .col-xs-3.col-xs-offset-1
+        form.form-horizontal(name="staffInvolvedForm" role="form" novalidate)
+          .form-group
+            label.control-label(for="staffInvolved") Staff involved
+            .input-group
+              input.form-control(type="text" name="newStaffName" typeahead="staff for staff in staffInvolved(activities) | filter:$viewValue" ng-model="newStaffName" required autocomplete="off")
+              span.input-group-btn
+                button.btn.btn-default(ng-click="addNewStaffInvolved()" ng-disabled="staffInvolvedForm.$invalid") +
+
+          .form-group
+            ul.list-group.staff-involved
+              li.list-group-item(ng-repeat="staffName in selectedActivity.staffInvolved track by $index")
+                | {{staffName}}
+                button.close(type="button" aria-hidden="true" ng-click="removeStaffInvolved(staffName)") &times;
+
+      .col-xs-3.col-xs-offset-1
+        form.form-horizontal(name="itSystemForm" role="form" novalidate)
+          .form-group
+            label.control-label(for="itSystem") IT System updated
+            .input-group
+              input.form-control(type="text" name="newITSystemName" typeahead="system for system in itSystemsUpdated(activities) | filter:$viewValue" ng-model="newITSystemName" required autocomplete="off")
+              span.input-group-btn
+                button.btn.btn-default(ng-click="addNewITSystem()" ng-disabled="itSystemForm.$invalid") +
+
+          .form-group
+            ul.list-group.it-systems-updated
+              li.list-group-item(ng-repeat="systemName in selectedActivity.itSystems track by $index")
+                | {{systemName}}
+                button.close(type="button" aria-hidden="true" ng-click="removeITSystem(systemName)") &times;
+
+      .col-xs-3.col-xs-offset-1
+        form.form-horizontal(name="paperRecordForm" role="form" novalidate)
+          .form-group
+            label.control-label(for="paperRecord") Paper Record updated
+            .input-group
+              input.form-control(type="text" name="newPaperRecord" typeahead="paperName for paperName in paperRecordslist(activities) | filter:$viewValue" ng-model="newPaperRecord" required autocomplete="off")
+              span.input-group-btn
+                button.btn.btn-default(ng-click="addNewPaperRecord()" ng-disabled="paperRecordForm.$invalid") +
+
+          .form-group
+            ul.list-group.paper-records-updated
+              li.list-group-item(ng-repeat="paperRecordName in selectedActivity.paperRecords track by $index")
+                | {{paperRecordName}}
+                button.close(type="button" aria-hidden="true" ng-click="removePaperRecord(paperRecordName)") &times;

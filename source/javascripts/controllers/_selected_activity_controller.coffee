@@ -1,0 +1,2 @@
+SelectedActivityController = ($scope) ->
+

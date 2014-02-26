@@ -1,0 +1,11 @@
+.activities-list
+  .panel.panel-info
+    .panel-heading
+      h4.name.panel-title
+        | List of Activities
+    .panel-body
+      .list-group
+        a.list-group-item.list-group-item-default(ng-repeat="activity in activities" ng-click="select(activity)" ng-class="activity == selectedActivity ? 'active' : ''")
+          span.badge
+            | {{activity.date}}
+          | {{activity.description}}

@@ -6,6 +6,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
 
   $scope.alerts = new MessagesList($timeout)
   addAlert = (text, type) -> $scope.alerts.add text, type
+  
   $scope.activities = []
 
   $scope.selectAllOnClick = (_event) -> _event.target.select()
