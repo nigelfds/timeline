@@ -101,7 +101,7 @@
                     button.btn.btn-default(ng-click="addNewPaperRecord()" ng-disabled="paperRecordForm.$invalid") +
 
               .form-group
-                ul.list-group.it-systems-updated
+                ul.list-group.paper-records-updated
                   li.list-group-item(ng-repeat="paperRecordName in selectedActivity.paperRecords track by $index")
                     | {{paperRecordName}}
                     button.close(type="button" aria-hidden="true" ng-click="removePaperRecord(paperRecordName)") &times;
