@@ -67,6 +67,17 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     $scope.selectedActivity.paperRecords.splice index, 1
     $scope.save()
 
+  uniquePaperRecords = (activities) ->
+    paperRecords = []
+    for activity in activities
+      if activity.paperRecords?
+        for paperName in activity.paperRecords
+          paperRecords.push paperName unless paperRecords.indexOf(paperName) != -1
+    paperRecords
+
+  $scope.paperRecordslist = (activities) ->
+    uniquePaperRecords activities
+
   addAlert = (alert) ->
     $scope.alerts.push alert
     $timeout(removeAlert, 5000)

@@ -96,7 +96,7 @@
               .form-group
                 label.control-label(for="paperRecord") Paper Record updated
                 .input-group
-                  input.form-control(type="text" name="newPaperRecord" ng-model="newPaperRecord" required autocomplete="off")
+                  input.form-control(type="text" name="newPaperRecord" typeahead="paperName for paperName in paperRecordslist(activities) | filter:$viewValue" ng-model="newPaperRecord" required autocomplete="off")
                   span.input-group-btn
                     button.btn.btn-default(ng-click="addNewPaperRecord()" ng-disabled="paperRecordForm.$invalid") +
 
@@ -108,7 +108,6 @@
 
     .col-xs-12
       = partial "views/user_details"
-
 
   -if false
     .row
