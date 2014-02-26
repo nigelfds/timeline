@@ -24,15 +24,17 @@ angular.module('timeline')
         updateTimeline = ->
           timelineData = scope.activities.map mapToTimeline
           timeline.setData timelineData
+          updateTimelineOptions()
 
         timeline = new links.Timeline(element.children()[0])
         options =
           width:  "100%"
           minHeight: 400
           style: "box"
-          zoomMax: 31536000000 # one year in milliseconds
           zoomMin: 86400000 # one day in milliseconds
           customStackOrder: (item1, item2) -> item1.start - item2.start
+          animateZoom: false
+          animate: false
 
         timeline.draw [], options
 
@@ -43,5 +45,32 @@ angular.module('timeline')
           scope.$apply()
 
         links.events.addListener timeline, 'select', onSelect
+
+        # TOTALLY UNTESTED CODE *****************************
+        links.events.addListener timeline, 'rangechanged', ->
+          updateTimelineOptions()
+
+        updateTimelineOptions = ->
+          moments = []
+          for activity in scope.activities
+            moments.push moment(activity.date, "DD/MM/YYYY hh:mm A")
+          moments.sort (x, y) -> x.toDate() - y.toDate()
+
+          maxMoment = moments[moments.length - 1]
+          minMoment = moments[0]
+
+          visibleRange = timeline.getVisibleChartRange()
+
+          range = visibleRange.end.getTime() - visibleRange.start.getTime()
+          range = 0.1 * range
+
+          maxMoment.add("ms", range)
+          minMoment.subtract("ms", range)
+
+          max = maxMoment.toDate()
+          min = minMoment.toDate()
+          timeline.options.max = max
+          timeline.options.min = min
+          timeline.options.zoomMax = max - min
   ]
 )

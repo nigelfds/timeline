@@ -12,6 +12,8 @@ describe "Timeline Directive", ->
     scope = $rootScope.$new()
 
     timeline = sinon.createStubInstance links.Timeline
+    timeline.getVisibleChartRange.returns start: new Date(), end: new Date()
+    timeline.options = {}
     sinon.stub(links, "Timeline").returns timeline
 
     listeners = {}

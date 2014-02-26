@@ -8,6 +8,7 @@ angular.module('timeline')
         format: "dd/mm/yyyy hh:ii P"
         autoclose: true
         todayHighlight: true
+        todayBtn: true
         keyboardNavigation: false
       $(element.children()[0]).datetimepicker options
   ]

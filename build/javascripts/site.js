@@ -104,15 +104,35 @@
   var ActivitiesController;
 
   ActivitiesController = function($scope, $routeParams, $timeout, ActivitiesService, UsersService) {
-    var addActivity, addAlert, removeActivity, removeAlert, uniqueITSystems, uniqueStaffInvolved, userId;
+    var addActivity, addAlert, removeActivity, uniqueAcrossActivities, userId;
     userId = $routeParams.userId;
     UsersService.getUser(userId, function(user) {
       return $scope.user = user;
     });
-    $scope.alerts = [];
+    $scope.alerts = new MessagesList($timeout);
+    addAlert = function(text, type) {
+      return $scope.alerts.add(text, type);
+    };
     $scope.activities = [];
     $scope.selectAllOnClick = function(_event) {
       return _event.target.select();
+    };
+    uniqueAcrossActivities = function(name, activities) {
+      var activity, element, unique, _i, _j, _len, _len1, _ref;
+      unique = [];
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity[name] != null) {
+          _ref = activity[name];
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            element = _ref[_j];
+            if (unique.indexOf(element) === -1) {
+              unique.push(element);
+            }
+          }
+        }
+      }
+      return unique;
     };
     $scope.addNewStaffInvolved = function() {
       if ($scope.selectedActivity.staffInvolved === void 0) {
@@ -122,7 +142,7 @@
         $scope.selectedActivity.staffInvolved.push($scope.newStaffName);
         return $scope.save();
       } else {
-        return addAlert("Existing Staff Member Name!");
+        return addAlert("Existing Staff Member Name!", "danger");
       }
     };
     $scope.removeStaffInvolved = function(staffName) {
@@ -131,22 +151,8 @@
       $scope.selectedActivity.staffInvolved.splice(index, 1);
       return $scope.save();
     };
-    uniqueStaffInvolved = function(activities) {
-      var activity, staff, staffName, _i, _j, _len, _len1, _ref;
-      staff = [];
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.staffInvolved != null) {
-          _ref = activity.staffInvolved;
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            staffName = _ref[_j];
-            if (staff.indexOf(staffName) === -1) {
-              staff.push(staffName);
-            }
-          }
-        }
-      }
-      return staff;
+    $scope.staffInvolved = function(activities) {
+      return uniqueAcrossActivities("staffInvolved", activities);
     };
     $scope.addNewITSystem = function() {
       if ($scope.selectedActivity.itSystems === void 0) {
@@ -156,7 +162,7 @@
         $scope.selectedActivity.itSystems.push($scope.newITSystemName);
         return $scope.save();
       } else {
-        return addAlert("Duplicated IT System name");
+        return addAlert("Duplicated IT System name", "danger");
       }
     };
     $scope.removeITSystem = function(systemName) {
@@ -165,25 +171,8 @@
       $scope.selectedActivity.itSystems.splice(index, 1);
       return $scope.save();
     };
-    uniqueITSystems = function(activities) {
-      var activity, systemName, systems, _i, _j, _len, _len1, _ref;
-      systems = [];
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.itSystems != null) {
-          _ref = activity.itSystems;
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            systemName = _ref[_j];
-            if (systems.indexOf(systemName) === -1) {
-              systems.push(systemName);
-            }
-          }
-        }
-      }
-      return systems;
-    };
     $scope.itSystemsUpdated = function(activities) {
-      return uniqueITSystems(activities);
+      return uniqueAcrossActivities("itSystems", activities);
     };
     $scope.addNewPaperRecord = function() {
       if ($scope.selectedActivity.paperRecords === void 0) {
@@ -193,7 +182,7 @@
         $scope.selectedActivity.paperRecords.push($scope.newPaperRecord);
         return $scope.save();
       } else {
-        return addAlert("Duplicated Paper Record name");
+        return addAlert("Duplicated Paper Record name", "danger");
       }
     };
     $scope.removePaperRecord = function(paperRecordName) {
@@ -202,12 +191,8 @@
       $scope.selectedActivity.paperRecords.splice(index, 1);
       return $scope.save();
     };
-    addAlert = function(alert) {
-      $scope.alerts.push(alert);
-      return $timeout(removeAlert, 5000);
-    };
-    removeAlert = function() {
-      return $scope.alerts.shift();
+    $scope.paperRecordslist = function(activities) {
+      return uniqueAcrossActivities("paperRecords", activities);
     };
     addActivity = function(new_activity) {
       return $scope.activities.push(new_activity);
@@ -246,10 +231,10 @@
         }
       }
       return ActivitiesService.updateActivity(userId, activityId, values, function(success) {
-        addAlert("Updated successfully");
+        addAlert("Updated successfully", "success");
         $scope.newStaffName = "";
         $scope.newITSystemName = "";
-        return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
+        return $scope.newPaperRecord = "";
       });
     };
     $scope["delete"] = function() {
@@ -266,8 +251,7 @@
         activity = activities[_i];
         addActivity(activity);
       }
-      $scope.select(activities[0]);
-      return $scope.staffInvolved = uniqueStaffInvolved($scope.activities);
+      return $scope.select(activities[0]);
     });
   };
 
@@ -278,68 +262,71 @@
   var JourneySummaryController;
 
   JourneySummaryController = function($scope) {
-    var uniqueITSystems, uniqueStaffInvolved;
-    uniqueStaffInvolved = function(activities) {
-      var activity, staff, staffName, _i, _j, _len, _len1, _ref;
-      staff = [];
+    var numOccurrenceOf, uniqueAcrossActivities;
+    uniqueAcrossActivities = function(name, activities) {
+      var activity, element, unique, _i, _j, _len, _len1, _ref;
+      unique = [];
       for (_i = 0, _len = activities.length; _i < _len; _i++) {
         activity = activities[_i];
-        if (activity.staffInvolved != null) {
-          _ref = activity.staffInvolved;
+        if (activity[name] != null) {
+          _ref = activity[name];
           for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            staffName = _ref[_j];
-            if (staff.indexOf(staffName) === -1) {
-              staff.push(staffName);
+            element = _ref[_j];
+            if (unique.indexOf(element) === -1) {
+              unique.push(element);
             }
           }
         }
       }
-      return staff;
+      return unique;
     };
     $scope.numberOfStaffInvolved = function(activities) {
-      return uniqueStaffInvolved(activities).length;
-    };
-    uniqueITSystems = function(activities) {
-      var activity, systemName, systems, _i, _j, _len, _len1, _ref;
-      systems = [];
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.itSystems != null) {
-          _ref = activity.itSystems;
-          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-            systemName = _ref[_j];
-            if (systems.indexOf(systemName) === -1) {
-              systems.push(systemName);
-            }
-          }
-        }
-      }
-      return systems;
+      return uniqueAcrossActivities("staffInvolved", activities).length;
     };
     $scope.numberOfITSystemUpdated = function(activities) {
-      return uniqueITSystems(activities).length;
+      return uniqueAcrossActivities("itSystems", activities).length;
+    };
+    $scope.countOfITSystemUpdates = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.itSystems) {
+          sum += activity.itSystems.length;
+        }
+      }
+      return sum;
+    };
+    $scope.numberOfPaperRecordUpdated = function(activities) {
+      return uniqueAcrossActivities("paperRecords", activities).length;
+    };
+    $scope.countOfPaperRecordUpdates = function(activities) {
+      var activity, sum, _i, _len;
+      sum = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity.paperRecords) {
+          sum += activity.paperRecords.length;
+        }
+      }
+      return sum;
+    };
+    numOccurrenceOf = function(name, activities) {
+      var activity, occurrence, _i, _len;
+      occurrence = 0;
+      for (_i = 0, _len = activities.length; _i < _len; _i++) {
+        activity = activities[_i];
+        if (activity[name]) {
+          occurrence += 1;
+        }
+      }
+      return occurrence;
     };
     $scope.numberOfHandoffs = function(activities) {
-      var activity, sum, _i, _len;
-      sum = 0;
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.involveHandoff) {
-          sum += 1;
-        }
-      }
-      return sum;
+      return numOccurrenceOf("involveHandoff", activities);
     };
     $scope.numberOfContacts = function(activities) {
-      var activity, sum, _i, _len;
-      sum = 0;
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.involveContact) {
-          sum += 1;
-        }
-      }
-      return sum;
+      return numOccurrenceOf("involveContact", activities);
     };
     $scope.numberOfTherapeuticContributions = function(activities) {
       var activity, sum, _i, _len;
@@ -353,15 +340,7 @@
       return sum;
     };
     return $scope.numberOfAPMActivities = function(activities) {
-      var activity, sum, _i, _len;
-      sum = 0;
-      for (_i = 0, _len = activities.length; _i < _len; _i++) {
-        activity = activities[_i];
-        if (activity.isAPM) {
-          sum++;
-        }
-      }
-      return sum;
+      return numOccurrenceOf("isAPM", activities);
     };
   };
 
@@ -369,12 +348,42 @@
 
 }).call(this);
 (function() {
+  var MessagesList,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MessagesList = (function(_super) {
+    __extends(MessagesList, _super);
+
+    function MessagesList(timeout) {
+      this.timeout = timeout;
+      MessagesList.__super__.constructor.call(this);
+    }
+
+    MessagesList.prototype.add = function(text, type) {
+      var _this = this;
+      this.push({
+        text: text,
+        type: type
+      });
+      return this.timeout((function() {
+        return _this.shift();
+      }), 5000);
+    };
+
+    return MessagesList;
+
+  })(Array);
+
+  window.MessagesList = MessagesList;
+
+}).call(this);
+(function() {
   var UserDetailsController;
 
   UserDetailsController = function($scope, $timeout, UsersService) {
-    var addMessage, removeAlert;
-    $scope.messages = [];
-    $scope.save = function(user) {
+    $scope.messages = new MessagesList($timeout);
+    return $scope.save = function(user) {
       var property, userId, value, values;
       userId = user._id.$oid;
       values = {};
@@ -386,22 +395,12 @@
       }
       return UsersService.updateUser(userId, values, function(success) {
         if (success) {
-          addMessage("Updated successfully", "success");
+          $scope.messages.add("Updated successfully", "success");
         }
         if (!success) {
-          return addMessage("Update failed", "danger");
+          return $scope.messages.add("Update failed", "danger");
         }
       });
-    };
-    addMessage = function(text, type) {
-      $scope.messages.push({
-        text: text,
-        type: type
-      });
-      return $timeout(removeAlert, 5000);
-    };
-    return removeAlert = function() {
-      return $scope.messages.shift();
     };
   };
 
