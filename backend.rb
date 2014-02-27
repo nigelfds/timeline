@@ -114,4 +114,27 @@ class Backend < Sinatra::Base
     return error 404 if result["n"] != 1
   end
 
+  get '/download' do
+    require 'csv'
+
+    filename = 'foo'
+    temp_file = Tempfile.new([filename, '.csv']).path
+
+    header = ['UR Number', 'Name', 'Age', 'Gender' ]
+
+    CSV.open( temp_file, 'w',
+              :write_headers => true,
+              :headers       => header ) do |csv|
+
+      db['users'].find().each do |user|
+        data =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
+        csv << data
+      end
+
+    end
+
+    send_file(temp_file, :disposition => 'attachment', :filename => filename);
+
+  end
+
 end
