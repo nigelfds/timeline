@@ -37,14 +37,6 @@ describe "Timeline Directive", ->
     @execute()
     timeline.draw.should.be.calledWith []
 
-  xit "stacks the activities in date order", ->
-    options =
-      width:  "100%"
-      minHeight: "400px"
-      style: "box"
-      zoomMax: 31536000000 # one year in milliseconds
-      zoomMin: 86400000 # one day in milliseconds
-
   describe "select item on the timeline", ->
 
     beforeEach ->
