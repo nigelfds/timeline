@@ -194,6 +194,30 @@ describe 'User API' do
         put "#{url_path}/52eeec750004deaf4d00000b", update_name.to_json
         last_response.status.should eq(400)
       end
+
+      describe "duplicated UR number" do
+        let(:user1_ur_num) { '007' }
+        let(:user1) { {:name => "Bob", :urNumber => user1_ur_num} }
+        let(:user2_id) { 
+          user2 = {:name => "Lily", :urNumber => '008' }
+          db_users.insert user2
+        }
+
+        before do
+          db_users.insert user1
+          put "#{url_path}/#{user2_id}", { "urNumber" => user1_ur_num }.to_json
+        end
+
+        it "should return error response" do
+          last_response.status.should eq(500)
+          last_response.body.should eq("UR Number already exists")
+        end
+
+        it "should not update the user ur number" do
+          user2 = db_users.find_one("_id" => user2_id)
+          user2['urNumber'].should eq '008'
+        end
+      end
     end
   end
 end

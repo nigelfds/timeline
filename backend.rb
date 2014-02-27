@@ -40,11 +40,7 @@ class Backend < Sinatra::Base
         body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
         status 200
       rescue Mongo::OperationFailure => err
-
-        message = err.error_code == 11000 ?
-                    "UR Number already exists" :
-                    "Internal Error"
-        halt 500, message
+        halt 500, db_error_message(err.error_code)
       end
 
     else
@@ -53,18 +49,30 @@ class Backend < Sinatra::Base
   end
 
   put '/users/:id' do
-    id = BSON.ObjectId(params[:id])
-    new_values = JSON.parse(request.body.read)
 
-    result = db["users"].update({"_id" => id}, {"$set" => new_values})
+    begin
+      id = BSON.ObjectId(params[:id])
+      new_values = JSON.parse(request.body.read)
 
-    unless result["updatedExisting"]
-      error 400, result.to_json
+      result = db["users"].update({"_id" => id}, {"$set" => new_values})
+
+      unless result["updatedExisting"]
+        error 400, result.to_json
+      end
+
+    rescue Mongo::OperationFailure => err
+
+      halt 500, db_error_message(err.error_code)
     end
+
   end
 
   def isValidUser(patient)
     patient["name"]
+  end
+
+  def db_error_message error_code
+    ( error_code == 11000 || error_code == 11001 ) ? "UR Number already exists" : "Internal Error"
   end
 
   # ==============================================================================================
