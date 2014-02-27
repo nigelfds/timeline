@@ -33,46 +33,26 @@ class Backend < Sinatra::Base
 
   post '/users' do
     body = JSON.parse(request.body.read)
-    if isValidUser(body)
+    halt 400, 'Invalid user details entered' unless isValidUser(body)
 
-      begin
-        id = db["users"].insert(body).to_s
-        body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
-        status 200
-      rescue Mongo::OperationFailure => err
-        halt 500, db_error_message(err.error_code)
-      end
-
-    else
-      error 400
+    begin
+      id = db["users"].insert(body).to_s
+      body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
+      status 200
+    rescue => err
+      halt 500, db_error_message[err.error_code]
     end
   end
 
   put '/users/:id' do
-
     begin
       id = BSON.ObjectId(params[:id])
       new_values = JSON.parse(request.body.read)
-
       result = db["users"].update({"_id" => id}, {"$set" => new_values})
-
-      unless result["updatedExisting"]
-        error 400, result.to_json
-      end
-
-    rescue Mongo::OperationFailure => err
-
-      halt 500, db_error_message(err.error_code)
+      error 400, 'Failed to update user' unless result["updatedExisting"]
+    rescue => err
+      halt 500, db_error_message[err.error_code]
     end
-
-  end
-
-  def isValidUser(patient)
-    patient["name"]
-  end
-
-  def db_error_message error_code
-    ( error_code == 11000 || error_code == 11001 ) ? "UR Number already exists" : "Internal Error"
   end
 
   # ==============================================================================================
