@@ -126,7 +126,10 @@ class Backend < Sinatra::Base
               :write_headers => true,
               :headers       => header ) do |csv|
 
-      csv << ["another", "row"]
+      db['users'].find().each do |user|
+        data =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
+        csv << data
+      end
 
     end
 
