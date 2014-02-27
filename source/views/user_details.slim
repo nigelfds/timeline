@@ -1,10 +1,10 @@
 .user-details(ng-controller="UserDetailsController")
-  .panel.panel-success
+  .panel.panel-info
     .panel-heading 
       h3.panel-title
         | Details for {{user.name}}
     .panel-body
-       form(name="userForm" ng-submit="save(user)")
+      form(name="userForm" ng-submit="save(user)")
         .form-group
           .messages
             ul.list-group
