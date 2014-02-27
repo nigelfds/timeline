@@ -13,7 +13,3 @@
       .col-xs-12
         = partial "views/activities_list"
 
-.messages
-  ul.list-group
-    li.list-group-item.fade(ng-repeat="message in alerts track by $index" ng-class="'list-group-item-' + message.type")
-      | {{message.text}}

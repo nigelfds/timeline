@@ -11,6 +11,11 @@
         .panel-body
           form.form-horizontal(name="selectedActivityForm" role="form")
             .form-group
+              .messages
+                ul.list-group
+                  li.list-group-item.fade(ng-repeat="message in alerts track by $index" ng-class="'list-group-item-' + message.type")
+                    | {{message.text}}
+            .form-group
               label.col-xs-1.control-label(for="date" ) Date
               .col-xs-2
                 datetimepicker
@@ -89,4 +94,4 @@
 
         .panel-footer
           a.btn.btn-danger(ng-click="delete()" ng-show="selectedActivity") Delete this activity
-          a.btn.btn-primary.pull-right(type="submit" ng-click="save()") Save
+          a.btn.btn-primary.pull-right(type="submit" ng-click="save(true)") Save

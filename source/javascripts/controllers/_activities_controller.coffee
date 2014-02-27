@@ -1,6 +1,4 @@
 ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, UsersService) ->
-  angular.element('#activityEditor').modal('show');
-
   userId = $routeParams.userId
 
   UsersService.getUser userId, (user) ->
@@ -89,7 +87,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.selectedActivity = new_activity
       angular.element('#activityEditor').modal('show');
 
-  $scope.save = ->
+  $scope.save = (andClose) ->
     activityId = $scope.selectedActivity._id.$oid
     values = {}
     for property, value of $scope.selectedActivity when property isnt "_id" and property isnt "user_id"
@@ -99,13 +97,13 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.newStaffName = ""
       $scope.newITSystemName = ""
       $scope.newPaperRecord = ""
+      angular.element('#activityEditor').modal('hide') if andClose
 
   $scope.delete = ->
     result = confirm "Are you sure you want to delete this activity?"
     if result
       activityId = $scope.selectedActivity._id.$oid
       ActivitiesService.deleteActivity userId, activityId, (success) ->
-        console.log "ASDDFSAFDSFADS"
         angular.element('#activityEditor').modal('hide');
         removeActivity $scope.selectedActivity
         $scope.select undefined
