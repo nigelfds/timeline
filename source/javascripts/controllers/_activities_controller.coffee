@@ -85,7 +85,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     ActivitiesService.createActivity userId, defaults, (new_activity) ->
       addActivity new_activity
       $scope.selectedActivity = new_activity
-    $('#activityEditor').modal('show');
+      angular.element('#activityEditor').modal('show');
 
   $scope.save = ->
     activityId = $scope.selectedActivity._id.$oid
@@ -99,7 +99,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.newPaperRecord = ""
 
   $scope.delete = ->
-    $('#activityEditor').modal('hide');
+    angular.element('#activityEditor').modal('hide');
     activityId = $scope.selectedActivity._id.$oid
     ActivitiesService.deleteActivity userId, activityId, (success) ->
       removeActivity $scope.selectedActivity

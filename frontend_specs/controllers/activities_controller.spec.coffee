@@ -12,6 +12,9 @@ describe "ActivitiesController", ->
   beforeEach inject (_$rootScope_) ->
     scope = _$rootScope_.$new()
     routeParams = userId: userId
+    sinon.stub(angular, "element", (selector) -> modal: sinon.stub())
+
+  afterEach -> angular.element.restore()
 
   beforeEach ->
     activitiesService = sinon.createStubInstance ActivitiesService
