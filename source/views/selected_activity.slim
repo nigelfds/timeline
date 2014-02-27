@@ -15,17 +15,17 @@
         .modal-body
             form.form-horizontal(name="selectedActivityForm" role="form")
               .form-group
-                label.col-xs-1.control-label(for="date" ) Date
-                .col-xs-2
+                label.col-xs-2.control-label(for="date" ) Date
+                .col-xs-3
                   datetimepicker
 
               .form-group
-                label.col-xs-1.control-label(for="description" ) Description
-                .col-xs-11
+                label.col-xs-2.control-label(for="description" ) Description
+                .col-xs-10
                   input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-click="selectAllOnClick($event)")
 
               .form-group
-                .col-xs-11.col-xs-offset-1
+                .col-xs-10.col-xs-offset-2
                   .checkbox
                     label
                       input(type="checkbox" name="isAPM" ng-model="selectedActivity.isAPM")
@@ -36,14 +36,14 @@
                       | Did this activity meet purpose?
 
               .form-group
-                .col-xs-11.col-xs-offset-1
+                .col-xs-10.col-xs-offset-2
                   .checkbox
                     label
                       input(type="checkbox" name="involveHandoff" ng-model="selectedActivity.involveHandoff")
                       | Did this activity involve a handoff?
 
               .form-group
-                .col-xs-11.col-xs-offset-1
+                .col-xs-10.col-xs-offset-2
                   .checkbox
                     label
                       input(type="checkbox" name="involveContact" ng-model="selectedActivity.involveContact")
@@ -51,7 +51,7 @@
 
             .row
               .col-xs-3.col-xs-offset-1
-                form.form-horizontal(name="staffInvolvedForm")
+                form(name="staffInvolvedForm")
                   .form-group
                     label.control-label(for="staffInvolved") Staff involved
                     .input-group
@@ -65,7 +65,7 @@
                         button.close(type="button" aria-hidden="true" ng-click="removeStaffInvolved(staffName)") &times;
 
               .col-xs-3.col-xs-offset-1
-                form.form-horizontal(name="itSystemForm")
+                form(name="itSystemForm")
                   .form-group
                     label.control-label(for="itSystem") IT System updated
                     .input-group
@@ -79,7 +79,7 @@
                         button.close(type="button" aria-hidden="true" ng-click="removeITSystem(systemName)") &times;
 
               .col-xs-3.col-xs-offset-1
-                form.form-horizontal(name="paperRecordForm")
+                form(name="paperRecordForm")
                   .form-group
                     label.control-label(for="paperRecord") Paper Record updated
                     .input-group
@@ -92,5 +92,10 @@
                         | {{paperRecordName}}
                         button.close(type="button" aria-hidden="true" ng-click="removePaperRecord(paperRecordName)") &times;
         .modal-footer
+          .messages
+            ul.list-group
+              li.list-group-item.fade-view(ng-repeat="message in alerts track by $index" ng-class="'list-group-item-' + message.type")
+                | {{message.text}}
+
           a.btn.btn-danger.pull-left(ng-click="delete()") Delete this activity
           a.btn.btn-primary(type="submit" ng-click="save(true)") Save

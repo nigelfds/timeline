@@ -16,8 +16,20 @@ angular.module('timeline')
         mapToTimeline = (activity) ->
           start = moment(activity.date, "DD/MM/YYYY hh:mm A").toDate()
 
+          content = """
+            <div class="timeline-activity panel panel-info" ondblclick="getScope().edit()">
+              <div class="panel-heading">
+                <span class="glyphicon glyphicon-calendar"></span>
+                #{activity.date}
+              </div>
+              <div class="panel-body">
+                  #{activity.description}
+              </div>
+            </div>
+          """
+
           start: start
-          content: activity.description
+          content: content
           className: if activity.isAPM then "apm" else ""
           group: if activity.isAPM then "APM" else "Outside APM"
 
@@ -34,19 +46,19 @@ angular.module('timeline')
           zoomMin: 86400000 # one day in milliseconds
           customStackOrder: (item1, item2) -> item1.start - item2.start
           animateZoom: false
-          animate: false
+          # animate: true
           # editable: true
 
         timeline.draw [], options
 
-        onEdit = ->
-          selection = timeline.getSelection()
-          selectActivity = scope.activities[selection[0].row] if selection.length > 0
-          scope.select selectActivity
-          scope.$apply()
-          $('#activityEditor').modal('show');
+        # onEdit = ->
+        #   selection = timeline.getSelection()
+        #   selectActivity = scope.activities[selection[0].row] if selection.length > 0
+        #   scope.select selectActivity
+        #   scope.$apply()
+        #   $('#activityEditor').modal('show');
 
-        links.events.addListener timeline, 'edit', onEdit
+        # links.events.addListener timeline, 'edit', onEdit
 
         onSelect = ->
           selection = timeline.getSelection()

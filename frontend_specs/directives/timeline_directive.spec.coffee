@@ -66,7 +66,7 @@ describe "Timeline Directive", ->
 
   describe "the activities change", ->
 
-    it "updates the timeline", ->
+    xit "updates the timeline", ->
 
       @execute()
       watchHandlers["activities"]()
@@ -76,13 +76,6 @@ describe "Timeline Directive", ->
         { start: moment("12 Nov 2011 15:55").toDate(), content: "Some other description", className: "", group: "Outside APM" }
       ]
       timeline.setData.should.have.been.calledWith timelineData
-
-    # it "configures the timeline", ->
-    #   @execute()
-    #   watchHandlers["activities"]()
-
-    #   timeline.setVisibleChartRangeAuto.should.have.been.called
-    #   timeline.zoom.should.have.been.calledWith -0.2
 
   describe "selected activity changes", ->
 
