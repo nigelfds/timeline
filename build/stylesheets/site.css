@@ -11,61 +11,44 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 100%;
+  width: 100%;
 }
-.fade {
+.fade-view {
   opacity: 1;
 }
-.fade.ng-enter,
-.fade.ng-leave {
+.fade-view.ng-enter,
+.fade-view.ng-leave {
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
   transition: all 1s ease;
 }
-.fade.ng-enter {
+.fade-view.ng-enter {
   opacity: 0;
 }
-.fade.ng-enter-active {
+.fade-view.ng-enter-active {
   opacity: 1;
 }
-.fade.ng-leave {
+.fade-view.ng-leave {
   opacity: 1;
 }
-.fade.ng-leave-active {
+.fade-view.ng-leave-active {
   opacity: 0;
 }
-.username {
-  margin: 0.3em;
-  width: 100%;
-}
-form.newuser {
-  margin: 0.3em;
-  margin-top: 1em;
-}
-.messages {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+.new-user .messages,
+.user-details .messages,
+.clinical-outcomes .messages {
+  position: static;
+  right: 0px;
+  top: 0px;
   opacity: 0.7;
 }
-.journeySummary {
-  position: fixed;
-  right: 30px;
-  top: 30px;
-}
-.journeySummary .badge {
+.badge {
   margin-left: 30px;
-}
-.userDetails .messages {
-  left: 30px;
-  right: auto;
 }
 input.form-control.datetimepicker {
   cursor: pointer;
   background-color: #fff;
-  text-align: center;
 }
 input.form-control.staffName {
   cursor: default;
@@ -83,14 +66,22 @@ ul.paper-records-updated li {
   padding-top: 6px;
   padding-bottom: 6px;
 }
+div.timeline-event-content {
+  margin: 0;
+  font-size: 0.9em;
+}
+div.timeline-event-content .panel {
+  background-color: inherit;
+  margin: 0;
+}
+div.timeline-event-content .panel .panel-heading {
+  text-align: left;
+  font-size: 0.7em;
+}
 .apm.timeline-event-box {
   border-color: #000;
-  border-width: 3px;
-  border-radius: 0;
+  border-width: 2px;
 }
-.apm.timeline-event-selected {
-  background-color: #fff;
-}
-.apm .timeline-event-content {
-  color: #000;
+div.timeline-navigation-delete {
+  display: none;
 }

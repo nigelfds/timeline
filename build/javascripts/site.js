@@ -74,21 +74,36 @@
     };
 
     UsersService.prototype.createUser = function(user, callback) {
-      var options;
-      options = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      var onError, onSuccess;
+      onSuccess = function(data) {
+        return callback({
+          success: true,
+          user: data
+        });
       };
-      return this.http.post("/users", user, options).success(function(data) {
-        return callback(data);
-      });
+      onError = function(data) {
+        return callback({
+          success: false,
+          message: data
+        });
+      };
+      return this.http.post("/users", user).success(onSuccess).error(onError);
     };
 
     UsersService.prototype.updateUser = function(id, data, callback) {
-      return this.http.put("/users/" + id, data).success(function() {
-        return callback(true);
-      });
+      var onError, onSuccess;
+      onSuccess = function(data) {
+        return callback({
+          success: true
+        });
+      };
+      onError = function(data) {
+        return callback({
+          success: false,
+          message: data
+        });
+      };
+      return this.http.put("/users/" + id, data).success(onSuccess).error(onError);
     };
 
     return UsersService;
@@ -216,10 +231,11 @@
       };
       return ActivitiesService.createActivity(userId, defaults, function(new_activity) {
         addActivity(new_activity);
-        return $scope.selectedActivity = new_activity;
+        $scope.selectedActivity = new_activity;
+        return angular.element('#selectedActivity').modal("show");
       });
     };
-    $scope.save = function() {
+    $scope.save = function(andClose) {
       var activityId, property, value, values, _ref;
       activityId = $scope.selectedActivity._id.$oid;
       values = {};
@@ -234,16 +250,27 @@
         addAlert("Updated successfully", "success");
         $scope.newStaffName = "";
         $scope.newITSystemName = "";
-        return $scope.newPaperRecord = "";
+        $scope.newPaperRecord = "";
+        if (andClose) {
+          return angular.element('#selectedActivity').modal("hide");
+        }
       });
     };
+    $scope.edit = function() {
+      return angular.element('#selectedActivity').modal('show');
+    };
     $scope["delete"] = function() {
-      var activityId;
-      activityId = $scope.selectedActivity._id.$oid;
-      return ActivitiesService.deleteActivity(userId, activityId, function(success) {
-        removeActivity($scope.selectedActivity);
-        return $scope.select(void 0);
-      });
+      var activityId, result;
+      result = confirm("Are you sure you want to delete this activity?");
+      if (result) {
+        activityId = $scope.selectedActivity._id.$oid;
+        return ActivitiesService.deleteActivity(userId, activityId, function(success) {
+          angular.element('#selectedActivity').modal("hide");
+          removeActivity($scope.selectedActivity);
+          $scope.select(void 0);
+          return addAlert("Activity deleted", "warning");
+        });
+      }
     };
     return ActivitiesService.getActivities(userId, function(activities) {
       var activity, _i, _len;
@@ -379,11 +406,29 @@
 
 }).call(this);
 (function() {
+  var SelectedActivityController;
+
+  SelectedActivityController = function($scope) {};
+
+}).call(this);
+(function() {
   var UserDetailsController;
 
   UserDetailsController = function($scope, $timeout, UsersService) {
+    var onUpdateError, onUpdateSuccess;
     $scope.messages = new MessagesList($timeout);
-    return $scope.save = function(user) {
+    $scope.validationClass = function(form, fieldName) {
+      return {
+        'has-error': form[fieldName].$invalid && !form[fieldName].$pristine
+      };
+    };
+    onUpdateSuccess = function() {
+      return $scope.messages.add("Updated successfully", "success");
+    };
+    onUpdateError = function(message) {
+      return $scope.messages.add(message, "danger");
+    };
+    $scope.save = function(user) {
       var property, userId, value, values;
       userId = user._id.$oid;
       values = {};
@@ -393,12 +438,24 @@
           values[property] = value;
         }
       }
-      return UsersService.updateUser(userId, values, function(success) {
-        if (success) {
-          $scope.messages.add("Updated successfully", "success");
+      return UsersService.updateUser(userId, values, function(result) {
+        if (result.success) {
+          return onUpdateSuccess();
+        } else {
+          return onUpdateError(result.message);
         }
-        if (!success) {
-          return $scope.messages.add("Update failed", "danger");
+      });
+    };
+    return $scope.saveClinicalOutcomes = function(user, outcomes) {
+      var userId;
+      userId = user._id.$oid;
+      return UsersService.updateUser(userId, {
+        clinicalOutcomes: outcomes
+      }, function(result) {
+        if (result.success) {
+          return onUpdateSuccess();
+        } else {
+          return onUpdateError(result.message);
         }
       });
     };
@@ -410,7 +467,9 @@
 (function() {
   var UsersController;
 
-  UsersController = function($scope, UsersService) {
+  UsersController = function($scope, $timeout, UsersService) {
+    var onCreateUserError, onCreateUserSuccess;
+    $scope.messages = new MessagesList($timeout);
     UsersService.getUsers(function(users) {
       return $scope.users = users;
     });
@@ -419,13 +478,26 @@
         'has-error': form[fieldName].$invalid && !form[fieldName].$pristine
       };
     };
-    return $scope.createUser = function(event) {
-      event.preventDefault();
-      return UsersService.createUser($scope.newUser, function(new_user) {
-        $scope.users.push(new_user);
-        $scope.newUser = {};
-        return $scope.userForm.$setPristine();
+    onCreateUserSuccess = function(user) {
+      $scope.users.push(user);
+      $scope.newUser = {};
+      $scope.newUserForm.$setPristine();
+      return $scope.messages.add("User created successfully", "success");
+    };
+    onCreateUserError = function(message) {
+      return $scope.messages.add(message, "danger");
+    };
+    $scope.createUser = function() {
+      return UsersService.createUser($scope.newUser, function(result) {
+        if (result.success) {
+          return onCreateUserSuccess(result.user);
+        } else {
+          return onCreateUserError(result.message);
+        }
       });
+    };
+    return $scope.onSubmit = function(viewValue) {
+      return console.log(viewValue);
     };
   };
 
@@ -444,6 +516,7 @@
             format: "dd/mm/yyyy hh:ii P",
             autoclose: true,
             todayHighlight: true,
+            todayBtn: true,
             keyboardNavigation: false
           };
           return $(element.children()[0]).datetimepicker(options);
@@ -460,7 +533,7 @@
         restrict: 'E',
         template: '<div></div>',
         link: function(scope, element, attrs) {
-          var mapToTimeline, onChanges, onSelect, onSelectionChange, options, timeline, updateTimeline;
+          var mapToTimeline, onChanges, onSelect, onSelectionChange, options, timeline, updateTimeline, updateTimelineOptions;
           onChanges = function() {
             return updateTimeline();
           };
@@ -476,11 +549,12 @@
           };
           scope.$watch("selectedActivity", onSelectionChange, true);
           mapToTimeline = function(activity) {
-            var start;
+            var content, start;
             start = moment(activity.date, "DD/MM/YYYY hh:mm A").toDate();
+            content = "<div class=\"timeline-activity panel panel-info\" ondblclick=\"getScope().edit()\">\n  <div class=\"panel-heading\">\n    <span class=\"glyphicon glyphicon-calendar\"></span>\n    " + activity.date + "\n  </div>\n  <div class=\"panel-body\">\n      " + activity.description + "\n  </div>\n</div>";
             return {
               start: start,
-              content: activity.description,
+              content: content,
               className: activity.isAPM ? "apm" : "",
               group: activity.isAPM ? "APM" : "Outside APM"
             };
@@ -488,18 +562,19 @@
           updateTimeline = function() {
             var timelineData;
             timelineData = scope.activities.map(mapToTimeline);
-            return timeline.setData(timelineData);
+            timeline.setData(timelineData);
+            return updateTimelineOptions();
           };
           timeline = new links.Timeline(element.children()[0]);
           options = {
             width: "100%",
             minHeight: 400,
             style: "box",
-            zoomMax: 31536000000,
             zoomMin: 86400000,
             customStackOrder: function(item1, item2) {
               return item1.start - item2.start;
-            }
+            },
+            animateZoom: false
           };
           timeline.draw([], options);
           onSelect = function() {
@@ -511,7 +586,38 @@
             scope.select(selectActivity);
             return scope.$apply();
           };
-          return links.events.addListener(timeline, 'select', onSelect);
+          links.events.addListener(timeline, 'select', onSelect);
+          links.events.addListener(timeline, 'rangechanged', function() {
+            return updateTimelineOptions();
+          });
+          return updateTimelineOptions = function() {
+            var activity, max, maxMoment, min, minMoment, moments, range, visibleRange, _i, _len, _ref;
+            moments = [];
+            _ref = scope.activities;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              activity = _ref[_i];
+              moments.push(moment(activity.date, "DD/MM/YYYY hh:mm A"));
+            }
+            moments.sort(function(x, y) {
+              return x.toDate() - y.toDate();
+            });
+            if (moments.length === 0) {
+              return;
+            }
+            maxMoment = moment(moments[moments.length - 1]);
+            minMoment = moment(moments[0]);
+            visibleRange = timeline.getVisibleChartRange();
+            range = visibleRange.end.getTime() - visibleRange.start.getTime();
+            range = 0.1 * range;
+            range = Math.max(range, 86400000);
+            maxMoment.add("ms", range);
+            minMoment.subtract("ms", range);
+            max = maxMoment.toDate();
+            min = minMoment.toDate();
+            timeline.options.max = max;
+            timeline.options.min = min;
+            return timeline.options.zoomMax = max - min;
+          };
         }
       };
     }
