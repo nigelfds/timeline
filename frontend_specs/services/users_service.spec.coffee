@@ -8,51 +8,89 @@ describe 'UsersService', () ->
     service = _UsersService_
     $httpBackend = _$httpBackend_
 
-  it "should callback with the list of users", (done) ->
-    users = []
-    $httpBackend.when("GET", "/users").respond users
+  describe "getUsers", ->
 
-    service.getUsers (_users) ->
-      _users.should.eql users
-      done()
+    it "should callback with the list of users", ->
+      users = []
+      $httpBackend.when("GET", "/users").respond users
 
-    $httpBackend.flush()
-
-  it "should return a user", (done) ->
-    test_user = id: "some_user_id"
-    user = name: "Seaton"
-    $httpBackend.when("GET", "/users/#{test_user.id}").respond user
-
-    service.getUser test_user.id, (_user) ->
-      _user.should.eql user
-      done()
-
-    $httpBackend.flush()
-
-  describe 'when creating a new user' , ()->
-
-    it 'should make a post to the user api', ()->
-      potential_user = {name: "Barry"}
-      created_user = {name: "Barry", id: "12345"}
-      $httpBackend.expectPOST('/users', potential_user).respond created_user
-
-      service.createUser potential_user, (new_user) -> new_user.should.eql created_user
-
+      result = undefined
+      service.getUsers (_users) -> result = _users
       $httpBackend.flush()
 
-  describe "updating a user", ->
+      result.should.eql users
 
-    it "sends the updated information to the server", ->
-      test_user = id: "some_id"
-      updatedUserData = "numberOfHandovers": 34
-      $httpBackend.expectPUT("/users/some_id", updatedUserData).respond {}
+  describe "getUser", ->
 
-      service.updateUser test_user.id, updatedUserData, (success) ->
-        success.should.eql true
+    it "should return a user", ->
+      test_user = id: "some_user_id"
+      user = name: "Seaton"
+      $httpBackend.when("GET", "/users/#{test_user.id}").respond user
 
-
+      result = undefined
+      service.getUser test_user.id, (_user) -> result = _user
       $httpBackend.flush()
 
+      result.should.eql user
+
+
+  describe "createUser" , ->
+    user = undefined
+
+    beforeEach -> 
+      user = name: "Barry"
+
+    it 'returns the created user', ->
+      createdUser = _id: {$oid: "12345"}, name: "Barry"
+      $httpBackend.when("POST", "/users", user).respond createdUser
+
+      result = undefined
+      service.createUser user, (_result) -> result = _result
+      $httpBackend.flush()
+
+      result.success.should.be.true
+      result.user.should.eql createdUser
+
+    describe "an error occurs", ->
+
+      it "returns a message about the error", ->
+        errorMessage = "Unable to create user"
+        $httpBackend.when("POST", "/users", user).respond 500, errorMessage
+
+        result = undefined
+        service.createUser user, (_result) -> result = _result
+        $httpBackend.flush()
+
+        result.success.should.be.false
+        result.message.should.eql errorMessage
+
+  describe "updateUser", ->
+    user = id: "some_id"
+    updatedUser = undefined
+    beforeEach ->
+      updatedUser = "numberOfHandovers": 34
+
+    it "returns a successful result", ->
+      $httpBackend.when("PUT", "/users/#{user.id}", updatedUser).respond {}
+
+      result = undefined
+      service.updateUser user.id, updatedUser, (_result) -> result = _result
+      $httpBackend.flush()
+
+      result.success.should.eql true
+    
+    describe "an error occurs", ->
+
+      it "returns a message about the error", ->
+        errorMessage = "Unable to update user"
+        $httpBackend.when("PUT", "/users/#{user.id}", updatedUser).respond 500, errorMessage
+
+        result = undefined
+        service.updateUser user.id, updatedUser, (_result) -> result = _result
+        $httpBackend.flush()
+
+        result.success.should.be.false
+        result.message.should.eql errorMessage
 
 
 

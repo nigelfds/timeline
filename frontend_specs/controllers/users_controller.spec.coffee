@@ -1,65 +1,73 @@
 describe "UsersController", ->
 
-  scope = usersService = users = undefined
+  scope = timeout = usersService = users = messages = undefined
 
   beforeEach module("timeline")
-
-  beforeEach inject (_$rootScope_) ->
+  beforeEach inject (_$rootScope_, _$timeout_) ->
     scope = _$rootScope_.$new()
-
+    timeout = _$timeout_
   beforeEach ->
     usersService = sinon.createStubInstance UsersService
-    barry = name: "Barry"
-    michael = name: "Michael"
-    users = [ barry, michael ]
+    users = [ 
+      { name: "Barry" },
+      { name: "Michael" }
+    ]
     usersService.getUsers.yields users
 
+    messages = sinon.createStubInstance MessagesList
+    sinon.stub(window, "MessagesList").returns messages
+  
+  afterEach -> MessagesList.restore()    
+
   it "should display the list of users", ->
-    usersController = UsersController scope, usersService
+    UsersController scope, timeout, usersService
 
     scope.users.should.eql users
 
-  describe 'when adding a new user', ->
-    event = form_values = new_user = undefined
+  describe "creating a new user", ->
+
+    createUserResult = undefined
 
     beforeEach ->
-      scope.userForm = $setPristine: sinon.spy()
-      event = preventDefault: sinon.stub()
-      form_values =
-        name: "Barry",
-        urNumber: "1234567890",
-        age:"35",
-        gender:"male"
-      new_user = name: "Noob", urNumber: "12345678"
-      usersService.createUser.yields new_user
+      newUser = name: "Barry", urNumber: "1234567890", age:"35", gender:"male"
+      createdUser = _id: {$oid: "database-id"}, name: "Returned from service"
+      createUserResult = user: createdUser
+      usersService.createUser.withArgs(newUser).yields createUserResult
 
-    it 'creates a new user', ->
-      usersController = UsersController scope, usersService
-      scope.newUser = form_values
+      scope.newUserForm = $setPristine: sinon.spy()
+      scope.newUser = newUser
 
-      scope.createUser(event)
+      UsersController scope, timeout, usersService
 
-      usersService.createUser.should.have.been.calledWith form_values
+    describe "creation succeeds", ->
 
-    it 'displays the new user', ->
-      usersController = UsersController scope, usersService
+      beforeEach -> createUserResult.success = true
 
-      scope.createUser(event)
+      it "displays the new user", ->
+        scope.createUser()
 
-      scope.users.should.contain.members [new_user]
+        scope.users[2].should.eql createUserResult.user
 
-    it 'resets the new user values', ->
-      usersController = UsersController scope, usersService
+      it "clears the form", ->
+        scope.createUser()
 
-      scope.newUser = form_values
-      scope.createUser(event)
+        scope.newUser.should.be.empty
+        scope.newUserForm.$setPristine.should.have.been.called
 
-      scope.newUser.should.be.empty
+      it "displays a success message", ->
+        scope.createUser()
 
-    it 'marks all fields as pristine', ->
-      usersController = UsersController scope, usersService
+        scope.messages.add.should.have.been.calledWith "User created successfully", "success"
 
-      scope.newUser = form_values
-      scope.createUser(event)
+    describe "creation fails", ->
+      errorMessage = "Could not create user"
+      beforeEach ->
+        createUserResult.success = false
+        createUserResult.message = errorMessage
 
-      scope.userForm.$setPristine.should.have.been.called
+      it "displays an the error message", ->
+        scope.createUser()
+
+        scope.messages.add.should.have.been.calledWith errorMessage, "danger"
+
+

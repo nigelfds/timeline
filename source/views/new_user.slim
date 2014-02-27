@@ -1,0 +1,36 @@
+.new-user
+  .panel.panel-default
+    .panel-heading
+      h4.name.panel-title
+        | New user
+    .panel-body
+      form(name="newUserForm" ng-submit="createUser($event)" novalidate)
+        .form-group
+          .messages
+            ul.list-group
+              li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+                | {{message.text}}
+
+        .form-group
+          .input-group(ng-class="validationClass(newUserForm, 'name')")
+            span.input-group-addon Name
+            input.form-control(name="name" ng-model="newUser.name" required)
+
+        .form-group
+          .input-group(ng-class="validationClass(newUserForm, 'urNumber')")
+            span.input-group-addon UR Number
+            input.form-control(name="urNumber" type="number" min="0" ng-model="newUser.urNumber" required)
+
+        .form-group
+          .input-group(ng-class="isValid(newUserForm, 'age') ? 'has-error' : ''" required)
+            span.input-group-addon Age
+            input.form-control(name="age" type="number" min="0" ng-model="newUser.age" required)
+
+        .form-group
+          select.form-control(ng-model="newUser.gender" required)
+            option (value="") Select A Gender
+            option (value="male") Male
+            option (value="female") Female
+        .form-group
+          button.pull-right.btn.btn-success(type="submit" ng-disabled="newUserForm.$invalid") Create User
+

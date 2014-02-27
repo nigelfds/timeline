@@ -15,7 +15,6 @@ describe "UserDetailsController", ->
     timeout = _$timeout_
   beforeEach ->
     service = sinon.createStubInstance UsersService
-
     messages = sinon.createStubInstance MessagesList
     sinon.stub(window, "MessagesList").returns messages
 
@@ -25,11 +24,15 @@ describe "UserDetailsController", ->
 
   describe "saving the user", ->
 
-    values = name: user.name, urNumber: user.urNumber, age: user.age, gender: user.gender
+    values = 
+      name: user.name,
+      urNumber: user.urNumber,
+      age: user.age,
+      gender: user.gender
 
     describe "the update succeeds", ->
 
-      beforeEach -> service.updateUser.withArgs(userId, values).yields true
+      beforeEach -> service.updateUser.withArgs(userId, values).yields success: true
 
       it "displays an update success message", ->
         UserDetailsController scope, timeout, service
@@ -39,13 +42,14 @@ describe "UserDetailsController", ->
         scope.messages.add.should.have.been.calledWith "Updated successfully", "success"
 
     describe "the update fails", ->
-
-      beforeEach -> service.updateUser.withArgs(userId, values).yields false
+      errorMessage = "Unable to update the user"
+      beforeEach ->
+        service.updateUser.withArgs(userId, values).yields success: false, message: errorMessage
 
       it "displays a failure message", ->
         UserDetailsController scope, timeout, service
 
         scope.save(user)
 
-        scope.messages.add.should.have.been.calledWith "Update failed", "danger"
+        scope.messages.add.should.have.been.calledWith errorMessage, "danger"
 

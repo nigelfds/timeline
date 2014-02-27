@@ -3,12 +3,8 @@ describe "JourneySummaryController", ->
   scope = undefined
 
   beforeEach module("timeline")
-
-  beforeEach inject (_$rootScope_) ->
-    scope = _$rootScope_.$new()
-
-  beforeEach ->
-    JourneySummaryController scope
+  beforeEach inject (_$rootScope_) -> scope = _$rootScope_.$new()
+  beforeEach -> JourneySummaryController scope
 
   describe "number of handsoff and number of contact", ->
 
@@ -82,7 +78,6 @@ describe "JourneySummaryController", ->
     it "display 0 if there is no staff involved", ->
       scope.numberOfStaffInvolved(fakeActivities2).should.eql 0
 
-
   describe "Paper record updated", ->
 
     fakeActivities1 = [
@@ -102,7 +97,7 @@ describe "JourneySummaryController", ->
       it "returns the correct count", ->
         scope.countOfPaperRecordUpdates(fakeActivities1).should.eql 6
 
-      it "returns zero if there are none"
+      it "returns zero if there are none", ->
         scope.countOfPaperRecordUpdates(fakeActivities2).should.eql 0
 
     describe "unique paper records", ->
@@ -112,7 +107,6 @@ describe "JourneySummaryController", ->
 
       it "display 0 if no paper records get updated", ->
         scope.numberOfPaperRecordUpdated(fakeActivities2).should.eql 0
-
 
   describe "therapeutic contributions", ->
     activities = [
