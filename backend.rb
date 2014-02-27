@@ -34,9 +34,19 @@ class Backend < Sinatra::Base
   post '/users' do
     body = JSON.parse(request.body.read)
     if isValidUser(body)
-      id = db["users"].insert(body).to_s
-      body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
-      status 200
+
+      begin
+        id = db["users"].insert(body).to_s
+        body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
+        status 200
+      rescue Mongo::OperationFailure => err
+
+        message = err.error_code == 11000 ?
+                    "UR Number already exists" :
+                    "Internal Error"
+        halt 500, message
+      end
+
     else
       error 400
     end
@@ -100,7 +110,7 @@ class Backend < Sinatra::Base
     return error 400 if user.nil?
 
     update_data = JSON.parse(request.body.read)
-    
+
     activity_id = BSON.ObjectId(params[:activity_id])
     result = db["activities"].update({ :_id => activity_id }, '$set' => update_data)
     error 400 unless result["updatedExisting"]

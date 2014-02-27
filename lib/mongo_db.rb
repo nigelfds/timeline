@@ -12,6 +12,8 @@ class MongoDb
     client = MongoClient.new(host, port).db(db_name)
     authenticate client
 
+    client["users"].ensure_index( { :urNumber => Mongo::ASCENDING }, { :unique => true, :sparse => true} )
+
     client
   end
 

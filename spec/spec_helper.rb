@@ -30,7 +30,10 @@ Spork.prefork do
   end
 
   def test_db
-    MongoClient.new('localhost', 27017).db('TestDb')
+    client = MongoClient.new('localhost', 27017).db('TestDb')
+    #TODO: should have better way to do test for uniqueness, instead of indexing test db
+    client["users"].ensure_index( { :urNumber => Mongo::ASCENDING }, { :unique => true, :sparse => true} )
+    client
   end
 
   def app

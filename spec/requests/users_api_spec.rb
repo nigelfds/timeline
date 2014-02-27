@@ -122,6 +122,26 @@ describe 'User API' do
           db_users.find.to_a.should eq([])
         end
       end
+
+      describe "duplicated UR number" do
+        let(:ur_num) { '007' }
+        let(:existing_user) { {:name => "Bob", :urNumber => ur_num} }
+        let(:new_user) { {:name => "Lily", :urNumber => ur_num} }
+
+        before { db_users.insert existing_user}
+
+        it "should return error response" do
+          post "#{url_path}", new_user.to_json
+          last_response.status.should eq(500)
+          last_response.body.should eq("UR Number already exists")
+        end
+
+        it "should not insert the new user" do
+          post "#{url_path}", new_user.to_json
+          db_users.find.to_a.length.should eq 1
+          db_users.find.to_a.first['name'].should eq 'Bob'
+        end
+      end
     end
 
   end
