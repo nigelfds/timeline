@@ -1,13 +1,11 @@
 .container-fluid
   .row
-    .col-md-12
-      = partial "views/clinical_outcomes"
-  .row
     .col-md-9
       = partial "views/journey"
       = partial "views/selected_activity"
     .col-md-3
       = partial "journey_summary"
+      = partial "views/clinical_outcomes"
       = partial "views/user_details"
 
   - if false
