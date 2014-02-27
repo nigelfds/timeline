@@ -8,7 +8,7 @@
         .form-group
           .messages
             ul.list-group
-              li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+              li.list-group-item.fade-view(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
                 | {{message.text}}
 
         table.table

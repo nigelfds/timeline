@@ -14,34 +14,34 @@ html, body
   width 100%
   // height 100%
 
-.fade
+.fade-view
   opacity 1
 
-.fade.ng-enter,
-.fade.ng-leave
+.fade-view.ng-enter,
+.fade-view.ng-leave
   -webkit-transition all 1s ease
   -moz-transition all 1s ease
   -o-transition all 1s ease
   transition all 1s ease
 
-.fade.ng-enter
+.fade-view.ng-enter
   opacity 0
 
-.fade.ng-enter-active
+.fade-view.ng-enter-active
   opacity 1
 
-.fade.ng-leave
+.fade-view.ng-leave
   opacity 1
 
-.fade.ng-leave-active
+.fade-view.ng-leave-active
   opacity 0
 
 .selected-activity
   .messages
-    position fixed
-    bottom 30px
-    opacity 0.7
-    width 100%
+    // position fixed
+    // top 30px
+    // opacity 1
+    // width 100%
 
 .new-user, .user-details, .clinical-outcomes
   .messages
@@ -52,11 +52,6 @@ html, body
 
 .badge
     margin-left 30px
-
-.userDetails
-  .messages
-    left 30px
-    right auto
 
 input.form-control.datetimepicker
   cursor pointer

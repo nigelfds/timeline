@@ -35,7 +35,7 @@ angular.module('timeline')
           customStackOrder: (item1, item2) -> item1.start - item2.start
           animateZoom: false
           animate: false
-          editable: true
+          # editable: true
 
         timeline.draw [], options
 

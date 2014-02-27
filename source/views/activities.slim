@@ -1,8 +1,9 @@
-.container-fluid
+.activities.container-fluid
   .row
+    .col-md-12
+      = partial "views/selected_activity"
     .col-md-9
       = partial "views/journey"
-      = partial "views/selected_activity"
     .col-md-3
       = partial "views/journey_summary"
       = partial "views/clinical_outcomes"
