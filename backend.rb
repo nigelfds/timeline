@@ -114,8 +114,4 @@ class Backend < Sinatra::Base
     return error 404 if result["n"] != 1
   end
 
-  def is_valid_activity(activity)
-    activity["date"] && activity["description"]
-  end
-
 end

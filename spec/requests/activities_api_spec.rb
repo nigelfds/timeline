@@ -191,15 +191,6 @@ describe "Activities API Spec" do
       end
 
     end
-
-    describe '#is_valid_activity' do
-      xit 'should return true when ...' do
-      end
-
-      xit 'should return false when ...' do
-      end
-    end
-
   end
 
   describe "PUT activity" do

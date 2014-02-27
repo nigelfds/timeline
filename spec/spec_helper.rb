@@ -25,6 +25,7 @@ Spork.prefork do
   RSpec.configure do |conf|
     conf.include Rack::Test::Methods
     conf.include Capybara::DSL
+    conf.include ApplicationHelper
 
     conf.before(:each) { Backend.any_instance.stub(:db).and_return(test_db) }
   end

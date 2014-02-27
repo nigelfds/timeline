@@ -18,8 +18,12 @@ module ApplicationHelper
     settings.mongo_db
   end
 
-  def isValidUser(patient)
+  def isValidUser patient
     patient["name"]
+  end
+
+  def is_valid_activity activity
+    activity["date"] && activity["description"]
   end
 
   def db_error_message
