@@ -25,12 +25,16 @@ Spork.prefork do
   RSpec.configure do |conf|
     conf.include Rack::Test::Methods
     conf.include Capybara::DSL
+    conf.include ApplicationHelper
 
     conf.before(:each) { Backend.any_instance.stub(:db).and_return(test_db) }
   end
 
   def test_db
-    MongoClient.new('localhost', 27017).db('TestDb')
+    client = MongoClient.new('localhost', 27017).db('TestDb')
+    #TODO: should have better way to do test for uniqueness, instead of indexing test db
+    client["users"].ensure_index( { :urNumber => Mongo::ASCENDING }, { :unique => true, :sparse => true} )
+    client
   end
 
   def app

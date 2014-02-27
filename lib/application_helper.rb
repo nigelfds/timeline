@@ -18,4 +18,21 @@ module ApplicationHelper
     settings.mongo_db
   end
 
+  def isValidUser patient
+    patient["name"]
+  end
+
+  def is_valid_activity activity
+    activity["date"] && activity["description"]
+  end
+
+  def db_error_message
+    err_msg_map = {
+      11000 => 'UR Number already exists',
+      11001 => 'UR Number already exists'
+    }
+    err_msg_map.default = 'Internal Server Error'
+    err_msg_map
+  end
+
 end

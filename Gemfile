@@ -26,3 +26,7 @@ gem "rspec"
 gem 'capybara'
 
 gem "bson_ext"
+
+group :development do
+  gem 'pry'
+end

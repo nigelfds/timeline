@@ -33,28 +33,26 @@ class Backend < Sinatra::Base
 
   post '/users' do
     body = JSON.parse(request.body.read)
-    if isValidUser(body)
+    halt 400, 'Invalid user details entered' unless isValidUser(body)
+
+    begin
       id = db["users"].insert(body).to_s
       body(db["users"].find_one({"_id" => BSON.ObjectId(id)}).to_json)
       status 200
-    else
-      error 400
+    rescue => err
+      halt 500, db_error_message[err.error_code]
     end
   end
 
   put '/users/:id' do
-    id = BSON.ObjectId(params[:id])
-    new_values = JSON.parse(request.body.read)
-
-    result = db["users"].update({"_id" => id}, {"$set" => new_values})
-
-    unless result["updatedExisting"]
-      error 400, result.to_json
+    begin
+      id = BSON.ObjectId(params[:id])
+      new_values = JSON.parse(request.body.read)
+      result = db["users"].update({"_id" => id}, {"$set" => new_values})
+      error 400, 'Failed to update user' unless result["updatedExisting"]
+    rescue => err
+      halt 500, db_error_message[err.error_code]
     end
-  end
-
-  def isValidUser(patient)
-    patient["name"]
   end
 
   # ==============================================================================================
@@ -100,7 +98,7 @@ class Backend < Sinatra::Base
     return error 400 if user.nil?
 
     update_data = JSON.parse(request.body.read)
-    
+
     activity_id = BSON.ObjectId(params[:activity_id])
     result = db["activities"].update({ :_id => activity_id }, '$set' => update_data)
     error 400 unless result["updatedExisting"]
@@ -114,10 +112,6 @@ class Backend < Sinatra::Base
     result = db["activities"].remove(:_id => activity_id)
 
     return error 404 if result["n"] != 1
-  end
-
-  def is_valid_activity(activity)
-    activity["date"] && activity["description"]
   end
 
 end
