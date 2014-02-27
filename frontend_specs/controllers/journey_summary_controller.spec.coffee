@@ -102,7 +102,7 @@ describe "JourneySummaryController", ->
       it "returns the correct count", ->
         scope.countOfPaperRecordUpdates(fakeActivities1).should.eql 6
 
-      it "returns zero if there are none"
+      it "returns zero if there are none", ->
         scope.countOfPaperRecordUpdates(fakeActivities2).should.eql 0
 
     describe "unique paper records", ->
