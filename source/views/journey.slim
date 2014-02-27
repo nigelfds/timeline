@@ -3,5 +3,7 @@
     .panel-heading
       h4.panel-title
         | Journey for {{user.name}}
+        .form-group.pull-right
+          button.btn.btn-primary(ng-click="new()") New Activity
     .panel-body
       timeline

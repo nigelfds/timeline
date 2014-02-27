@@ -1,13 +1,10 @@
 .container-fluid
   .row
-    .col-xs-12
+    .col-md-9
       = partial "views/journey"
-
-  .row
-    .col-xs-12
       = partial "views/selected_activity"
-
-    .col-xs-12
+    .col-md-3
+      = partial "journey_summary"
       = partial "views/user_details"
 
   - if false
@@ -19,7 +16,3 @@
   ul.list-group
     li.list-group-item.fade(ng-repeat="message in alerts track by $index" ng-class="'list-group-item-' + message.type")
       | {{message.text}}
-
-= partial "journey_summary"
-
-

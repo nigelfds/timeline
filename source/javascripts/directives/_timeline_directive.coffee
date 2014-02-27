@@ -35,10 +35,20 @@ angular.module('timeline')
           customStackOrder: (item1, item2) -> item1.start - item2.start
           animateZoom: false
           animate: false
+          editable: true
 
         timeline.draw [], options
 
-        onSelect =  ->
+        onEdit = ->
+          selection = timeline.getSelection()
+          selectActivity = scope.activities[selection[0].row] if selection.length > 0
+          scope.select selectActivity
+          scope.$apply()
+          $('#activityEditor').modal('show');
+
+        links.events.addListener timeline, 'edit', onEdit
+
+        onSelect = ->
           selection = timeline.getSelection()
           selectActivity = scope.activities[selection[0].row] if selection.length > 0
           scope.select selectActivity
