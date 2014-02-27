@@ -19,5 +19,13 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
       then onUpdateSuccess()
       else onUpdateError(result.message)
 
+  $scope.saveClinicalOutcomes = (user, outcomes) ->
+    userId = user._id.$oid
+
+    UsersService.updateUser userId, clinicalOutcomes: outcomes, (result) ->
+      if result.success
+      then onUpdateSuccess()
+      else onUpdateError(result.message)
+
 angular.module('timeline')
   .controller 'UserDetailsController', UserDetailsController
