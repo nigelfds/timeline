@@ -1,6 +1,9 @@
 UserDetailsController = ($scope, $timeout, UsersService) ->
   $scope.messages = new MessagesList($timeout)
 
+  $scope.validationClass = (form, fieldName) ->
+    'has-error': form[fieldName].$invalid and not form[fieldName].$pristine
+
   onUpdateSuccess = -> 
     $scope.messages.add "Updated successfully", "success" 
 

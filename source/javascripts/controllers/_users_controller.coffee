@@ -7,9 +7,6 @@ UsersController = ($scope, $timeout, UsersService) ->
   $scope.validationClass = (form, fieldName) ->
     'has-error': form[fieldName].$invalid and not form[fieldName].$pristine
 
-  $scope.isValid = (form, fieldName) ->
-    form[fieldName].$invalid and not form[fieldName].$pristine
-
   onCreateUserSuccess = (user) ->
     $scope.users.push user
     $scope.newUser = {}

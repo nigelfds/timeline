@@ -56,19 +56,23 @@ angular.module('timeline')
             moments.push moment(activity.date, "DD/MM/YYYY hh:mm A")
           moments.sort (x, y) -> x.toDate() - y.toDate()
 
-          maxMoment = moments[moments.length - 1]
-          minMoment = moments[0]
+          if moments.length is 0 then return
+
+          maxMoment = moment(moments[moments.length - 1])
+          minMoment = moment(moments[0])
 
           visibleRange = timeline.getVisibleChartRange()
 
           range = visibleRange.end.getTime() - visibleRange.start.getTime()
           range = 0.1 * range
+          range = Math.max(range, 86400000)
 
           maxMoment.add("ms", range)
           minMoment.subtract("ms", range)
 
           max = maxMoment.toDate()
           min = minMoment.toDate()
+
           timeline.options.max = max
           timeline.options.min = min
           timeline.options.zoomMax = max - min

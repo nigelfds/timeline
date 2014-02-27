@@ -1,22 +1,27 @@
-.userDetails(ng-controller="UserDetailsController")
+.user-details(ng-controller="UserDetailsController")
   .panel.panel-success
     .panel-heading 
       h3.panel-title
         | Details for {{user.name}}
     .panel-body
-       form(ng-submit="save(user)")
+       form(name="userForm" ng-submit="save(user)")
         .form-group
-          .input-group
+          .messages
+            ul.list-group
+              li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+                | {{message.text}}
+        .form-group
+          .input-group(ng-class="validationClass(userForm, 'name')")
             span.input-group-addon Name
-            input.form-control(name="userName" ng-model="user.name" required)
+            input.form-control(name="name" ng-model="user.name" required)
 
         .form-group
-          .input-group
+          .input-group(ng-class="validationClass(userForm, 'urNumber')")
             span.input-group-addon UR Number
             input.form-control(name="urNumber" type="number" min="0" ng-model="user.urNumber" required)
 
         .form-group
-          .input-group
+          .input-group(ng-class="validationClass(userForm, 'age')" required)
             span.input-group-addon Age
             input.form-control(name="age" type="number" min="0" ng-model="user.age" required)
 
@@ -27,9 +32,5 @@
             option (value="female")Female
 
         .form-group
-          button.btn.btn-primary(type="submit" ng-disabled="") Update
+          button.btn.btn-primary(type="submit" ng-disabled="userForm.$invalid") Update
 
-  .messages
-    ul.list-group
-      li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
-        | {{message.text}}
