@@ -116,12 +116,12 @@
               tbody
                 tr
                   td K10
-                  td 
+                  td
                     input.form-control(name="k10_1" type="number" ng-model="user.clinicalOutcomes.1.k10" min="0" max="50")
                   td
                   td
                   td
-                    input.form-control(name="k10_4" type="number" ng-model="user.clinicalOutcomes.4.k10" min="0" max="50")
+                    input.form-control.has-error(name="k10_4" type="number" ng-model="user.clinicalOutcomes.4.k10" min="0" max="50")
                 tr
                   td HONOS
                   td
@@ -186,6 +186,10 @@
                     input.form-control(name="srs_4_4" type="number" ng-model="user.clinicalOutcomes.4.srs4" min="0" max="5")
 
         .modal-footer
+          .messages
+            ul.list-group
+              li.list-group-item.fade-view(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+                | {{message.text}}
           .form-group
             button.btn.btn-primary(type="submit" ng-click="saveClinicalOutcomes(user, user.clinicalOutcomes)") Save
 

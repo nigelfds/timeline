@@ -11,6 +11,7 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
     $scope.messages.add message, "danger"
 
   $scope.save = (user) ->
+
     userId = user._id.$oid
     values = {}
     values[property] = value for property, value of user when property isnt "_id"
@@ -20,14 +21,16 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
       else onUpdateError(result.message)
 
   $scope.saveClinicalOutcomes = (user, outcomes) ->
-    userId = user._id.$oid
-
-    UsersService.updateUser userId, clinicalOutcomes: outcomes, (result) ->
-      if result.success
-        angular.element('#clinicalOutcomes').modal("hide")
-        onUpdateSuccess()
-      else
-        onUpdateError(result.message)
+    if $scope.clinicalOutcomesForm.$invalid
+      onUpdateError "Some of the values are not valid"
+    else
+      userId = user._id.$oid
+      UsersService.updateUser userId, clinicalOutcomes: outcomes, (result) ->
+        if result.success
+          angular.element('#clinicalOutcomes').modal("hide")
+          onUpdateSuccess()
+        else
+          onUpdateError(result.message)
 
 angular.module('timeline')
   .controller 'UserDetailsController', UserDetailsController
