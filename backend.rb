@@ -118,7 +118,7 @@ class Backend < Sinatra::Base
   get '/download' do
     require 'csv'
 
-    filename = 'foo'
+    filename = 'data'
     temp_file = Tempfile.new([filename, '.csv']).path
 
     CSV.open( temp_file, 'w', :write_headers => true, :headers => csv_header ) do |csv|
