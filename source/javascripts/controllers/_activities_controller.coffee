@@ -85,7 +85,7 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
     ActivitiesService.createActivity userId, defaults, (new_activity) ->
       addActivity new_activity
       $scope.selectedActivity = new_activity
-      angular.element('#selectedActivity').modal("show");
+      $scope.edit()
 
   $scope.save = (andClose) ->
     activityId = $scope.selectedActivity._id.$oid

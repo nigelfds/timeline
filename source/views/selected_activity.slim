@@ -22,7 +22,12 @@
               .form-group
                 label.col-xs-2.control-label(for="description" ) Description
                 .col-xs-10
-                  input.form-control(type="text" name="description" ng-model="selectedActivity.description" ng-click="selectAllOnClick($event)")
+                  input.form-control(type="text" name="description" maxLength="30" ng-model="selectedActivity.description" ng-click="selectAllOnClick($event)")
+
+              .form-group
+                label.col-xs-2.control-label(for="notes" ) Notes
+                .col-xs-10
+                  textarea.form-control(type="text" name="notes" ng-model="selectedActivity.notes")
 
               .form-group
                 .col-xs-10.col-xs-offset-2
