@@ -8,7 +8,7 @@
         .form-group
           .messages
             ul.list-group
-              li.list-group-item.fade(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+              li.list-group-item.fade-view(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
                 | {{message.text}}
 
         .form-group
@@ -21,8 +21,13 @@
             span.input-group-addon UR Number
             input.form-control(name="urNumber" type="number" min="0" ng-model="newUser.urNumber" required)
 
+        / .form-group
+        /   .input-group(ng-class="validationClass(newUserForm, 'age')" required)
+        /     span.input-group-addon Age
+        /     input.form-control(name="age" type="number" min="0" ng-model="newUser.age" required)
+
         .form-group
-          .input-group(ng-class="validationClass(userForm, 'age')" required)
+          .input-group
             span.input-group-addon DOB
             datetimepicker(model="newUser.dob" minView="month" format="dd/mm/yyyy")
 

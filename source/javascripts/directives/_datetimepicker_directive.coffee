@@ -2,6 +2,7 @@ angular.module('timeline')
   .directive('datetimepicker', [ ->
     restrict: 'E',
     templateUrl: 'views/date-time-picker.html'
+    replace: true
     scope: 
       model: "="
       minView: "="
@@ -21,10 +22,10 @@ angular.module('timeline')
         forceParse: false
         minView: minView
         viewSelect: "month"
-      $(element.children()[0]).datetimepicker options
+      $(element).datetimepicker options
 
-      $(element.children()[0]).datetimepicker().on "show",(x) ->
-        $(element.children()[0]).datetimepicker("setEndDate", moment().toDate())
+      $(element).datetimepicker().on "show",(x) ->
+        $(element).datetimepicker("setEndDate", moment().toDate())
 
   ]
 ) 

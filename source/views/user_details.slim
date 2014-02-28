@@ -21,7 +21,7 @@
             input.form-control(name="urNumber" type="number" min="0" ng-model="user.urNumber" required)
 
         .form-group
-          .input-group(ng-class="validationClass(userForm, 'age')" required)
+          .input-group
             span.input-group-addon DOB
             datetimepicker(model="user.dob" minView="month" format="dd/mm/yyyy")
 
