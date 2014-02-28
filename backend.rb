@@ -3,6 +3,7 @@ require 'sinatra/base'
 
 require_relative 'lib/mongo_db'
 require_relative 'lib/application_helper'
+require_relative 'lib/csv_export'
 
 class Backend < Sinatra::Base
   helpers ApplicationHelper
@@ -120,15 +121,14 @@ class Backend < Sinatra::Base
     filename = 'foo'
     temp_file = Tempfile.new([filename, '.csv']).path
 
-    header = ['UR Number', 'Name', 'Age', 'Gender' ]
-
     CSV.open( temp_file, 'w',
               :write_headers => true,
-              :headers       => header ) do |csv|
+              :headers       => csv_header ) do |csv|
 
       db['users'].find().each do |user|
-        data =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
-        csv << data
+        row =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
+        row.concat journey_summary(user['_id'])
+        csv << row
       end
 
     end
