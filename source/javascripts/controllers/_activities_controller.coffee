@@ -9,6 +9,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   
   $scope.activities = []
 
+  $scope.selectAllOnClick = (_event) -> _event.target.select()
+
   uniqueAcrossActivities = (name, activities) ->
     unique = []
     for activity in activities

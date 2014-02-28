@@ -1,9 +1,8 @@
-SelectedActivityController = ($scope) ->
-
-  $scope.selectAllOnClick = (_event) -> _event.target.select()
+# SelectedActivityController = ($scope) ->
 
 
 
 
-angular.module('timeline')
-  .controller 'SelectedActivityController', SelectedActivityController
+
+# angular.module('timeline')
+#   .controller 'SelectedActivityController', SelectedActivityController

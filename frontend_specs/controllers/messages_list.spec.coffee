@@ -16,5 +16,5 @@ describe "MessagesList", ->
   it "removes alerts after a timeout", ->
     messageList.add "text", "type"
 
-    timeout.flush(5000)
+    timeout.flush(3000)
     messageList.length.should.be.zero

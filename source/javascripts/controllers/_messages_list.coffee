@@ -4,6 +4,6 @@ class MessagesList extends Array
   add: (text, type) ->
     @push(text: text, type: type)
 
-    @timeout ( => @shift() ), 5000
+    @timeout ( => @shift() ), 3000
 
 window.MessagesList = MessagesList
