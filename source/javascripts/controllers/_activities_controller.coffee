@@ -9,8 +9,6 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
   
   $scope.activities = []
 
-  $scope.selectAllOnClick = (_event) -> _event.target.select()
-
   uniqueAcrossActivities = (name, activities) ->
     unique = []
     for activity in activities
@@ -99,7 +97,8 @@ ActivitiesController = ($scope, $routeParams, $timeout, ActivitiesService, Users
       $scope.newPaperRecord = ""
       angular.element('#selectedActivity').modal("hide") if andClose
 
-  $scope.edit = -> angular.element('#selectedActivity').modal('show');
+  $scope.edit = ->
+    angular.element('#selectedActivity').modal('show')
 
   $scope.delete = ->
     result = confirm "Are you sure you want to delete this activity?"
