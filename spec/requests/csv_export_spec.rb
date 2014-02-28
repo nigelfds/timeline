@@ -51,4 +51,56 @@ describe 'csv data export' do
       count_combined_occurrance(activities, 'fieldA', 'fieldB').should eq 1
     end
   end
+
+  describe '#clinical_outcome' do
+    let(:outcome1) { { "k10"=>1, "honos"=>2, "demoralisation"=>3, "basis32"=>4,
+                       "srs1"=>4, "srs2"=>5, "srs3"=>6, "srs4"=>7 } }
+    let(:outcome2) { { "srs1"=>21,             "srs3"=>23, "srs4"=>24 } }
+    let(:outcome3) { { "srs1"=>31, "srs2"=>32,             "srs4"=>34 } }
+    let(:outcome4) { { "k10"=>9, "honos"=>8,                      "basis32"=>6,
+                       "srs1"=>5, "srs2"=>4, "srs3"=>3, "srs4"=>nil } }
+
+    let(:user) { {"name" => 'Teddy'} }
+
+    context 'user with 4 appointments' do
+      let(:user) {
+        { "name" => 'Teddy',
+          "clinicalOutcomes"=> { "1"=> outcome1, "2"=> outcome2, "3"=> outcome3, "4"=> outcome4 } }
+      }
+
+      it 'should get the clinical outcomes value in correct order' do
+        expected_value = [ 1,2,3,4,4,5,6,7, 21,nil,23,24, 31,32,nil,34, 9,8,nil,6,5,4,3,nil ]
+        clinical_outcome(user).should eq expected_value
+      end
+    end
+
+    context 'user with one interim appointments' do
+      let(:user) {
+        { "name" => 'Teddy',
+          "clinicalOutcomes"=> { "1"=> outcome1, "2" => outcome2, "4"=> outcome4 } }
+      }
+
+      it 'should only fill the start and final appointment column' do
+        expected_value = [ 1,2,3,4,4,5,6,7, 21,nil,23,24, nil,nil,nil,nil, 9,8,nil,6,5,4,3,nil ]
+        clinical_outcome(user).should eq expected_value
+      end
+    end
+    context 'user without interim appointments' do
+      let(:user) {
+        { "name" => 'Teddy',
+          "clinicalOutcomes"=> { "1"=> outcome1, "4"=> outcome4 } }
+      }
+
+      it 'should only fill the start and final appointment column' do
+        expected_value = [ 1,2,3,4,4,5,6,7, nil,nil,nil,nil, nil,nil,nil,nil, 9,8,nil,6,5,4,3,nil ]
+        clinical_outcome(user).should eq expected_value
+      end
+    end
+
+    context 'user without clinicalOutcome' do
+      it 'return empty array' do
+        clinical_outcome(user).should eq []
+      end
+    end
+  end
 end

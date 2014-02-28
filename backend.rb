@@ -121,20 +121,16 @@ class Backend < Sinatra::Base
     filename = 'foo'
     temp_file = Tempfile.new([filename, '.csv']).path
 
-    CSV.open( temp_file, 'w',
-              :write_headers => true,
-              :headers       => csv_header ) do |csv|
-
+    CSV.open( temp_file, 'w', :write_headers => true, :headers => csv_header ) do |csv|
       db['users'].find().each do |user|
         row =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
         row.concat journey_summary(user['_id'])
+        row.concat clinical_outcome(user)
         csv << row
       end
-
     end
 
-    send_file(temp_file, :disposition => 'attachment', :filename => filename);
-
+    send_file(temp_file, :disposition => 'attachment', :filename => filename)
   end
 
 end
