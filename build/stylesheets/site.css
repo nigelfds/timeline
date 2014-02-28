@@ -49,6 +49,7 @@ body {
 input.form-control.datetimepicker {
   cursor: pointer;
   background-color: #fff;
+  margin-top: 0;
 }
 input.form-control.staffName {
   cursor: default;

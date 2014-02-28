@@ -232,7 +232,7 @@
       return ActivitiesService.createActivity(userId, defaults, function(new_activity) {
         addActivity(new_activity);
         $scope.selectedActivity = new_activity;
-        return angular.element('#selectedActivity').modal("show");
+        return $scope.edit();
       });
     };
     $scope.save = function(andClose) {
@@ -395,7 +395,7 @@
       });
       return this.timeout((function() {
         return _this.shift();
-      }), 5000);
+      }), 3000);
     };
 
     return MessagesList;
@@ -406,9 +406,7 @@
 
 }).call(this);
 (function() {
-  var SelectedActivityController;
 
-  SelectedActivityController = function($scope) {};
 
 }).call(this);
 (function() {
@@ -510,16 +508,31 @@
       return {
         restrict: 'E',
         templateUrl: 'views/date-time-picker.html',
+        replace: true,
+        scope: {
+          model: "=",
+          minView: "=",
+          format: "="
+        },
         link: function(scope, element, attrs) {
-          var options;
+          var format, minView, options;
+          format = attrs.format || "dd/mm/yyyy hh:ii P";
+          minView = attrs.minview || "hour";
           options = {
-            format: "dd/mm/yyyy hh:ii P",
+            format: format,
             autoclose: true,
             todayHighlight: true,
             todayBtn: true,
-            keyboardNavigation: false
+            keyboardNavigation: false,
+            minuteStep: 1,
+            forceParse: false,
+            minView: minView,
+            viewSelect: "month"
           };
-          return $(element.children()[0]).datetimepicker(options);
+          $(element).datetimepicker(options);
+          return $(element).datetimepicker().on("show", function(x) {
+            return $(element).datetimepicker("setEndDate", moment().toDate());
+          });
         }
       };
     }
