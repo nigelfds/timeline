@@ -41,13 +41,23 @@ angular.module('timeline')
         timeline = new links.Timeline(element.children()[0])
         options =
           width:  "100%"
-          minHeight: 400
+          minHeight: 600
           style: "box"
           zoomMin: 86400000 # one day in milliseconds
           customStackOrder: (item1, item2) -> item1.start - item2.start
           animateZoom: false
+          groupsOrder: (group1, group2) -> 
+            if group1.content < group2.content
+            then return 1 
+            else if group1.content > group2.content
+            then return -1
+            else return 0
+
+          # showCurrentTime: false
+          # box: align: "left"
           # animate: true
           # editable: true
+          # cluster: true
 
         timeline.draw [], options
 

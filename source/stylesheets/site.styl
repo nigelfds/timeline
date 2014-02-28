@@ -71,6 +71,12 @@ ul.paper-records-updated
     padding-top: 6px
     padding-bottom: 6px
 
+div.timeline-event.timeline-event-box
+  background-color white
+
+div.timeline-event.timeline-event-box.timeline-event-selected
+  background-color #FFF785
+
 div.timeline-event-content
   margin 0
   font-size 0.9em
@@ -80,18 +86,26 @@ div.timeline-event-content
     .panel-heading
       text-align left
       font-size 0.7em
+      padding 3px
+
+    .panel-body
+      padding 3px
 
 .apm
-  &.timeline-event-box
-    border-color black
-    border-width 2px
-    // background-color #007AAD
-    // border-radius 0 
-
-  &.timeline-event-selected
-    // background-color #A6DE27
-  .timeline-event-content
-    // color black
+  &.timeline-event
+    &.timeline-event-box
+      border-color #5F70A1
+      border-width 3px
+      &.timeline-event-selected
+        border-color #ADAF02
+    &.timeline-event-line
+      border-color #5F70A1
+      &.timeline-event-selected
+        border-color #ADAF02
+    &.timeline-event-dot
+      border-color #5F70A1
+      &.timeline-event-selected
+        border-color #ADAF02
 
 div.timeline-navigation-delete
     display: none

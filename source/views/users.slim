@@ -10,7 +10,7 @@
           h3.panel-title Users of the clinic
 
         .list-group
-          a.username.list-group-item.list-group-item-info(ng-repeat="user in users | orderBy:'name'" href="#/activities/{{user._id.$oid}}")
+          a.username.list-group-item.list-group-item-default(ng-repeat="user in users | orderBy:'name'" href="#/activities/{{user._id.$oid}}")
             span.badge
               | UR {{user.urNumber}}
             | {{user.name}}
