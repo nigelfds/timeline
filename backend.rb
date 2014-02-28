@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/base'
+require 'csv'
 
 require_relative 'lib/mongo_db'
 require_relative 'lib/application_helper'
@@ -116,17 +117,12 @@ class Backend < Sinatra::Base
   end
 
   get '/download' do
-    require 'csv'
-
     filename = 'data'
     temp_file = Tempfile.new([filename, '.csv']).path
 
     CSV.open( temp_file, 'w', :write_headers => true, :headers => csv_header ) do |csv|
       db['users'].find().each do |user|
-        row =  [ user['urNumber'], user['name'], user['age'], user['gender'] ]
-        row.concat journey_summary(user['_id'])
-        row.concat clinical_outcome(user)
-        csv << row
+        csv << data_for(user)
       end
     end
 

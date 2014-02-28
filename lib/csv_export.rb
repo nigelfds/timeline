@@ -19,6 +19,18 @@ def csv_header
 
 end
 
+def data_for user
+  [
+    demograpic_data(user),
+    journey_summary(user['_id']),
+    clinical_outcome(user)
+  ].flatten
+end
+
+def demograpic_data user
+  [ user['name'], user['urNumber'], user['age'], user['gender'] ]
+end
+
 def journey_summary user_id
   activities = db["activities"].find(:user_id => user_id).to_a
 
