@@ -1,96 +1,191 @@
 .clinical-outcomes(ng-controller="UserDetailsController")
+
   .panel.panel-info
     .panel-heading 
       h3.panel-title
         | Clinical Outcomes for {{user.name}}
+
     .panel-body
-      form(name="clinicalOutcomesForm" ng-submit="saveClinicalOutcomes(user, user.clinicalOutcomes)")
-        .form-group
-          .messages
-            ul.list-group
-              li.list-group-item.fade-view(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
-                | {{message.text}}
+      .messages
+        ul.list-group
+          li.list-group-item.fade-view(ng-repeat="message in messages track by $index" ng-class="'list-group-item-' + message.type")
+            | {{message.text}}
 
-        table.table
-          thead
-            tr
-              th Appointment
-              th Initial
-              th Interim
-              th Interim
-              th Final
-          tbody
-            tr
-              td K10
-              td 
-                input.form-control(name="k10_1" type="number" ng-model="user.clinicalOutcomes.1.k10")
-              td
-              td
-              td
-                input.form-control(name="k10_4" type="number" ng-model="user.clinicalOutcomes.4.k10")
-            tr
-              td HONOS
-              td
-                input.form-control(name="honos_1" type="number" ng-model="user.clinicalOutcomes.1.honos")
-              td
-              td
-              td
-                input.form-control(name="honos_4" type="number" ng-model="user.clinicalOutcomes.4.honos")
-            tr
-              td Demoralisation
-              td
-                input.form-control(name="demoralisation_1" type="number" ng-model="user.clinicalOutcomes.1.demoralisation")
-              td
-              td
-              td
-                input.form-control(name="demoralisation_4" type="number" ng-model="user.clinicalOutcomes.4.demoralisation")
-            tr
-              td Basis 32
-              td
-                input.form-control(name="basis32_1" type="number" ng-model="user.clinicalOutcomes.1.basis32")
-              td
-              td
-              td
-                input.form-control(name="basis32_4" type="number" ng-model="user.clinicalOutcomes.4.basis32")
+      table.table
+        thead
+          tr
+            th Appointment
+            th Initial
+            th Interim
+            th Interim
+            th Final
+        tbody
+          tr
+            td K10
+            td 
+              | {{user.clinicalOutcomes.1.k10}}
+            td
+            td
+            td
+              | {{user.clinicalOutcomes.4.k10}}
+          tr
+            td HONOS
+            td
+              | {{user.clinicalOutcomes.1.honos}}
+            td
+            td
+            td
+              | {{user.clinicalOutcomes.4.honos}}
+          tr
+            td Demoralisation
+            td
+              | {{user.clinicalOutcomes.1.demoralisation}}
+            td
+            td
+            td
+              | {{user.clinicalOutcomes.4.demoralisation}}
+          tr
+            td Basis 32
+            td
+              | {{user.clinicalOutcomes.1.basis32}}
+            td
+            td
+            td
+              | {{user.clinicalOutcomes.4.basis32}}
 
-            tr
-              td(rowspan="4") SRS
-              td
-                input.form-control(name="srs_1_1" type="number" ng-model="user.clinicalOutcomes.1.srs1")
-              td
-                input.form-control(name="srs_2_1" type="number" ng-model="user.clinicalOutcomes.2.srs1")
-              td
-                input.form-control(name="srs_3_1" type="number" ng-model="user.clinicalOutcomes.3.srs1")
-              td
-                input.form-control(name="srs_4_1" type="number" ng-model="user.clinicalOutcomes.4.srs1")
-            tr
-              td
-                input.form-control(name="srs_1_2" type="number" ng-model="user.clinicalOutcomes.1.srs2")
-              td
-                input.form-control(name="srs_2_2" type="number" ng-model="user.clinicalOutcomes.2.srs2")
-              td
-                input.form-control(name="srs_3_2" type="number" ng-model="user.clinicalOutcomes.3.srs2")
-              td
-                input.form-control(name="srs_4_2" type="number" ng-model="user.clinicalOutcomes.4.srs2")
-            tr
-              td
-                input.form-control(name="srs_1_3" type="number" ng-model="user.clinicalOutcomes.1.srs3")
-              td
-                input.form-control(name="srs_2_3" type="number" ng-model="user.clinicalOutcomes.2.srs3")
-              td
-                input.form-control(name="srs_3_3" type="number" ng-model="user.clinicalOutcomes.3.srs3")
-              td
-                input.form-control(name="srs_4_3" type="number" ng-model="user.clinicalOutcomes.4.srs3")
-            tr
-              td
-                input.form-control(name="srs_1_4" type="number" ng-model="user.clinicalOutcomes.1.srs4")
-              td
-                input.form-control(name="srs_2_4" type="number" ng-model="user.clinicalOutcomes.2.srs4")
-              td
-                input.form-control(name="srs_3_4" type="number" ng-model="user.clinicalOutcomes.3.srs4")
-              td
-                input.form-control(name="srs_4_4" type="number" ng-model="user.clinicalOutcomes.4.srs4")
+          tr
+            td(rowspan="4") SRS
+            td
+              | {{user.clinicalOutcomes.1.srs1}}
+            td
+              | {{user.clinicalOutcomes.2.srs1}}
+            td
+              | {{user.clinicalOutcomes.3.srs1}}
+            td
+              | {{user.clinicalOutcomes.4.srs1}}
+          tr
+            td
+              | {{user.clinicalOutcomes.1.srs2}}
+            td
+              | {{user.clinicalOutcomes.2.srs2}}
+            td
+              | {{user.clinicalOutcomes.3.srs2}}
+            td
+              | {{user.clinicalOutcomes.4.srs2}}
+          tr
+            td
+              | {{user.clinicalOutcomes.1.srs3}}
+            td
+              | {{user.clinicalOutcomes.2.srs3}}
+            td
+              | {{user.clinicalOutcomes.3.srs3}}
+            td
+              | {{user.clinicalOutcomes.4.srs3}}
+          tr
+            td
+              | {{user.clinicalOutcomes.1.srs4}}
+            td
+              | {{user.clinicalOutcomes.2.srs4}}
+            td
+              | {{user.clinicalOutcomes.3.srs4}}
+            td
+              | {{user.clinicalOutcomes.4.srs4}}
 
-        .form-group
-          button.btn.btn-primary(type="submit") Save
+
+      .form-group
+        button.btn.btn-primary(data-toggle="modal" data-target="#clinicalOutcomes") Edit Clinical Outcomes
+
+
+  #clinicalOutcomes.modal.fade
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          button.close(data-dismiss="modal") &times;
+          h4.modal-title Clinical Outcomes
+
+        .modal-body
+          form(name="clinicalOutcomesForm")
+            table.table
+              thead
+                tr
+                  th Appointment
+                  th Initial
+                  th Interim
+                  th Interim
+                  th Final
+              tbody
+                tr
+                  td K10
+                  td 
+                    input.form-control(name="k10_1" type="number" ng-model="user.clinicalOutcomes.1.k10")
+                  td
+                  td
+                  td
+                    input.form-control(name="k10_4" type="number" ng-model="user.clinicalOutcomes.4.k10")
+                tr
+                  td HONOS
+                  td
+                    input.form-control(name="honos_1" type="number" ng-model="user.clinicalOutcomes.1.honos")
+                  td
+                  td
+                  td
+                    input.form-control(name="honos_4" type="number" ng-model="user.clinicalOutcomes.4.honos")
+                tr
+                  td Demoralisation
+                  td
+                    input.form-control(name="demoralisation_1" type="number" ng-model="user.clinicalOutcomes.1.demoralisation")
+                  td
+                  td
+                  td
+                    input.form-control(name="demoralisation_4" type="number" ng-model="user.clinicalOutcomes.4.demoralisation")
+                tr
+                  td Basis 32
+                  td
+                    input.form-control(name="basis32_1" type="number" ng-model="user.clinicalOutcomes.1.basis32")
+                  td
+                  td
+                  td
+                    input.form-control(name="basis32_4" type="number" ng-model="user.clinicalOutcomes.4.basis32")
+
+                tr
+                  td(rowspan="4") SRS
+                  td
+                    input.form-control(name="srs_1_1" type="number" ng-model="user.clinicalOutcomes.1.srs1")
+                  td
+                    input.form-control(name="srs_2_1" type="number" ng-model="user.clinicalOutcomes.2.srs1")
+                  td
+                    input.form-control(name="srs_3_1" type="number" ng-model="user.clinicalOutcomes.3.srs1")
+                  td
+                    input.form-control(name="srs_4_1" type="number" ng-model="user.clinicalOutcomes.4.srs1")
+                tr
+                  td
+                    input.form-control(name="srs_1_2" type="number" ng-model="user.clinicalOutcomes.1.srs2")
+                  td
+                    input.form-control(name="srs_2_2" type="number" ng-model="user.clinicalOutcomes.2.srs2")
+                  td
+                    input.form-control(name="srs_3_2" type="number" ng-model="user.clinicalOutcomes.3.srs2")
+                  td
+                    input.form-control(name="srs_4_2" type="number" ng-model="user.clinicalOutcomes.4.srs2")
+                tr
+                  td
+                    input.form-control(name="srs_1_3" type="number" ng-model="user.clinicalOutcomes.1.srs3")
+                  td
+                    input.form-control(name="srs_2_3" type="number" ng-model="user.clinicalOutcomes.2.srs3")
+                  td
+                    input.form-control(name="srs_3_3" type="number" ng-model="user.clinicalOutcomes.3.srs3")
+                  td
+                    input.form-control(name="srs_4_3" type="number" ng-model="user.clinicalOutcomes.4.srs3")
+                tr
+                  td
+                    input.form-control(name="srs_1_4" type="number" ng-model="user.clinicalOutcomes.1.srs4")
+                  td
+                    input.form-control(name="srs_2_4" type="number" ng-model="user.clinicalOutcomes.2.srs4")
+                  td
+                    input.form-control(name="srs_3_4" type="number" ng-model="user.clinicalOutcomes.3.srs4")
+                  td
+                    input.form-control(name="srs_4_4" type="number" ng-model="user.clinicalOutcomes.4.srs4")
+
+        .modal-footer
+          .form-group
+            button.btn.btn-primary(type="submit" ng-click="saveClinicalOutcomes(user, user.clinicalOutcomes)") Save
 
