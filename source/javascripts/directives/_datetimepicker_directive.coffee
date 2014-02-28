@@ -10,6 +10,7 @@ angular.module('timeline')
         todayHighlight: true
         todayBtn: true
         keyboardNavigation: false
+        minuteStep: 1
       $(element.children()[0]).datetimepicker options
   ]
 ) 
