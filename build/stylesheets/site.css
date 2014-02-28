@@ -67,6 +67,12 @@ ul.paper-records-updated li {
   padding-top: 6px;
   padding-bottom: 6px;
 }
+div.timeline-event.timeline-event-box {
+  background-color: #fff;
+}
+div.timeline-event.timeline-event-box.timeline-event-selected {
+  background-color: #fff785;
+}
 div.timeline-event-content {
   margin: 0;
   font-size: 0.9em;
@@ -78,10 +84,29 @@ div.timeline-event-content .panel {
 div.timeline-event-content .panel .panel-heading {
   text-align: left;
   font-size: 0.7em;
+  padding: 3px;
 }
-.apm.timeline-event-box {
-  border-color: #000;
-  border-width: 2px;
+div.timeline-event-content .panel .panel-body {
+  padding: 3px;
+}
+.apm.timeline-event.timeline-event-box {
+  border-color: #5f70a1;
+  border-width: 3px;
+}
+.apm.timeline-event.timeline-event-box.timeline-event-selected {
+  border-color: #adaf02;
+}
+.apm.timeline-event.timeline-event-line {
+  border-color: #5f70a1;
+}
+.apm.timeline-event.timeline-event-line.timeline-event-selected {
+  border-color: #adaf02;
+}
+.apm.timeline-event.timeline-event-dot {
+  border-color: #5f70a1;
+}
+.apm.timeline-event.timeline-event-dot.timeline-event-selected {
+  border-color: #adaf02;
 }
 div.timeline-navigation-delete {
   display: none;

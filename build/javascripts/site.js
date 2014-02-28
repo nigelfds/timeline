@@ -581,13 +581,22 @@
           timeline = new links.Timeline(element.children()[0]);
           options = {
             width: "100%",
-            minHeight: 400,
+            minHeight: 600,
             style: "box",
             zoomMin: 86400000,
             customStackOrder: function(item1, item2) {
               return item1.start - item2.start;
             },
-            animateZoom: false
+            animateZoom: false,
+            groupsOrder: function(group1, group2) {
+              if (group1.content < group2.content) {
+                return 1;
+              } else if (group1.content > group2.content) {
+                return -1;
+              } else {
+                return 0;
+              }
+            }
           };
           timeline.draw([], options);
           onSelect = function() {
@@ -621,7 +630,7 @@
             minMoment = moment(moments[0]);
             visibleRange = timeline.getVisibleChartRange();
             range = visibleRange.end.getTime() - visibleRange.start.getTime();
-            range = 0.1 * range;
+            range = 0.13 * range;
             range = Math.max(range, 86400000);
             maxMoment.add("ms", range);
             minMoment.subtract("ms", range);
