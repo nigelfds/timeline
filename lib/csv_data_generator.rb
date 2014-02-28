@@ -1,6 +1,6 @@
 class CSVDataGenerator
   def header
-    [ 'Name', 'UR', 'Age (DOB)', 'Gender',
+    [ 'Name', 'UR', 'DOB', 'Gender',
 
       'Handoffs',
       'Direct contacts',
@@ -29,7 +29,7 @@ class CSVDataGenerator
   end
 
   def demograpic_data user
-    [ user['name'], user['urNumber'], user['age'], user['gender'] ]
+    [ user['name'], user['urNumber'], user['dob'], user['gender'] ]
   end
 
   def journey_summary activities
