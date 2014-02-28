@@ -24,11 +24,9 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
 
     UsersService.updateUser userId, clinicalOutcomes: outcomes, (result) ->
       if result.success
-        console.log "done!"
         angular.element('#clinicalOutcomes').modal("hide")
         onUpdateSuccess()
       else
-        console.log "woot!"
         onUpdateError(result.message)
 
 angular.module('timeline')
