@@ -22,9 +22,9 @@
             input.form-control(name="urNumber" type="number" min="0" ng-model="newUser.urNumber" required)
 
         .form-group
-          .input-group(ng-class="validationClass(newUserForm, 'age')" required)
-            span.input-group-addon Age
-            input.form-control(name="age" type="number" min="0" ng-model="newUser.age" required)
+          .input-group(ng-class="validationClass(userForm, 'age')" required)
+            span.input-group-addon DOB
+            datetimepicker(model="newUser.dob" minView="month" format="dd/mm/yyyy")
 
         .form-group
           select.form-control(ng-model="newUser.gender" required)

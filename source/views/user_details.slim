@@ -22,8 +22,8 @@
 
         .form-group
           .input-group(ng-class="validationClass(userForm, 'age')" required)
-            span.input-group-addon Age
-            input.form-control(name="age" type="number" min="0" ng-model="user.age" required)
+            span.input-group-addon DOB
+            datetimepicker(model="user.dob" minView="month" format="dd/mm/yyyy")
 
         .form-group
           select.form-control(ng-model="user.gender" required)
