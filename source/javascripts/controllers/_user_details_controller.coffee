@@ -4,8 +4,8 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
   $scope.validationClass = (form, fieldName) ->
     'has-error': form[fieldName].$invalid and not form[fieldName].$pristine
 
-  onUpdateSuccess = -> 
-    $scope.messages.add "Updated successfully", "success" 
+  onUpdateSuccess = ->
+    $scope.messages.add "Updated successfully", "success"
 
   onUpdateError = (message) ->
     $scope.messages.add message, "danger"
@@ -24,8 +24,12 @@ UserDetailsController = ($scope, $timeout, UsersService) ->
 
     UsersService.updateUser userId, clinicalOutcomes: outcomes, (result) ->
       if result.success
-      then onUpdateSuccess()
-      else onUpdateError(result.message)
+        console.log "done!"
+        angular.element('#clinicalOutcomes').modal("hide")
+        onUpdateSuccess()
+      else
+        console.log "woot!"
+        onUpdateError(result.message)
 
 angular.module('timeline')
   .controller 'UserDetailsController', UserDetailsController
