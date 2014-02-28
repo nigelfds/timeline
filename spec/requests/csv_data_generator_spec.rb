@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'csv data export' do
+  let(:csv_data_generator) { CSVDataGenerator.new }
   let(:activity1) { { 'staffInvolved' => ['s1', 's2' ], 'itSystems' => [ 'sys A', 'sys B'], 'paperRecords' => [ 'paper A', 'paper B', 'paper C', 'paper D'] } }
   let(:activity2) { { 'staffInvolved' => ['s1', 's3' ], 'itSystems' => [ 'sys C', 'sys B'], 'paperRecords' => [ 'paper C', 'paper E'] } }
   let(:activity3) { { 'itSystems' => [ 'sys A', nil] } }
@@ -10,13 +11,13 @@ describe 'csv data export' do
 
   describe '#num_updates_and_uniq' do
     it "should calculalte the number of updates and the number of unique it system" do
-      num_updates, uniq_it_sys = num_updates_and_uniq(activities, 'itSystems')
+      num_updates, uniq_it_sys = csv_data_generator.num_updates_and_uniq(activities, 'itSystems')
       num_updates.should eq 5
       uniq_it_sys.should eq 3
     end
 
     it "should calculalte the number of updates and the number of unique paper record" do
-      num_updates, uniq_paper_record = num_updates_and_uniq(activities, 'paperRecords')
+      num_updates, uniq_paper_record = csv_data_generator.num_updates_and_uniq(activities, 'paperRecords')
       num_updates.should eq 7
       uniq_paper_record.should eq 5
     end
@@ -24,7 +25,7 @@ describe 'csv data export' do
 
   describe '#num_uniq' do
     it "should calculalte the number uniq staff involved" do
-      num_uniq(activities, 'staffInvolved').should eq 4
+      csv_data_generator.num_uniq(activities, 'staffInvolved').should eq 4
     end
   end
 
@@ -36,7 +37,7 @@ describe 'csv data export' do
     let(:activity4) { { 'fieldA' => true } }
 
     it "should count only the true value" do
-      count_occurrance(activities, 'fieldA').should eq 2
+      csv_data_generator.count_occurrance(activities, 'fieldA').should eq 2
     end
   end
 
@@ -48,7 +49,7 @@ describe 'csv data export' do
     let(:activity4) { { 'fieldA' => true, 'fieldB' => false } }
 
     it "should count only the true value" do
-      count_combined_occurrance(activities, 'fieldA', 'fieldB').should eq 1
+      csv_data_generator.count_combined_occurrance(activities, 'fieldA', 'fieldB').should eq 1
     end
   end
 
@@ -70,7 +71,7 @@ describe 'csv data export' do
 
       it 'should get the clinical outcomes value in correct order' do
         expected_value = [ 1,2,3,4,4,5,6,7, 21,nil,23,24, 31,32,nil,34, 9,8,nil,6,5,4,3,nil ]
-        clinical_outcome(user).should eq expected_value
+        csv_data_generator.clinical_outcome(user).should eq expected_value
       end
     end
 
@@ -82,7 +83,7 @@ describe 'csv data export' do
 
       it 'should only fill the start and final appointment column' do
         expected_value = [ 1,2,3,4,4,5,6,7, 21,nil,23,24, nil,nil,nil,nil, 9,8,nil,6,5,4,3,nil ]
-        clinical_outcome(user).should eq expected_value
+        csv_data_generator.clinical_outcome(user).should eq expected_value
       end
     end
     context 'user without interim appointments' do
@@ -93,13 +94,13 @@ describe 'csv data export' do
 
       it 'should only fill the start and final appointment column' do
         expected_value = [ 1,2,3,4,4,5,6,7, nil,nil,nil,nil, nil,nil,nil,nil, 9,8,nil,6,5,4,3,nil ]
-        clinical_outcome(user).should eq expected_value
+        csv_data_generator.clinical_outcome(user).should eq expected_value
       end
     end
 
     context 'user without clinicalOutcome' do
       it 'return empty array' do
-        clinical_outcome(user).should eq []
+        csv_data_generator.clinical_outcome(user).should eq []
       end
     end
   end

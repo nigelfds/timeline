@@ -96,7 +96,7 @@ angular.module('timeline')
           visibleRange = timeline.getVisibleChartRange()
 
           range = visibleRange.end.getTime() - visibleRange.start.getTime()
-          range = 0.1 * range
+          range = 0.13 * range
           range = Math.max(range, 86400000)
 
           maxMoment.add("ms", range)

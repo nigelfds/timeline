@@ -4,7 +4,7 @@ require 'csv'
 
 require_relative 'lib/mongo_db'
 require_relative 'lib/application_helper'
-require_relative 'lib/csv_export'
+require_relative 'lib/csv_data_generator'
 
 class Backend < Sinatra::Base
   helpers ApplicationHelper
@@ -119,10 +119,12 @@ class Backend < Sinatra::Base
   get '/download' do
     filename = 'data'
     temp_file = Tempfile.new([filename, '.csv']).path
+    csv_generator = CSVDataGenerator.new
 
-    CSV.open( temp_file, 'w', :write_headers => true, :headers => csv_header ) do |csv|
+    CSV.open( temp_file, 'w', :write_headers => true, :headers => csv_generator.header ) do |csv|
       db['users'].find().each do |user|
-        csv << data_for(user)
+        activities = db["activities"].find(:user_id => user['_id']).to_a
+        csv << csv_generator.data_for(user, activities)
       end
     end
 
