@@ -7,5 +7,5 @@
       .form-group.pull-right
         button.btn.btn-primary(ng-click="new()") Add a New Activity
       .form-group
-        button.btn.btn-default(ng-click="edit()" ng-show="selectedActivity") Edit Selected Activity 
+        button.btn.btn-default(ng-show="selectedActivity" data-toggle="modal" data-target="#selectedActivity") Edit Selected Activity 
       timeline

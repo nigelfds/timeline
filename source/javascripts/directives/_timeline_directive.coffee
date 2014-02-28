@@ -52,7 +52,6 @@ angular.module('timeline')
             else if group1.content > group2.content
             then return -1
             else return 0
-
           # showCurrentTime: false
           # box: align: "left"
           # animate: true
@@ -60,15 +59,6 @@ angular.module('timeline')
           # cluster: true
 
         timeline.draw [], options
-
-        # onEdit = ->
-        #   selection = timeline.getSelection()
-        #   selectActivity = scope.activities[selection[0].row] if selection.length > 0
-        #   scope.select selectActivity
-        #   scope.$apply()
-        #   $('#activityEditor').modal('show');
-
-        # links.events.addListener timeline, 'edit', onEdit
 
         onSelect = ->
           selection = timeline.getSelection()
